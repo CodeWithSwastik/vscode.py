@@ -1,4 +1,4 @@
-# vscode
+# vscode-ext
 
 This package allows you to create vscode extensions with python. It does so by transpiling the python code to javascript.
 
@@ -13,7 +13,7 @@ pip install vscode-ext
 Working version:
 
 ```
-pip install git+https://github.com/CodeWithSwastik/vscode
+pip install git+https://github.com/CodeWithSwastik/vscode-ext
 ```
 
 ## Tutorial
@@ -25,7 +25,7 @@ Comming soon!
 ```python
 import vscode
 
-ext = vscode.Extension(name="testpy", display_name="Test Py", version = "0.0.1")
+ext = vscode.Extension(name = "testpy", display_name = "Test Py", version = "0.0.1")
 
 @ext.event
 def on_activate():
