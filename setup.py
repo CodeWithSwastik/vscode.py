@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="utf-8") as readme_file:
 #     requirements = req_file.readlines()
 
 setup(
-    name="vscode",
+    name="vscode-ext",
     version=version,
     description="Create VSCode Extensions with python",
     long_description=long_description,

@@ -1,0 +1,60 @@
+Metadata-Version: 2.1
+Name: vscode-ext
+Version: 1.0.0
+Summary: Create VSCode Extensions with python
+Home-page: https://github.com/CodeWithSwastik/vscode
+Author: Swas.py
+Author-email: cwswas.py@gmail.com
+License: UNKNOWN
+Project-URL: Issue tracker, https://github.com/CodeWithSwastik/vscode/issues
+Description: # vscode
+        
+        This package allows you to create vscode extensions with python. It does so by transpiling the python code to javascript.
+        
+        ## Installation
+        
+        Stable version:
+        
+        ```
+        pip install vscode-ext
+        ```
+        
+        Working version:
+        
+        ```
+        pip install git+https://github.com/CodeWithSwastik/vscode
+        ```
+        
+        ## Tutorial
+        
+        Comming soon!
+        
+        ## Example Extension
+        
+        ```python
+        import vscode
+        
+        ext = vscode.Extension(name="testpy", display_name="Test Py", version = "0.0.1")
+        
+        @ext.event
+        def on_activate():
+            return f"The Extension '{ext.name}' has started"
+        
+        @ext.command()
+        def hello_world():
+            return vscode.window.show_info_message(f'Hello World from {ext.name}')
+        
+        vscode.build(ext)
+        ```
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Internet
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
