@@ -42,7 +42,7 @@ class Command:
         return temp[0] + "".join(ele.title() for ele in temp[1:])
 
     def convert_snake_to_title(self, text):
-        return "".join(text.split("_")).title()
+        return text.replace("_", " ").title()
 
     def __repr__(self):
         return f"<vscode.Command {self.name}>"

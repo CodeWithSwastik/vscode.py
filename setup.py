@@ -1,6 +1,6 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-version = "1.0.1"
+version = "1.0.2"
 
 with open("README.md", "r", encoding="utf-8") as readme_file:
     long_description = readme_file.read()
@@ -16,7 +16,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Swas.py",
     author_email="cwswas.py@gmail.com",
-    py_modules=["vscode"],
+    packages=find_packages(),
     url = "https://github.com/CodeWithSwastik/vscode", 
     project_urls={
     "Issue tracker": "https://github.com/CodeWithSwastik/vscode/issues",
