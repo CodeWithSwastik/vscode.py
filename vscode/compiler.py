@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import inspect
 
 def create_package(data, activation_events, commands):
     package_name = data["name"]
@@ -43,9 +44,28 @@ launch_json = {
     ],
 }
 
+main_py = '''\n
+def ipc_main():
+    globals()[sys.argv[1]]()
+
+ipc_main()
+'''
+
+def build_py(functions):
+    pre = '# Built using vscode-ext\n\n'
+    with open(inspect.getfile(functions[0]), 'r') as f:
+        imports = pre + ''.join([l for l in f.readlines() if not '.build(' in l])
+    imports += "\nimport sys \n"
+    main = main_py
+    code = imports+main
+    return code
 
 def build_js(name, events, commands):
-    imports = "const vscode = require('vscode');\n"
+    cwd = os.getcwd()
+    python_path = os.path.join(cwd, "build", "extension.py").replace('\\', '\\\\')
+    pre = '// Built using vscode-ext\n\n'
+
+    imports = pre + "const vscode = require('vscode');\nconst spawn = require('child_process').spawn;\n"
 
     on_activate = events.get("activate")
     code_on_activate = "function activate(context) {\n"
@@ -57,12 +77,19 @@ def build_js(name, events, commands):
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
             + " function () {\n"
         )
-        # It has been hardcoded for now!
+        code_on_activate += f'let pythonProcess = spawn("python", ["{python_path}","{command.func_name}"]);\n'
+        code_on_activate += 'pythonProcess.stdout.on("data", (data) => {\n'
+        code_on_activate += 'data = data.toString(); code = data.slice(0,2); args = data.substring(4).split("|||");\n'
+        code_on_activate += 'if (code === "IM") {\n'
         code_on_activate += (
-            f"vscode.window.showInformationMessage('{command.func()}');\n"
+            f"vscode.window.showInformationMessage(...args);\n"
         )
+        code_on_activate += "}\n"
         code_on_activate += "});\n"
-        code_on_activate += f"context.subscriptions.push({command.name});\n" + "}\n"
+        code_on_activate += "});\n"
+        code_on_activate += f"context.subscriptions.push({command.name});\n"
+
+    code_on_activate += "}\n"
 
     on_deactivate = events.get("deactivate")
     code_on_deactivate = "function deactivate() {"
@@ -75,7 +102,7 @@ def build_js(name, events, commands):
     return code
 
 
-def create_files(package, javascript):
+def create_files(package, javascript, python):
     cwd = os.getcwd()
 
     # ---- Static ----
@@ -90,7 +117,7 @@ def create_files(package, javascript):
     with open("launch.json", "w") as f:
         json.dump(launch_json, f, indent=2)
 
-    # ---- Static ----
+    # ---- Dynamic ----
 
     with open(os.path.join(cwd, "package.json"), "w") as f:
         json.dump(package, f, indent=2)
@@ -101,11 +128,13 @@ def create_files(package, javascript):
     with open("extension.js", "w") as f:
         f.write(javascript)
 
+    with open("extension.py", "w") as f:
+        f.write(python)
     os.chdir(cwd)
 
 
 def build(extension):
-    print("\033[1;37;49mBuilding Extension...", "\033[0m")
+    print(f"\033[1;37;49mBuilding Extension...", "\033[0m")
     start = time.time()
 
     ext_data = extension.__dict__
@@ -120,7 +149,8 @@ def build(extension):
         activation_events.append(event)
     package = create_package(ext_data, activation_events, commands)
     javascript = build_js(package_name, ext_data["events"], ext_data["commands"])
-    create_files(package, javascript)
+    python = build_py([c.func for c in ext_data["commands"]])
+    create_files(package, javascript, python)
 
     end = time.time()
     time_taken = round((end - start) * 1000,2)

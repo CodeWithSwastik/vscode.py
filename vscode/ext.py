@@ -33,7 +33,8 @@ class Command:
             self.title = title
 
         self.func = func
-
+        self.func_name = self.func.__name__
+    
     def extension(self, ext_name):
         return f"{ext_name}.{self.name}"
 

@@ -70,11 +70,11 @@ def on_activate():
 
 @ext.command()
 def hello_world():
-    return vscode.window.show_info_message(f'Hello World from {ext.name}')
+    vscode.window.show_info_message(f'Hello World from {ext.name}')
 
 vscode.build(ext)
 ```
 
 ## Documentation
 
-Comming soon!
+Coming soon!
