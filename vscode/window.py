@@ -1,6 +1,15 @@
 # IPC Commands are in the following format
 # {2digitcode}: {arg1}|||{arg2}|||{argn}
 
+import json
+
+def show_quick_pick(data, options):
+    data = json.dumps(data)
+    options = json.dumps(options)
+    print(f'QP: {data}|||{options}')
+    res = input()
+    return json.loads(res)
+
 def _base(code, text, *args):
     print(f'{code}: {text}' + '|||'*bool(args) + '|||'.join(args), flush=True, end='')
     res = input()

@@ -18,4 +18,19 @@ def ask_question():
     elif res == "Meh":
         vscode.window.show_info_message('Sorry to hear that :(')
 
+@ext.command()
+def show_picker():
+    data = [
+        {
+            'label': 'apple',
+            'detail': 'A fruit'
+        }, 
+        {
+            'label': 'boring',
+            'detail': 'An adjective'            
+        }
+    ]
+    res = vscode.window.show_quick_pick(data, {'matchOnDetail': True})
+    vscode.window.show_info_message(f"Nice you chose {res['label']}")
+    
 vscode.build(ext)

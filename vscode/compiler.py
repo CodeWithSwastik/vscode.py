@@ -80,7 +80,7 @@ def build_js(name, events, commands):
         )
         code_on_activate += f'let pythonProcess = spawn("python", ["{python_path}","{command.func_name}"]);\n'
         code_on_activate += 'pythonProcess.stdout.on("data", (data) => {\n'
-        code_on_activate += '''data = data.toString().split('\\n'); 
+        code_on_activate += '''data = data.toString().split('\\n').filter(e => e !== ''); 
         debug = data.slice(0, data.length-1);
         data = data[data.length-1];
         code = data.slice(0,2); 
@@ -95,6 +95,9 @@ def build_js(name, events, commands):
         case "EM":
             vscode.window.showErrorMessage(...args).then((r) => pythonProcess.stdin.write(r + "\\n"));;
             break;
+        case "QP":
+            vscode.window.showQuickPick(JSON.parse(args[0]), JSON.parse(args[1])).then((r) => pythonProcess.stdin.write(JSON.stringify(r) + "\\n"));;
+
         default:
             console.log("Couldn't parse this: "+data);
         };
