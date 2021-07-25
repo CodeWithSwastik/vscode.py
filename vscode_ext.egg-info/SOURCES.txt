@@ -1,6 +1,0 @@
-README.md
-setup.py
-vscode_ext.egg-info/PKG-INFO
-vscode_ext.egg-info/SOURCES.txt
-vscode_ext.egg-info/dependency_links.txt
-vscode_ext.egg-info/top_level.txt
