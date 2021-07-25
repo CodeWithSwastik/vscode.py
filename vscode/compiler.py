@@ -79,12 +79,21 @@ def build_js(name, events, commands):
         )
         code_on_activate += f'let pythonProcess = spawn("python", ["{python_path}","{command.func_name}"]);\n'
         code_on_activate += 'pythonProcess.stdout.on("data", (data) => {\n'
-        code_on_activate += 'data = data.toString(); code = data.slice(0,2); args = data.substring(4).split("|||");\n'
-        code_on_activate += 'if (code === "IM") {\n'
-        code_on_activate += (
-            f"vscode.window.showInformationMessage(...args);\n"
-        )
-        code_on_activate += "}\n"
+        code_on_activate += '''data = data.toString(); code = data.slice(0,2); args = data.substring(4).split("|||");
+        switch (code) {
+        case "IM":
+            vscode.window.showInformationMessage(...args);
+            break;
+        case "WM":
+            vscode.window.showWarningMessage(...args);
+            break;
+        case "EM":
+            vscode.window.showErrorMessage(...args);
+            break;
+        default:
+            console.log('Command did not respond with a valid IPC code.');
+        };
+        '''
         code_on_activate += "});\n"
         code_on_activate += "});\n"
         code_on_activate += f"context.subscriptions.push({command.name});\n"

@@ -10,4 +10,8 @@ def on_activate():
 def hello_world():
     return vscode.window.show_info_message(f'Hello World from {ext.name}')
 
+@ext.command(title='Cause Some Error')
+def show_error():
+    return vscode.window.show_error_message(f'Error!')
+
 vscode.build(ext)
