@@ -3,7 +3,8 @@
 
 def _base(code, text, *args):
     print(f'{code}: {text}' + '|||'*bool(args) + '|||'.join(args), flush=True, end='')
-    return text    
+    res = input()
+    return res    
 
 def show_info_message(text, *args):
     return _base('IM', text, *args)

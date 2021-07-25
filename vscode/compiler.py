@@ -45,6 +45,7 @@ launch_json = {
 }
 
 main_py = '''\n
+import sys
 def ipc_main():
     globals()[sys.argv[1]]()
 
@@ -55,7 +56,7 @@ def build_py(functions):
     pre = '# Built using vscode-ext\n\n'
     with open(inspect.getfile(functions[0]), 'r') as f:
         imports = pre + ''.join([l for l in f.readlines() if not '.build(' in l])
-    imports += "\nimport sys \n"
+    imports += "\n"
     main = main_py
     code = imports+main
     return code
@@ -75,23 +76,30 @@ def build_js(name, events, commands):
     for command in commands:
         code_on_activate += (
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
-            + " function () {\n"
+            + "async function () {\n"
         )
         code_on_activate += f'let pythonProcess = spawn("python", ["{python_path}","{command.func_name}"]);\n'
         code_on_activate += 'pythonProcess.stdout.on("data", (data) => {\n'
-        code_on_activate += '''data = data.toString(); code = data.slice(0,2); args = data.substring(4).split("|||");
+        code_on_activate += '''data = data.toString().split('\\n'); 
+        debug = data.slice(0, data.length-1);
+        data = data[data.length-1];
+        code = data.slice(0,2); 
+        args = data.substring(4).split("|||");
         switch (code) {
         case "IM":
-            vscode.window.showInformationMessage(...args);
+            vscode.window.showInformationMessage(...args).then((r) => pythonProcess.stdin.write(r + "\\n"));;
             break;
         case "WM":
-            vscode.window.showWarningMessage(...args);
+            vscode.window.showWarningMessage(...args).then((r) => pythonProcess.stdin.write(r + "\\n"));;
             break;
         case "EM":
-            vscode.window.showErrorMessage(...args);
+            vscode.window.showErrorMessage(...args).then((r) => pythonProcess.stdin.write(r + "\\n"));;
             break;
         default:
-            console.log('Command did not respond with a valid IPC code.');
+            console.log("Couldn't parse this: "+data);
+        };
+        if (debug.length > 0) {
+          console.log("Debug message from extension.py: " + debug);
         };
         '''
         code_on_activate += "});\n"
@@ -111,7 +119,7 @@ def build_js(name, events, commands):
     return code
 
 
-def create_files(package, javascript, python):
+def create_files(package, javascript, python, publish):
     cwd = os.getcwd()
 
     # ---- Static ----
@@ -141,8 +149,16 @@ def create_files(package, javascript, python):
         f.write(python)
     os.chdir(cwd)
 
+    if publish:
+        with open('README.md', 'w') as f:
+            pass
+        with open('CHANGELOG.md', 'w') as f:
+            pass        
+        if not os.path.isfile('.vscodeignore'):
+            with open('.vscodeignore', 'w') as f:
+                f.write('.vscode/**') 
 
-def build(extension):
+def build(extension, publish=False):
     print(f"\033[1;37;49mBuilding Extension...", "\033[0m")
     start = time.time()
 
@@ -159,8 +175,7 @@ def build(extension):
     package = create_package(ext_data, activation_events, commands)
     javascript = build_js(package_name, ext_data["events"], ext_data["commands"])
     python = build_py([c.func for c in ext_data["commands"]])
-    create_files(package, javascript, python)
-
+    create_files(package, javascript, python, publish)
     end = time.time()
     time_taken = round((end - start) * 1000,2)
     print(f"\033[1;37;49mBuild completed successfully in {time_taken} ms!", "\033[0m")

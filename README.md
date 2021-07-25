@@ -72,6 +72,13 @@ def on_activate():
 def hello_world():
     vscode.window.show_info_message(f'Hello World from {ext.name}')
 
+@ext.command()
+def ask_question():
+    res = vscode.window.show_info_message('How are you?', 'Great', 'Meh')
+    if res == "Great":
+        vscode.window.show_info_message('Woah nice!!')
+    elif res == "Meh":
+        vscode.window.show_info_message('Sorry to hear that :(')
 vscode.build(ext)
 ```
 
