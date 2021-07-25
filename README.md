@@ -77,4 +77,4 @@ vscode.build(ext)
 
 ## Documentation
 
-Comming soon!
+Coming soon!
