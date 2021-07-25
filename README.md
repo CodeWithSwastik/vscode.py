@@ -1,6 +1,6 @@
 # vscode-ext
 
-This package allows you to create vscode extensions with python. It does so by transpiling the python code to javascript.
+This package allows you to create vscode extensions with python.
 
 ## Installation
 
