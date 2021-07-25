@@ -1,0 +1,7 @@
+**/__pycache__
+/vscode.egg-info
+/dist
+/build
+/.vscode
+.env
+package.json
