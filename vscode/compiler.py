@@ -64,10 +64,11 @@ def build_py(functions):
 def build_js(name, events, commands):
     cwd = os.getcwd()
     python_path = os.path.join(cwd, "build", "extension.py").replace('\\', '\\\\')
-    pre = '// Built using vscode-ext\n\n'
 
-    imports = pre + "const vscode = require('vscode');\nconst spawn = require('child_process').spawn;\n"
-
+    imports = ''
+    directory, filename = os.path.split(inspect.getfile(build_py))
+    with open(os.path.join(directory,'main.js'),'r') as f:
+        imports += f.read()
     on_activate = events.get("activate")
     code_on_activate = "function activate(context) {\n"
     if on_activate:
@@ -78,10 +79,12 @@ def build_js(name, events, commands):
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
             + "async function () {\n"
         )
-        code_on_activate += f'let pythonProcess = spawn("python", ["{python_path}","{command.func_name}"]);\n'
-        directory, filename = os.path.split(inspect.getfile(build_py))
-        with open(os.path.join(directory,'main.js'),'r') as f:
-            code_on_activate += f.read()
+        code_on_activate += f'let py = spawn("python", [pythonPath,"{command.func_name}"]);\n'
+        code_on_activate += '''
+py.stdout.on("data", (data) => {
+    executeCommands(py, data);
+});
+'''
         code_on_activate += "});\n"
         code_on_activate += f"context.subscriptions.push({command.name});\n"
 
@@ -138,7 +141,7 @@ def create_files(package, javascript, python, publish):
                 f.write('.vscode/**') 
 
 def build(extension, publish=False):
-    print(f"\033[1;37;49mBuilding Extension...", "\033[0m")
+    print(f"\033[1;37;49mBuilding Extension {extension.name}...", "\033[0m")
     start = time.time()
 
     ext_data = extension.__dict__
