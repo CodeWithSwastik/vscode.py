@@ -42,7 +42,7 @@ launch_json = {
     ],
 }
 
-main_py = """\n
+main_py = """
 import sys
 def ipc_main():
     globals()[sys.argv[1]]()
@@ -54,7 +54,7 @@ ipc_main()
 def build_py(functions):
     pre = "# Built using vscode-ext\n\n"
     with open(inspect.getfile(functions[0]), "r") as f:
-        imports = pre + "".join([l for l in f.readlines() if not ".build(" in l])
+        imports = pre + "".join([l for l in f.readlines() if not "build(" in l])
     imports += "\n"
     main = main_py
     code = imports + main
@@ -85,6 +85,9 @@ def build_js(name, events, commands):
         code_on_activate += """
 py.stdout.on("data", (data) => {
     executeCommands(py, data);
+});
+py.stderr.on("data", (data) => {
+    console.error(`An Error occurred in the python script: ${data}`);
 });
 """
         code_on_activate += "});\n"

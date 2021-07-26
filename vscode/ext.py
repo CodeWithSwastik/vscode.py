@@ -1,3 +1,4 @@
+from .interfaces import *
 class Extension:
     def __init__(self, name, display_name, version, description=""):
         self.name = name
@@ -95,10 +96,3 @@ class Command:
 
     def __repr__(self):
         return f"<vscode.Command {self.name}>"
-
-
-class ActivityBar:
-    def __init__(self, id, title, icon):
-        self.id = id
-        self.title = title
-        self.icon = icon

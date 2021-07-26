@@ -24,6 +24,11 @@ function executeCommands(pythonProcess, data) {
         .showQuickPick(JSON.parse(args[0]), JSON.parse(args[1]))
         .then((r) => pythonProcess.stdin.write(JSON.stringify(r) + "\n"));
       break;
+    case "IB":
+      vscode.window
+        .showInputBox(JSON.parse(args[0]))
+        .then((s) => pythonProcess.stdin.write(s + "\n"));
+      break;
     case "OE":
       vscode.env.openExternal(args[0]);
       break;

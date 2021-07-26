@@ -23,8 +23,10 @@ def ask_question():
     if res == "Great":
         vscode.window.show_info_message("Woah nice!!")
     elif res == "Meh":
-        vscode.window.show_info_message("Sorry to hear that :(")
-
+        options = vscode.ext.InputBoxOptions(prompt='Sorry to hear that, could you tell us why?')
+        res = vscode.window.show_input_box(options)
+        vscode.window.show_info_message(res)
+        
 
 @ext.command()
 def show_picker():
@@ -32,7 +34,9 @@ def show_picker():
         {"label": "apple", "detail": "A fruit"},
         {"label": "boring", "detail": "An adjective"},
     ]
-    res = vscode.window.show_quick_pick(data, {"matchOnDetail": True})
+    res = vscode.window.show_quick_pick(data, vscode.ext.QuickPickOptions(match_on_detail=True))
+    if res == vscode.undefined:
+        return print(type(res))
     vscode.window.show_info_message(f"Nice you chose {res['label']}")
 
 
