@@ -79,33 +79,9 @@ def build_js(name, events, commands):
             + "async function () {\n"
         )
         code_on_activate += f'let pythonProcess = spawn("python", ["{python_path}","{command.func_name}"]);\n'
-        code_on_activate += 'pythonProcess.stdout.on("data", (data) => {\n'
-        code_on_activate += '''data = data.toString().split('\\n').filter(e => e !== ''); 
-        debug = data.slice(0, data.length-1);
-        data = data[data.length-1];
-        code = data.slice(0,2); 
-        args = data.substring(4).split("|||");
-        switch (code) {
-        case "IM":
-            vscode.window.showInformationMessage(...args).then((r) => pythonProcess.stdin.write(r + "\\n"));;
-            break;
-        case "WM":
-            vscode.window.showWarningMessage(...args).then((r) => pythonProcess.stdin.write(r + "\\n"));;
-            break;
-        case "EM":
-            vscode.window.showErrorMessage(...args).then((r) => pythonProcess.stdin.write(r + "\\n"));;
-            break;
-        case "QP":
-            vscode.window.showQuickPick(JSON.parse(args[0]), JSON.parse(args[1])).then((r) => pythonProcess.stdin.write(JSON.stringify(r) + "\\n"));;
-
-        default:
-            console.log("Couldn't parse this: "+data);
-        };
-        if (debug.length > 0) {
-          console.log("Debug message from extension.py: " + debug);
-        };
-        '''
-        code_on_activate += "});\n"
+        directory, filename = os.path.split(inspect.getfile(build_py))
+        with open(os.path.join(directory,'main.js'),'r') as f:
+            code_on_activate += f.read()
         code_on_activate += "});\n"
         code_on_activate += f"context.subscriptions.push({command.name});\n"
 
