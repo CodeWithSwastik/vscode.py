@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = "1.1.5"
+version = "1.1.8"
 
 with open("README.md", "r", encoding="utf-8") as readme_file:
     long_description = readme_file.read()
@@ -17,9 +17,10 @@ setup(
     author="Swas.py",
     author_email="cwswas.py@gmail.com",
     packages=find_packages(),
-    url = "https://github.com/CodeWithSwastik/vscode", 
+    include_package_data=True,
+    url = "https://github.com/CodeWithSwastik/vscode-ext", 
     project_urls={
-    "Issue tracker": "https://github.com/CodeWithSwastik/vscode/issues",
+    "Issue tracker": "https://github.com/CodeWithSwastik/vscode-ext/issues",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
