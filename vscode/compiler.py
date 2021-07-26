@@ -186,7 +186,7 @@ def build(extension, publish=False, config=None):
                 }
             ]
         }
-        if package_config["contributes"].has_key("views"):
+        if "views" in package_config["contributes"]:
             package_config["contributes"]["views"].update(view)
         else:
             package_config["contributes"]["views"] = view
