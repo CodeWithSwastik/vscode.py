@@ -4,7 +4,7 @@ import time
 import inspect
 
 
-def create_package(data, activation_events, commands):
+def create_package(data, config):
     package_name = data["name"]
     package = {
         "name": package_name,
@@ -13,12 +13,9 @@ def create_package(data, activation_events, commands):
         "version": data["version"],
         "engines": {"vscode": "^1.58.0"},
         "categories": ["Other"],
-        "activationEvents": activation_events,
         "main": "./build/extension.js",
-        "contributes": {
-            "commands": commands,
-        },
     }
+    package.update(config)
     return package
 
 
@@ -163,10 +160,38 @@ def build(extension, publish=False, config=None):
     activation_events = []
     for command in ext_data.get("commands"):
         cmd = {"command": f"{package_name}.{command.name}", "title": command.title}
+        if command.category is not None:
+            cmd.update({"category": command.category})
         event = "onCommand:" + command.extension(package_name)
         commands.append(cmd)
         activation_events.append(event)
-    package = create_package(ext_data, activation_events, commands)
+    package_config = {
+        "contributes": {
+            "commands": commands,
+        },
+        "activationEvents": activation_events,
+    }
+    if extension.keybindings:
+        package_config["contributes"].update({"keybindings": extension.keybindings})
+
+    if extension.activity_bar:
+        package_config["contributes"]["viewsContainers"] = {
+            "activitybar": [extension.activity_bar]
+        }
+        view = {
+            extension.activity_bar["id"]: [
+                {
+                    "id": extension.activity_bar["id"],
+                    "name": extension.activity_bar["title"],
+                }
+            ]
+        }
+        if package_config["contributes"].has_key("views"):
+            package_config["contributes"]["views"].update(view)
+        else:
+            package_config["contributes"]["views"] = view
+
+    package = create_package(ext_data, package_config)
     javascript = build_js(package_name, ext_data["events"], ext_data["commands"])
     python = build_py([c.func for c in ext_data["commands"]])
     create_files(package, javascript, python, publish, config)

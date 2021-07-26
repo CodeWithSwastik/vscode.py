@@ -7,15 +7,22 @@ class Extension:
         self.commands = []
         self.events = {}
         self.default_category = None
-        
-    def register_command(self, func, name=None, title=None, category = None):
+        self.keybindings = []
+        self.activity_bar = None
+
+    def register_command(
+        self, func, name=None, title=None, category=None, keybind=None, when=None
+    ):
         name = func.__name__ if name is None else name
         category = self.default_category if category is None else category
-        self.commands.append(Command(name, func, title, category))
+        command = Command(name, func, title, category, keybind, when)
+        if keybind:
+            self.register_keybind(command)
+        self.commands.append(command)
 
-    def command(self, name=None, title=None, category = None):
+    def command(self, name=None, title=None, category=None, keybind=None, when=None):
         def decorator(func):
-            self.register_command(func, name, title, category)
+            self.register_command(func, name, title, category, keybind, when)
             return func
 
         return decorator
@@ -25,11 +32,28 @@ class Extension:
         self.events[name] = func
         return func
 
-    def set_default_category(self, category=None):
-        self.default_category = category if category is not None else self.display_name
+    def register_keybind(self, command):
+        keybind = {"command": command.extension(self.name), "key": command.keybind}
+        if command.when:
+            keybind.update({"when": command.when})
+        self.keybindings.append(keybind)
+
+    def set_default_category(self, category):
+        self.default_category = category
+
+    def set_activity_bar(self, activity_bar):
+        if isinstance(activity_bar, ActivityBar):
+            self.activity_bar = activity_bar.__dict__
+        elif isinstance(activity_bar, dict):
+            self.activity_bar = activity_bar
+        else:
+            raise TypeError(
+                "activity_bar must be either an instance of vscode.ActivityBar or dict"
+            )
+
 
 class Command:
-    def __init__(self, name, func, title=None, category=None):
+    def __init__(self, name, func, title=None, category=None, keybind=None, when=None):
         self.name = self.convert_snake_to_camel(name)
         if title is None:
             self.title = self.convert_snake_to_title(name)
@@ -39,6 +63,8 @@ class Command:
         self.func = func
         self.func_name = self.func.__name__
         self.category = None if category is False else category
+        self.keybind = keybind.upper() if keybind is not None else None
+        self.when = self.convert_python_condition(when) if when is not None else None
 
     def extension(self, ext_name):
         return f"{ext_name}.{self.name}"
@@ -50,5 +76,29 @@ class Command:
     def convert_snake_to_title(self, text):
         return text.replace("_", " ").title()
 
+    def convert_python_condition(self, condition):
+        condition = " ".join(
+            i if "_" not in i else self.convert_snake_to_camel(i)
+            for i in condition.split(" ")
+        )
+        condition = condition.replace(" and ", " && ")
+        condition = condition.replace(" or ", " || ")
+        if " not " in condition:
+            if not ("(" in condition and ")" in condition):
+                raise SyntaxError(
+                    "Use parenthesis '()' while using 'not' otherwise your conditions might not work as expected!"
+                )
+            else:
+                condition = condition.replace(" not ", " !")
+
+        return condition
+
     def __repr__(self):
         return f"<vscode.Command {self.name}>"
+
+
+class ActivityBar:
+    def __init__(self, id, title, icon):
+        self.id = id
+        self.title = title
+        self.icon = icon

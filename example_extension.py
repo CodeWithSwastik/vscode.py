@@ -1,36 +1,39 @@
 import vscode
 
-ext = vscode.Extension(name="testpy", display_name="Test Py", version = "0.0.1")
+ext = vscode.Extension(name="testpy", display_name="Test Py", version="0.0.1")
+ext.set_default_category(ext.display_name)
+ext.set_activity_bar(
+    vscode.ext.ActivityBar(id=ext.name, title=ext.display_name, icon="media/python.svg")
+)
+
 
 @ext.event
 def on_activate():
     return f"The Extension '{ext.name}' has started"
 
-@ext.command()
-def hello_world():
-    return vscode.window.show_info_message(f'Hello World from {ext.name}')
 
-@ext.command()
+@ext.command(keybind="f8")
+def hello_world():
+    return vscode.window.show_info_message(f"Hello World from {ext.name}")
+
+
+@ext.command(keybind="f9", when="editor_lang_id == python")
 def ask_question():
-    res = vscode.window.show_info_message('How are you?', 'Great', 'Meh')
+    res = vscode.window.show_info_message("How are you?", "Great", "Meh")
     if res == "Great":
-        vscode.window.show_info_message('Woah nice!!')
+        vscode.window.show_info_message("Woah nice!!")
     elif res == "Meh":
-        vscode.window.show_info_message('Sorry to hear that :(')
+        vscode.window.show_info_message("Sorry to hear that :(")
+
 
 @ext.command()
 def show_picker():
     data = [
-        {
-            'label': 'apple',
-            'detail': 'A fruit'
-        }, 
-        {
-            'label': 'boring',
-            'detail': 'An adjective'            
-        }
+        {"label": "apple", "detail": "A fruit"},
+        {"label": "boring", "detail": "An adjective"},
     ]
-    res = vscode.window.show_quick_pick(data, {'matchOnDetail': True})
+    res = vscode.window.show_quick_pick(data, {"matchOnDetail": True})
     vscode.window.show_info_message(f"Nice you chose {res['label']}")
-    
+
+
 vscode.build(ext)

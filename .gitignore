@@ -2,6 +2,7 @@
 /vscode_ext.egg-info
 /dist
 /build
+/media
 /.vscode
 .env
 package.json

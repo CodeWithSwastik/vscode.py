@@ -26,8 +26,10 @@ function executeCommands(pythonProcess, data) {
       break;
     case "OE":
       vscode.env.openExternal(args[0]);
+      break;
     case "EP":
       pythonProcess.stdin.write(vscode.env[args[0]] + "\n");
+      break;
     default:
       console.log("Couldn't parse this: " + data);
   }
