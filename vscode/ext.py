@@ -6,14 +6,16 @@ class Extension:
         self.description = description
         self.commands = []
         self.events = {}
-
-    def register_command(self, func, name=None, title=None):
+        self.default_category = None
+        
+    def register_command(self, func, name=None, title=None, category = None):
         name = func.__name__ if name is None else name
-        self.commands.append(Command(name, func, title))
+        category = self.default_category if category is None else category
+        self.commands.append(Command(name, func, title, category))
 
-    def command(self, name=None, title=None):
+    def command(self, name=None, title=None, category = None):
         def decorator(func):
-            self.register_command(func, name, title)
+            self.register_command(func, name, title, category)
             return func
 
         return decorator
@@ -23,9 +25,11 @@ class Extension:
         self.events[name] = func
         return func
 
+    def set_default_category(self, category=None):
+        self.default_category = category if category is not None else self.display_name
 
 class Command:
-    def __init__(self, name, func, title=None):
+    def __init__(self, name, func, title=None, category=None):
         self.name = self.convert_snake_to_camel(name)
         if title is None:
             self.title = self.convert_snake_to_title(name)
@@ -34,7 +38,8 @@ class Command:
 
         self.func = func
         self.func_name = self.func.__name__
-    
+        self.category = None if category is False else category
+
     def extension(self, ext_name):
         return f"{ext_name}.{self.name}"
 

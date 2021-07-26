@@ -3,6 +3,7 @@ import json
 import time
 import inspect
 
+
 def create_package(data, activation_events, commands):
     package_name = data["name"]
     package = {
@@ -44,30 +45,32 @@ launch_json = {
     ],
 }
 
-main_py = '''\n
+main_py = """\n
 import sys
 def ipc_main():
     globals()[sys.argv[1]]()
 
 ipc_main()
-'''
+"""
+
 
 def build_py(functions):
-    pre = '# Built using vscode-ext\n\n'
-    with open(inspect.getfile(functions[0]), 'r') as f:
-        imports = pre + ''.join([l for l in f.readlines() if not '.build(' in l])
+    pre = "# Built using vscode-ext\n\n"
+    with open(inspect.getfile(functions[0]), "r") as f:
+        imports = pre + "".join([l for l in f.readlines() if not ".build(" in l])
     imports += "\n"
     main = main_py
-    code = imports+main
+    code = imports + main
     return code
+
 
 def build_js(name, events, commands):
     cwd = os.getcwd()
-    python_path = os.path.join(cwd, "build", "extension.py").replace('\\', '\\\\')
+    python_path = os.path.join(cwd, "build", "extension.py").replace("\\", "\\\\")
 
-    imports = ''
+    imports = ""
     directory, filename = os.path.split(inspect.getfile(build_py))
-    with open(os.path.join(directory,'main.js'),'r') as f:
+    with open(os.path.join(directory, "main.js"), "r") as f:
         imports += f.read()
     on_activate = events.get("activate")
     code_on_activate = "function activate(context) {\n"
@@ -79,12 +82,14 @@ def build_js(name, events, commands):
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
             + "async function () {\n"
         )
-        code_on_activate += f'let py = spawn("python", [pythonPath,"{command.func_name}"]);\n'
-        code_on_activate += '''
+        code_on_activate += (
+            f'let py = spawn("python", [pythonPath,"{command.func_name}"]);\n'
+        )
+        code_on_activate += """
 py.stdout.on("data", (data) => {
     executeCommands(py, data);
 });
-'''
+"""
         code_on_activate += "});\n"
         code_on_activate += f"context.subscriptions.push({command.name});\n"
 
@@ -101,7 +106,7 @@ py.stdout.on("data", (data) => {
     return code
 
 
-def create_files(package, javascript, python, publish):
+def create_files(package, javascript, python, publish, config):
     cwd = os.getcwd()
 
     # ---- Static ----
@@ -117,7 +122,7 @@ def create_files(package, javascript, python, publish):
         json.dump(launch_json, f, indent=2)
 
     # ---- Dynamic ----
-
+    package.update(config)
     with open(os.path.join(cwd, "package.json"), "w") as f:
         json.dump(package, f, indent=2)
 
@@ -132,15 +137,22 @@ def create_files(package, javascript, python, publish):
     os.chdir(cwd)
 
     if publish:
-        with open('README.md', 'w') as f:
+        with open("README.md", "w") as f:
             pass
-        with open('CHANGELOG.md', 'w') as f:
-            pass        
-        if not os.path.isfile('.vscodeignore'):
-            with open('.vscodeignore', 'w') as f:
-                f.write('.vscode/**') 
+        with open("CHANGELOG.md", "w") as f:
+            pass
+        if not os.path.isfile(".vscodeignore"):
+            with open(".vscodeignore", "w") as f:
+                f.write(".vscode/**")
 
-def build(extension, publish=False):
+
+def build(extension, publish=False, config=None):
+    if config is None:
+        config = {}
+    if publish:
+        if config.get("publisher") is None:
+            config["publisher"] = input("Enter publisher name: ")
+
     print(f"\033[1;37;49mBuilding Extension {extension.name}...", "\033[0m")
     start = time.time()
 
@@ -157,7 +169,7 @@ def build(extension, publish=False):
     package = create_package(ext_data, activation_events, commands)
     javascript = build_js(package_name, ext_data["events"], ext_data["commands"])
     python = build_py([c.func for c in ext_data["commands"]])
-    create_files(package, javascript, python, publish)
+    create_files(package, javascript, python, publish, config)
     end = time.time()
-    time_taken = round((end - start) * 1000,2)
+    time_taken = round((end - start) * 1000, 2)
     print(f"\033[1;37;49mBuild completed successfully in {time_taken} ms!", "\033[0m")

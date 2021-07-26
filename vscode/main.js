@@ -14,26 +14,20 @@ function executeCommands(pythonProcess, data) {
   code = data.slice(0, 2);
   args = data.substring(4).split("|||");
   switch (code) {
-    case "IM":
-      vscode.window
-        .showInformationMessage(...args)
-        .then((r) => pythonProcess.stdin.write(r + "\n"));
-      break;
-    case "WM":
-      vscode.window
-        .showWarningMessage(...args)
-        .then((r) => pythonProcess.stdin.write(r + "\n"));
-      break;
-    case "EM":
-      vscode.window
-        .showErrorMessage(...args)
-        .then((r) => pythonProcess.stdin.write(r + "\n"));
+    case "SM":
+      vscode.window[args[0]](...args.slice(1)).then((r) =>
+        pythonProcess.stdin.write(r + "\n")
+      );
       break;
     case "QP":
       vscode.window
         .showQuickPick(JSON.parse(args[0]), JSON.parse(args[1]))
         .then((r) => pythonProcess.stdin.write(JSON.stringify(r) + "\n"));
       break;
+    case "OE":
+      vscode.env.openExternal(args[0]);
+    case "EP":
+      pythonProcess.stdin.write(vscode.env[args[0]] + "\n");
     default:
       console.log("Couldn't parse this: " + data);
   }
