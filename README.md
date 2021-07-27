@@ -8,9 +8,9 @@
 <a href="https://GitHub.com/CodeWithSwastik/vscode-ext/stargazers/"><img src="https://img.shields.io/github/stars/CodeWithSwastik/vscode-ext.svg?style=social&amp;label=Star&amp;maxAge=2592000" alt="GitHub stars"></a>
 <a href="https://lbesson.mit-license.org/"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT license"></a></p>
 
+## About
 
-
-Create vscode extensions with python. vscode-ext 
+Create vscode extensions with python. 
 
 ## Installation
 
