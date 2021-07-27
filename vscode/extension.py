@@ -11,6 +11,8 @@ class Extension:
         icon: str = None,
         repository: dict = None,
     ) -> None:
+        if " " in name:
+            raise ValueError("The Extension name should not contain any spaces! If you want to include spaces please use the display_name attribute.")
         self.name = name
         self.display_name = display_name
         self.version = version

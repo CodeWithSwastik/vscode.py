@@ -1,6 +1,6 @@
 import vscode
 
-ext = vscode.Extension(name="testpy", display_name="Test Py", version="0.0.2")
+ext = vscode.Extension(name="test py", display_name="Test Py", version="0.0.2")
 ext.set_activity_bar(
     vscode.ext.ActivityBar(id=ext.name, title=ext.display_name, icon="media/python.svg"),
     vscode.ext.StaticWebview(f"{ext.name}.activity", html ='<h1>Welcome"!</h1>')

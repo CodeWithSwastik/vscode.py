@@ -2,7 +2,7 @@ import os
 import json
 import time
 import inspect
-
+from .extension import Extension
 
 def create_package(data, config):
     package_name = data["name"]
@@ -177,7 +177,10 @@ def create_files(package, javascript, python, publish):
                 f.write(".vscode/**")
 
 
-def build(extension, publish=False, config=None):
+def build(extension: Extension, publish:bool=False, config:dict=None) -> None:
+    """
+    Builds the extension. 
+    """
     if config is None:
         config = {}
     if publish:
