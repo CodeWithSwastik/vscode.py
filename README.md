@@ -1,16 +1,16 @@
 <p align="center">
-  <img alt="vscode logo" src="images/vscode-ext.png" width="100px" />
-  <h1 align="center">vscode-ext</h1>
+  <img alt="vscode logo" src="images/vscode-ext-2.png" width='400px'/>
 </p>
 
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/CodeWithSwastik/vscode-ext/graphs/commit-activity)
-[![Downloads](https://static.pepy.tech/personalized-badge/vscode-ext?period=total&units=international_system&left_color=orange&right_color=brightgreen&left_text=Downloads)](https://pepy.tech/project/vscode-ext)
-[![PyPI version](https://badge.fury.io/py/vscode-ext.svg)](https://pypi.python.org/pypi/vscode-ext/)
-[![GitHub stars](https://img.shields.io/github/stars/CodeWithSwastik/vscode-ext.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/CodeWithSwastik/vscode-ext/stargazers/)
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+<p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode-ext/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance"></a>
+<a href="https://pepy.tech/project/vscode-ext"><img src="https://static.pepy.tech/personalized-badge/vscode-ext?period=total&amp;units=international_system&amp;left_color=orange&amp;right_color=brightgreen&amp;left_text=Downloads" alt="Downloads"></a>
+<a href="https://pypi.python.org/pypi/vscode-ext/"><img src="https://badge.fury.io/py/vscode-ext.svg" alt="PyPI version"></a>
+<a href="https://GitHub.com/CodeWithSwastik/vscode-ext/stargazers/"><img src="https://img.shields.io/github/stars/CodeWithSwastik/vscode-ext.svg?style=social&amp;label=Star&amp;maxAge=2592000" alt="GitHub stars"></a>
+<a href="https://lbesson.mit-license.org/"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT license"></a></p>
 
 
-This package allows you to create vscode extensions with python.
+
+Create vscode extensions with python. vscode-ext 
 
 ## Installation
 
