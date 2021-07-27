@@ -6,19 +6,30 @@ from ._types import *
 from .utils import *
 
 
-def show_quick_pick(items: list, options: QuickPickOptions) -> dict:
+def show_quick_pick(items: list, options: QuickPickOptions) -> QuickPickItem:
     """
     Shows a selection list allowing multiple selections.
 
     Returns either the selected items or undefined.
     """
+    data = []
+    for item in items:
+        if isinstance(item, QuickPickItem):
+            data.append(item.__dict__)
+        else:
+            data.append(item)
     
-    items = json.dumps(items)
+    items = json.dumps(data)
     if isinstance(options, QuickPickOptions):
         options = options.__dict__
     options = json.dumps(options)
     print(f"QP: {items}|||{options}", flush=True, end="")
-    return json_input()
+    res = json_input()
+    if not res:
+        return res
+    else:
+        return QuickPickItem(**res)
+
 
 
 def show_input_box(options: InputBoxOptions) -> str:

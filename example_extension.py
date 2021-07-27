@@ -1,6 +1,6 @@
 import vscode
 
-ext = vscode.Extension(name="test py", display_name="Test Py", version="0.0.2")
+ext = vscode.Extension(name="testpy", display_name="Test Py", version="0.0.2")
 ext.set_activity_bar(
     vscode.ext.ActivityBar(id=ext.name, title=ext.display_name, icon="media/python.svg"),
     vscode.ext.StaticWebview(f"{ext.name}.activity", html ='<h1>Welcome"!</h1>')
@@ -35,9 +35,8 @@ def show_picker():
         {"label": "boring", "detail": "An adjective"},
     ]
     res = vscode.window.show_quick_pick(data, vscode.ext.QuickPickOptions(match_on_detail=True))
-    if res == vscode.undefined:
+    if not res:
         return print(type(res))
-    vscode.window.show_info_message(f"Nice you chose {res['label']}")
-
+    vscode.window.show_info_message(f"Nice you chose {res.label}")
 
 vscode.build(ext)

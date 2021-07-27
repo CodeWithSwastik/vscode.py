@@ -63,6 +63,16 @@ class QuickPickOptions:
         self.placeHolder = place_holder
         self.matchOnDetail = match_on_detail
 
+class QuickPickItem:
+    """
+    Content settings for a Quick Pick Item.
+    """
+
+    def __init__(self, label: str = None, description: str = None, **options) -> None:
+        self.label = label
+        self.description = description
+        self.__dict__.update(options)
+
 
 class Undefined:
     """
