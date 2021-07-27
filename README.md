@@ -16,7 +16,7 @@ Create vscode extensions with python.
 
 Stable version:
 
-```
+```sh-session
 pip install vscode-ext
 ```
 
