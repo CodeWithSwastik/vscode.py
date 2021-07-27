@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="vscode logo" src="images/vscode-ext-2.png" width='400px'/>
+  <img alt="vscode logo" src="images/vscode-ext-2.png" width='500px'/>
 </p>
 
 <p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode-ext/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance"></a>
