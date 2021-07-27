@@ -8,4 +8,4 @@ from . import window
 from .compiler import build
 from .ext import Extension
 from .envMethods import env
-from .interfaces import undefined
+from ._types import *

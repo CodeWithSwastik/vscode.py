@@ -1,8 +1,16 @@
-from .interfaces import *
+from ._types import *
 
 
 class Extension:
-    def __init__(self, name, display_name, version, description=None, icon=None, repository = None):
+    def __init__(
+        self,
+        name: str,
+        display_name: str,
+        version: str,
+        description: str = None,
+        icon: str = None,
+        repository: dict = None,
+    ) -> None:
         self.name = name
         self.display_name = display_name
         self.version = version
@@ -18,8 +26,14 @@ class Extension:
         self.activity_bar_webview = None
 
     def register_command(
-        self, func, name=None, title=None, category=None, keybind=None, when=None
-    ):
+        self,
+        func,
+        name: str = None,
+        title: str = None,
+        category: str = None,
+        keybind: str = None,
+        when: str = None,
+    ) -> None:
         name = func.__name__ if name is None else name
         category = self.default_category if category is None else category
         command = Command(name, func, title, category, keybind, when)
@@ -27,7 +41,14 @@ class Extension:
             self.register_keybind(command)
         self.commands.append(command)
 
-    def command(self, name=None, title=None, category=None, keybind=None, when=None):
+    def command(
+        self,
+        name: str = None,
+        title: str = None,
+        category: str = None,
+        keybind: str = None,
+        when: str = None,
+    ):
         def decorator(func):
             self.register_command(func, name, title, category, keybind, when)
             return func
@@ -39,19 +60,19 @@ class Extension:
         self.events[name] = func
         return func
 
-    def register_keybind(self, command):
+    def register_keybind(self, command) -> None:
         keybind = {"command": command.extension(self.name), "key": command.keybind}
         if command.when:
             keybind.update({"when": command.when})
         self.keybindings.append(keybind)
 
-    def set_repository(self, url):
-        self.repository = {'type': 'git', 'url': url}
+    def set_repository(self, url: str) -> None:
+        self.repository = {"type": "git", "url": url}
 
-    def set_default_category(self, category):
+    def set_default_category(self, category) -> None:
         self.default_category = category
 
-    def set_activity_bar(self, activity_bar, webview=None):
+    def set_activity_bar(self, activity_bar, webview=None) -> None:
         if isinstance(activity_bar, ActivityBar):
             self.activity_bar = activity_bar.__dict__
         elif isinstance(activity_bar, dict):
@@ -72,7 +93,15 @@ class Extension:
 
 
 class Command:
-    def __init__(self, name, func, title=None, category=None, keybind=None, when=None):
+    def __init__(
+        self,
+        name: str,
+        func,
+        title: str = None,
+        category: str = None,
+        keybind: str = None,
+        when: str = None,
+    ):
         self.name = self.convert_snake_to_camel(name)
         if title is None:
             self.title = self.convert_snake_to_title(name)
@@ -85,17 +114,17 @@ class Command:
         self.keybind = keybind.upper() if keybind is not None else None
         self.when = self.convert_python_condition(when) if when is not None else None
 
-    def extension(self, ext_name):
+    def extension(self, ext_name: str) -> str:
         return f"{ext_name}.{self.name}"
 
-    def convert_snake_to_camel(self, text):
+    def convert_snake_to_camel(self, text: str) -> str:
         temp = text.split("_")
         return temp[0] + "".join(ele.title() for ele in temp[1:])
 
-    def convert_snake_to_title(self, text):
+    def convert_snake_to_title(self, text) -> str:
         return text.replace("_", " ").title()
 
-    def convert_python_condition(self, condition):
+    def convert_python_condition(self, condition) -> str:
         condition = " ".join(
             i if "_" not in i else self.convert_snake_to_camel(i)
             for i in condition.split(" ")

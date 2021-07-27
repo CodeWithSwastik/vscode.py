@@ -78,7 +78,7 @@ def build_js(name, events, commands, activity_bar_config=None):
         code_on_activate += (
             f'let html = "{html}"; let id = "{activity_bar_config["id"]}";\n'
         )
-        code_on_activate += '''
+        code_on_activate += """
 let thisProvider = {
   resolveWebviewView: function (thisWebview, thisWebviewContext, thisToken) {
     thisWebview.webview.options = { enableScript: true };
@@ -90,7 +90,7 @@ context.subscriptions.push(
 );
             
             
-'''
+"""
     for command in commands:
         code_on_activate += (
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
@@ -199,14 +199,16 @@ def build(extension, publish=False, config=None):
         event = "onCommand:" + command.extension(package_name)
         commands.append(cmd)
         activation_events.append(event)
-    
+
     package_config = config
-    package_config.update({
-        "contributes": {
-            "commands": commands,
-        },
-        "activationEvents": activation_events,
-    })
+    package_config.update(
+        {
+            "contributes": {
+                "commands": commands,
+            },
+            "activationEvents": activation_events,
+        }
+    )
 
     if extension.keybindings:
         package_config["contributes"].update({"keybindings": extension.keybindings})
@@ -244,7 +246,7 @@ def build(extension, publish=False, config=None):
         package_config["icon"] = extension.icon
     if extension.repository:
         package_config["repository"] = extension.repository
-    
+
     package = create_package(ext_data, package_config)
     javascript = build_js(
         package_name,

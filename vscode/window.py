@@ -2,25 +2,8 @@
 # {2digitcode}: {arg1}|||{arg2}|||{argn}
 
 import json
-from .interfaces import *
-
-
-def _input():
-    res = input()
-    if res.strip() == "undefined":
-        return undefined
-    else:
-        return res
-
-
-def _json_input():
-    res = _input()
-    if not res:
-        return res
-    try:
-        return json.loads(res)
-    except json.decoder.JSONDecodeError:
-        return res
+from ._types import *
+from .utils import *
 
 
 def show_quick_pick(items, options):
@@ -29,7 +12,7 @@ def show_quick_pick(items, options):
         options = options.__dict__
     options = json.dumps(options)
     print(f"QP: {items}|||{options}", flush=True, end="")
-    return _json_input()
+    return json_input()
 
 
 def show_input_box(options):
@@ -37,7 +20,7 @@ def show_input_box(options):
         options = options.__dict__
     options = json.dumps(options)
     print(f"IB: {options}", flush=True, end="")
-    return _input()
+    return uinput()
 
 
 def _base(func, text, *args):
@@ -46,7 +29,7 @@ def _base(func, text, *args):
         flush=True,
         end="",
     )
-    res = _input()
+    res = uinput()
     return res
 
 
