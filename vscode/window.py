@@ -4,13 +4,15 @@
 import json
 from .interfaces import *
 
+
 def _input():
     res = input()
-    if res.strip() == 'undefined':
+    if res.strip() == "undefined":
         return undefined
     else:
         return res
-    
+
+
 def _json_input():
     res = _input()
     if not res:
@@ -20,6 +22,7 @@ def _json_input():
     except json.decoder.JSONDecodeError:
         return res
 
+
 def show_quick_pick(items, options):
     items = json.dumps(items)
     if isinstance(options, QuickPickOptions):
@@ -28,12 +31,14 @@ def show_quick_pick(items, options):
     print(f"QP: {items}|||{options}", flush=True, end="")
     return _json_input()
 
+
 def show_input_box(options):
     if isinstance(options, InputBoxOptions):
         options = options.__dict__
     options = json.dumps(options)
     print(f"IB: {options}", flush=True, end="")
     return _input()
+
 
 def _base(func, text, *args):
     print(

@@ -1,20 +1,29 @@
 class Undefined:
     def __str__(self):
-        return 'undefined'
+        return "undefined"
 
     def __bool__(self):
         return False
 
     def __eq__(self, other):
         return isinstance(other, self.__class__)
-        
+
+
 undefined = Undefined()
+
 
 class ActivityBar:
     def __init__(self, id, title, icon):
         self.id = id
         self.title = title
         self.icon = icon
+
+
+class StaticWebview:
+    def __init__(self, id, html, title=None):
+        self.id = id
+        self.html = html
+        self.title = title
 
 
 class InputBoxOptions:
@@ -33,6 +42,7 @@ class InputBoxOptions:
         self.prompt = prompt
         self.placeHolder = place_holder
         self.value = value
+
 
 class QuickPickOptions:
     def __init__(

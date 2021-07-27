@@ -61,7 +61,7 @@ def build_py(functions):
     return code
 
 
-def build_js(name, events, commands):
+def build_js(name, events, commands, activity_bar_config=None):
     cwd = os.getcwd()
     python_path = os.path.join(cwd, "build", "extension.py").replace("\\", "\\\\")
 
@@ -72,8 +72,26 @@ def build_js(name, events, commands):
     on_activate = events.get("activate")
     code_on_activate = "function activate(context) {\n"
     if on_activate:
-        code_on_activate += f'console.log("{on_activate()}");\n'
-
+        r = str(on_activate()).replace('"', '\\"')
+        code_on_activate += f'console.log("{r}");\n'
+    if activity_bar_config:
+        html = activity_bar_config["html"].replace('"', '\\"')
+        code_on_activate += (
+            f'let html = "{html}"; let id = "{activity_bar_config["id"]}";\n'
+        )
+        code_on_activate += '''
+let thisProvider = {
+  resolveWebviewView: function (thisWebview, thisWebviewContext, thisToken) {
+    thisWebview.webview.options = { enableScript: true };
+    thisWebview.webview.html = html;
+  },
+};
+context.subscriptions.push(
+  vscode.window.registerWebviewViewProvider(id, thisProvider)
+);
+            
+            
+'''
     for command in commands:
         code_on_activate += (
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
@@ -98,7 +116,8 @@ py.stderr.on("data", (data) => {
     on_deactivate = events.get("deactivate")
     code_on_deactivate = "function deactivate() {"
     if on_deactivate:
-        code_on_activate += f'\nconsole.log("{on_deactivate()}");\n'
+        r = str(on_deactivate()).replace('"', '\\"')
+        code_on_activate += f'\nconsole.log("{r}");\n'
     code_on_deactivate += "}"
     main = code_on_activate + "\n" + code_on_deactivate
     exports = "module.exports = {activate,deactivate}"
@@ -181,21 +200,37 @@ def build(extension, publish=False, config=None):
         package_config["contributes"]["viewsContainers"] = {
             "activitybar": [extension.activity_bar]
         }
+        bar = extension.activity_bar
+        webview = extension.activity_bar_webview
         view = {
             extension.activity_bar["id"]: [
                 {
-                    "id": extension.activity_bar["id"],
-                    "name": extension.activity_bar["title"],
+                    "id": f'{extension.name}.{bar["id"]}'
+                    if not webview
+                    else webview["id"],
+                    "name": webview["title"]
+                    if webview and webview["title"]
+                    else bar["title"],
                 }
             ]
         }
+        if extension.activity_bar_webview:
+            view[extension.activity_bar["id"]][0].update({"type": "webview"})
+            package_config["activationEvents"].append(
+                f"onView:{extension.activity_bar_webview['id']}"
+            )
         if "views" in package_config["contributes"]:
             package_config["contributes"]["views"].update(view)
         else:
             package_config["contributes"]["views"] = view
 
     package = create_package(ext_data, package_config)
-    javascript = build_js(package_name, ext_data["events"], ext_data["commands"])
+    javascript = build_js(
+        package_name,
+        ext_data["events"],
+        ext_data["commands"],
+        extension.activity_bar_webview,
+    )
     python = build_py([c.func for c in ext_data["commands"]])
     create_files(package, javascript, python, publish, config)
     end = time.time()

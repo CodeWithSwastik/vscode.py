@@ -1,4 +1,6 @@
 from .interfaces import *
+
+
 class Extension:
     def __init__(self, name, display_name, version, description=""):
         self.name = name
@@ -10,6 +12,7 @@ class Extension:
         self.default_category = None
         self.keybindings = []
         self.activity_bar = None
+        self.activity_bar_webview = None
 
     def register_command(
         self, func, name=None, title=None, category=None, keybind=None, when=None
@@ -42,7 +45,7 @@ class Extension:
     def set_default_category(self, category):
         self.default_category = category
 
-    def set_activity_bar(self, activity_bar):
+    def set_activity_bar(self, activity_bar, webview=None):
         if isinstance(activity_bar, ActivityBar):
             self.activity_bar = activity_bar.__dict__
         elif isinstance(activity_bar, dict):
@@ -51,6 +54,15 @@ class Extension:
             raise TypeError(
                 "activity_bar must be either an instance of vscode.ActivityBar or dict"
             )
+        if webview:
+            if isinstance(webview, StaticWebview):
+                self.activity_bar_webview = webview.__dict__
+            elif isinstance(webview, dict):
+                self.activity_bar_webview = webview
+            else:
+                raise TypeError(
+                    "activity_bar_webview must be either an instance of vscode.StaticWebview or dict"
+                )
 
 
 class Command:
