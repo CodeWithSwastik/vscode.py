@@ -9,7 +9,6 @@ def create_package(data, config):
     package = {
         "name": package_name,
         "displayName": data.get("display_name", package_name),
-        "description": data.get("description", ""),
         "version": data["version"],
         "engines": {"vscode": "^1.58.0"},
         "categories": ["Other"],
@@ -125,7 +124,7 @@ py.stderr.on("data", (data) => {
     return code
 
 
-def create_files(package, javascript, python, publish, config):
+def create_files(package, javascript, python, publish):
     cwd = os.getcwd()
 
     # ---- Static ----
@@ -141,9 +140,18 @@ def create_files(package, javascript, python, publish, config):
         json.dump(launch_json, f, indent=2)
 
     # ---- Dynamic ----
-    package.update(config)
-    with open(os.path.join(cwd, "package.json"), "w") as f:
-        json.dump(package, f, indent=2)
+    package_dir = os.path.join(cwd, "package.json")
+    if os.path.isfile(package_dir):
+        with open(package_dir, "r") as f:
+            try:
+                existing = json.load(f)
+                existing.update(package)
+            except json.decoder.JSONDecodeError:
+                existing = package
+    else:
+        existing = package
+    with open(package_dir, "w") as f:
+        json.dump(existing, f, indent=2)
 
     build_path = os.path.join(cwd, "build")
     os.makedirs(build_path, exist_ok=True)
@@ -156,10 +164,14 @@ def create_files(package, javascript, python, publish, config):
     os.chdir(cwd)
 
     if publish:
-        with open("README.md", "w") as f:
-            pass
-        with open("CHANGELOG.md", "w") as f:
-            pass
+        if not os.path.isfile("README.md"):
+            with open("README.md", "w") as f:
+                pass
+
+        if not os.path.isfile("CHANGELOG.md"):
+            with open("CHANGELOG.md", "w") as f:
+                pass
+
         if not os.path.isfile(".vscodeignore"):
             with open(".vscodeignore", "w") as f:
                 f.write(".vscode/**")
@@ -187,12 +199,15 @@ def build(extension, publish=False, config=None):
         event = "onCommand:" + command.extension(package_name)
         commands.append(cmd)
         activation_events.append(event)
-    package_config = {
+    
+    package_config = config
+    package_config.update({
         "contributes": {
             "commands": commands,
         },
         "activationEvents": activation_events,
-    }
+    })
+
     if extension.keybindings:
         package_config["contributes"].update({"keybindings": extension.keybindings})
 
@@ -223,7 +238,13 @@ def build(extension, publish=False, config=None):
             package_config["contributes"]["views"].update(view)
         else:
             package_config["contributes"]["views"] = view
-
+    if extension.description:
+        package_config["description"] = extension.description
+    if extension.icon:
+        package_config["icon"] = extension.icon
+    if extension.repository:
+        package_config["repository"] = extension.repository
+    
     package = create_package(ext_data, package_config)
     javascript = build_js(
         package_name,
@@ -232,7 +253,7 @@ def build(extension, publish=False, config=None):
         extension.activity_bar_webview,
     )
     python = build_py([c.func for c in ext_data["commands"]])
-    create_files(package, javascript, python, publish, config)
+    create_files(package, javascript, python, publish)
     end = time.time()
     time_taken = round((end - start) * 1000, 2)
     print(f"\033[1;37;49mBuild completed successfully in {time_taken} ms!", "\033[0m")

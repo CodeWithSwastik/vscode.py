@@ -2,11 +2,14 @@ from .interfaces import *
 
 
 class Extension:
-    def __init__(self, name, display_name, version, description=""):
+    def __init__(self, name, display_name, version, description=None, icon=None, repository = None):
         self.name = name
         self.display_name = display_name
         self.version = version
         self.description = description
+        self.icon = icon
+        self.repository = repository
+
         self.commands = []
         self.events = {}
         self.default_category = None
@@ -41,6 +44,9 @@ class Extension:
         if command.when:
             keybind.update({"when": command.when})
         self.keybindings.append(keybind)
+
+    def set_repository(self, url):
+        self.repository = {'type': 'git', 'url': url}
 
     def set_default_category(self, category):
         self.default_category = category
