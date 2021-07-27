@@ -42,18 +42,22 @@ launch_json = {
 }
 
 main_py = """
-import sys
 def ipc_main():
     globals()[sys.argv[1]]()
 
 ipc_main()
 """
 
+force_imports = """
+# Built using vscode-ext
+
+import os
+import sys
+"""
 
 def build_py(functions):
-    pre = "# Built using vscode-ext\n\n"
     with open(inspect.getfile(functions[0]), "r") as f:
-        imports = pre + "".join([l for l in f.readlines() if not "build(" in l])
+        imports = force_imports + "".join([l for l in f.readlines() if not "build(" in l])
     imports += "\n"
     main = main_py
     code = imports + main
@@ -163,6 +167,10 @@ def create_files(package, javascript, python, publish):
         f.write(python)
     os.chdir(cwd)
 
+    if not os.path.isfile("requirements.txt"):
+        with open("requirements.txt", "w") as f:
+            f.write("vscode-ext")
+
     if publish:
         if not os.path.isfile("README.md"):
             with open("README.md", "w") as f:
@@ -177,6 +185,7 @@ def create_files(package, javascript, python, publish):
                 f.write(".vscode/**")
 
 
+
 def build(extension: Extension, publish:bool=False, config:dict=None) -> None:
     """
     Builds the extension. 
@@ -184,9 +193,11 @@ def build(extension: Extension, publish:bool=False, config:dict=None) -> None:
     if config is None:
         config = {}
     if publish:
-        if config.get("publisher") is None:
+        if extension.publisher is None:
             config["publisher"] = input("Enter publisher name: ")
-
+        else:
+            config["publisher"] = extension.publisher 
+        
     print(f"\033[1;37;49mBuilding Extension {extension.name}...", "\033[0m")
     start = time.time()
 

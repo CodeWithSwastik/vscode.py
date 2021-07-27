@@ -3,6 +3,14 @@ const vscode = require("vscode");
 const spawn = require("child_process").spawn;
 const path = require("path");
 const pythonPath = path.join(__dirname, "extension.py");
+const requirements = path.join(__dirname, "../requirements.txt");
+const osvar = process.platform;
+
+if (osvar == "win32") {
+  spawn("python", ["-m", "pip", "install", "-r", requirements]);
+} else {
+  spawn("python3", ["-m", "pip3", "install", "-r", requirements]);
+}
 
 function executeCommands(pythonProcess, data) {
   data = data

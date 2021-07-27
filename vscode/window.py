@@ -6,7 +6,7 @@ from ._types import *
 from .utils import *
 
 
-def show_quick_pick(items: list, options: QuickPickOptions) -> QuickPickItem:
+def show_quick_pick(items: list, options: QuickPickOptions = None) -> QuickPickItem:
     """
     Shows a selection list allowing multiple selections.
 
@@ -20,24 +20,29 @@ def show_quick_pick(items: list, options: QuickPickOptions) -> QuickPickItem:
             data.append(item)
     
     items = json.dumps(data)
+    if not options:
+        options = {}
+    
     if isinstance(options, QuickPickOptions):
         options = options.__dict__
     options = json.dumps(options)
     print(f"QP: {items}|||{options}", flush=True, end="")
     res = json_input()
-    if not res:
+    if not res or isinstance(res, str):
         return res
     else:
         return QuickPickItem(**res)
 
 
 
-def show_input_box(options: InputBoxOptions) -> str:
+def show_input_box(options: InputBoxOptions = None) -> str:
     """
     Opens an input box to ask the user for input.
 
     The returned value will be undefined if the input box was canceled (e.g. pressing ESC). Otherwise the returned value will be the string typed by the user or an empty string if the user did not type anything but dismissed the input box with OK.
     """
+    if not options:
+        options = {}
     if isinstance(options, InputBoxOptions):
         options = options.__dict__
     options = json.dumps(options)
