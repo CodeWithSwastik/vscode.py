@@ -79,3 +79,20 @@ def show_error_message(text:str, *args:str) -> str:
     Show an error message.
     """
     return _base("showErrorMessage", text, *args)
+
+def set_status_bar_message(text: str, hide_after_timeout: int = None) -> Disposable:
+    """
+    Set a message to the status bar. 
+
+    Note that status bar messages stack and that they must be disposed when no longer used.
+
+    hide_after_timeout: Timeout in seconds after which the message will be auto disposed.
+    """
+
+    print(
+        f"BM: {text}" + f"|||{hide_after_timeout*1000}" * (hide_after_timeout is not None),
+        flush=True,
+        end="",
+    )
+    res = uinput()
+    return Disposable(res)

@@ -73,7 +73,7 @@ def build_js(name, events, commands, activity_bar_config=None):
     with open(os.path.join(directory, "main.js"), "r") as f:
         imports += f.read()
     on_activate = events.get("activate")
-    code_on_activate = "function activate(context) {\n"
+    code_on_activate = "function activate(context) {\nlet globalStorage = {}\n"
     if on_activate:
         r = str(on_activate()).replace('"', '\\"')
         code_on_activate += f'console.log("{r}");\n'
@@ -105,7 +105,7 @@ context.subscriptions.push(
         )
         code_on_activate += """
 py.stdout.on("data", (data) => {
-    executeCommands(py, data);
+    executeCommands(py, data, globalStorage);
 });
 py.stderr.on("data", (data) => {
     console.error(`An Error occurred in the python script: ${data}`);

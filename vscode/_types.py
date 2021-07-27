@@ -90,3 +90,14 @@ class Undefined:
 
 
 undefined = Undefined()
+
+class Disposable:
+    """
+    Represents a type which can release resources, such as event listening or a timer.
+    """
+    def __init__(self, id):
+        self.id = id
+
+    def dispose(self):
+        print(f'DI: {self.id}', flush=True, end='')
+        

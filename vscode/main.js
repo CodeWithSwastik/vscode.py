@@ -12,7 +12,7 @@ if (osvar == "win32") {
   spawn("python3", ["-m", "pip3", "install", "-r", requirements]);
 }
 
-function executeCommands(pythonProcess, data) {
+function executeCommands(pythonProcess, data, globalStorage) {
   data = data
     .toString()
     .split("\n")
@@ -42,6 +42,20 @@ function executeCommands(pythonProcess, data) {
       break;
     case "EP":
       pythonProcess.stdin.write(vscode.env[args[0]] + "\n");
+      break;
+    case "BM":
+      let dis;
+      if (args.length > 1) {
+        dis = vscode.window.setStatusBarMessage(args[0], parseInt(args[1]));
+      } else {
+        dis = vscode.window.setStatusBarMessage(args[0]);
+      }
+      let id = "id" + Math.random().toString(16).slice(2);
+      globalStorage[id] = dis;
+      pythonProcess.stdin.write(id + "\n");
+      break;
+    case "DI":
+      globalStorage[args[0]].dispose();
       break;
     default:
       console.log("Couldn't parse this: " + data);
