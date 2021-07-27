@@ -85,6 +85,10 @@ def ask_question():
         vscode.window.show_info_message('Sorry to hear that :(')
 vscode.build(ext)
 ```
+## Extensions built using vscode-ext
+Here's a list of some extensions built using vscode-ext. If you'd like to include your extension here feel free to create a PR.
+- [Youtube](https://github.com/CodeWithSwastik/youtube-ext) 
+
 
 ## Documentation
 
