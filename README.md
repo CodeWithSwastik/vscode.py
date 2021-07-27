@@ -1,4 +1,14 @@
-# vscode-ext
+<p align="center">
+  <img alt="vscode logo" src="images/vscode-ext.png" width="100px" />
+  <h1 align="center">vscode-ext</h1>
+</p>
+
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/CodeWithSwastik/vscode-ext/graphs/commit-activity)
+[![Downloads](https://static.pepy.tech/personalized-badge/vscode-ext?period=total&units=international_system&left_color=orange&right_color=brightgreen&left_text=Downloads)](https://pepy.tech/project/vscode-ext)
+[![PyPI version](https://badge.fury.io/py/vscode-ext.svg)](https://pypi.python.org/pypi/vscode-ext/)
+[![GitHub stars](https://img.shields.io/github/stars/CodeWithSwastik/vscode-ext.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/CodeWithSwastik/vscode-ext/stargazers/)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+
 
 This package allows you to create vscode extensions with python.
 
@@ -10,7 +20,6 @@ Stable version:
 pip install vscode-ext
 ```
 
-Working version: `pip install git+https://github.com/CodeWithSwastik/vscode-ext`
 
 ## Why use this?
 
