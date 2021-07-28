@@ -82,11 +82,6 @@ function executeCommands(pythonProcess, data, globalStorage) {
       pythonProcess.stdin.write(JSON.stringify(res) + "\n");
       break;
     case "EE":
-      let editor = vscode.window.activeTextEditor;
-      let res;
-      if (!editor) {
-        return;
-      }
       let { start, end } = JSON.parse(args[0]);
       let range = new vscode.Range(
         start.line,
@@ -94,7 +89,10 @@ function executeCommands(pythonProcess, data, globalStorage) {
         end.line,
         end.character
       );
-      editor
+      if (!vscode.window.activeTextEditor) {
+        return;
+      }
+      vscode.window.activeTextEditor
         .edit((editB) => {
           editB.replace(range, args[1]);
         })

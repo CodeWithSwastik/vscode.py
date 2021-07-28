@@ -97,21 +97,6 @@ def set_status_bar_message(text: str, hide_after_timeout: int = None) -> Disposa
     res = uinput()
     return Disposable(res)
 
-class ActiveTextEditor:
-    """
-    The currently active editor or undefined. The active editor is the one that currently has focus or, when none has focus, the one that has changed input most recently.
-    """
-
-    def __init__(self):
-        print('AT', flush=True, end="")
-        res = uinput()
-        if not res:
-            self = undefined
-        res = json.loads(res.replace(r'\\', r'\\\\'))
-        self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
-        self.document = TextDocument(self.document)
-        if hasattr(self, 'selection'):
-            self.selection = Range.from_dict(self.selection)
 
 class Position:
     """
@@ -122,8 +107,10 @@ class Position:
         self.character = character
 
     @staticmethod
-    def __init__(data):
-        return Position(0,0).__dict__.update(data)
+    def from_dict(data: dict):
+        pos = Position(0,0)
+        pos.__dict__.update(data)
+        return pos
 
     def __eq__(self, other):
         return self.line == other.line and self.character == other.character
@@ -140,7 +127,8 @@ class Range:
     @staticmethod
     def from_dict(data):
         return Range(Position.from_dict(data['start']),Position.from_dict(data['end']))
-
+    
+    @property
     def __dict__(self):
         return {'start': self.start.__dict__, 'end': self.end.__dict__}
 
@@ -165,6 +153,8 @@ class TextDocument:
     def __init__(self, data):
         self.__dict__.update(data)
 
+
+
     def get_text(self, location: Range = None) -> str:
         """
         Get the text of this document. A substring can be retrieved by providing a range. The range will be adjusted.
@@ -177,23 +167,49 @@ class TextDocument:
         else:
             print('GT', flush=True, end="")
 
-        return uinput()
+        return json_input()
     
     # TODO: TextDocument methods
 
-class TextEditorEdit:
+class ActiveTextEditor:
     """
-    A complex edit that will be applied in one transaction on a TextEditor. 
-    This holds a description of the edits and if the edits are valid (i.e. no overlapping regions, document was not changed in the meantime, etc.) they can be applied on a document associated with a text editor.
+    The currently active editor or undefined. The active editor is the one that currently has focus or, when none has focus, the one that has changed input most recently.
     """
+
+    def __init__(self):
+        print('AT', flush=True, end="")
+        res = uinput()
+        if not res:
+            self = undefined
+        res = json.loads(res.replace(r'\\', r'\\\\'))
+        self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
+        self.document = TextDocument(self.document)
+        if hasattr(self, 'selection'):
+            self.selection = Range.from_dict(self.selection)
+
     def replace(self, location: Range, value: str) -> bool:
+        """
+        Replace a certain text region with a new value. 
+        You can use \r\n or \n in value and they will be normalized to the current document.   
+        """
+
         if isinstance(location, Range):
             location = location.__dict__    
         location = json.dumps(location)
         print(f'EE: {location}|||{value}', flush=True, end="")
         return eval(uinput().title()) 
+    
     def delete(self, location: Range) -> bool:
+        """
+        Delete a certain text region.
+        """
         return self.replace(location, '')
 
     def insert(self, location: Position, value:str) -> bool:
+
+        """
+        Insert text at a location. You can use \r\n or \n in value and they will be normalized to the current document.
+        """
+
         return self.replace(Range(location,location), value)
+        
