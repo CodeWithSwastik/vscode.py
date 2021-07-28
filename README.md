@@ -6,7 +6,7 @@
 <a href="https://pepy.tech/project/vscode-ext"><img src="https://static.pepy.tech/personalized-badge/vscode-ext?period=total&amp;units=international_system&amp;left_color=orange&amp;right_color=brightgreen&amp;left_text=Downloads" alt="Downloads"></a>
 <a href="https://pypi.python.org/pypi/vscode-ext/"><img src="https://badge.fury.io/py/vscode-ext.svg" alt="PyPI version"></a>
 <a href="https://GitHub.com/CodeWithSwastik/vscode-ext/stargazers/"><img src="https://img.shields.io/github/stars/CodeWithSwastik/vscode-ext.svg?style=social&amp;label=Star&amp;maxAge=2592000" alt="GitHub stars"></a>
-<a href="https://lbesson.mit-license.org/"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT license"></a></p>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 ## About
 
