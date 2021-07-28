@@ -57,6 +57,23 @@ function executeCommands(pythonProcess, data, globalStorage) {
     case "DI":
       globalStorage[args[0]].dispose();
       break;
+    case "AT":
+      pythonProcess.stdin.write(
+        JSON.stringify(vscode.window.activeTextEditor) + "\n"
+      );
+      break;
+    case "GT":
+      let editor = vscode.window.activeTextEditor;
+      let res;
+      if (!editor) {
+        res = undefined;
+      } else if (args.length > 0) {
+        res = editor.document.getText(args[0]);
+      } else {
+        res = editor.document.getText();
+      }
+      pythonProcess.stdin.write(JSON.stringify(res) + "\n");
+      break;
     default:
       console.log("Couldn't parse this: " + data);
   }

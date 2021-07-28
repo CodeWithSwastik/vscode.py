@@ -110,3 +110,37 @@ class ActiveTextEditor:
         res = json.loads(res.replace(r'\\', r'\\\\'))
         self.__dict__.update(res)
         
+class Range:
+    def __init__(self, data):
+        self.__dict__.update(data)
+
+    # TODO: Range methods
+
+class Position:
+    """
+    Represents a line and character position, such as the position of the cursor.
+    """
+    def __init__(self, data):
+        self.__dict__.update(data)
+
+    # TODO: Position methods
+
+class TextDocument:
+    """
+    Represents a text document, such as a source file. Text documents have lines and knowledge about an underlying resource like a file.
+    """
+    def __init__(self, data):
+        self.__dict__.update(data)
+
+    def get_text(self, range: Range = None) -> str:
+        """
+        Get the text of this document. A substring can be retrieved by providing a range. The range will be adjusted.
+        """
+        if range is not None:
+            print('GT: {range}', flush=True, end="")
+        else:
+            print('GT', flush=True, end="")
+
+        return uinput()
+    
+    # TODO: TextDocument methods
