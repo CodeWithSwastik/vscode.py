@@ -109,6 +109,7 @@ class ActiveTextEditor:
             self = undefined
         res = json.loads(res.replace(r'\\', r'\\\\'))
         self.__dict__.update(res)
+        self.document = TextDocument(self.document)
         
 class Range:
     def __init__(self, data):
@@ -137,7 +138,10 @@ class TextDocument:
         Get the text of this document. A substring can be retrieved by providing a range. The range will be adjusted.
         """
         if range is not None:
-            print('GT: {range}', flush=True, end="")
+            if isinstance(range, Range):
+                range = range.__dict__
+            range = json.dumps(range)
+            print(f'GT: {range}', flush=True, end="")
         else:
             print('GT', flush=True, end="")
 

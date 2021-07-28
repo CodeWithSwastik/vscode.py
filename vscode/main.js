@@ -68,7 +68,14 @@ function executeCommands(pythonProcess, data, globalStorage) {
       if (!editor) {
         res = undefined;
       } else if (args.length > 0) {
-        res = editor.document.getText(args[0]);
+        let { start, end } = JSON.parse(args[0]);
+        let range = new vscode.Range(
+          start.line,
+          start.character,
+          end.line,
+          end.character
+        );
+        res = editor.document.getText(range);
       } else {
         res = editor.document.getText();
       }
