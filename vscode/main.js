@@ -81,6 +81,25 @@ function executeCommands(pythonProcess, data, globalStorage) {
       }
       pythonProcess.stdin.write(JSON.stringify(res) + "\n");
       break;
+    case "EE":
+      let editor = vscode.window.activeTextEditor;
+      let res;
+      if (!editor) {
+        return;
+      }
+      let { start, end } = JSON.parse(args[0]);
+      let range = new vscode.Range(
+        start.line,
+        start.character,
+        end.line,
+        end.character
+      );
+      editor
+        .edit((editB) => {
+          editB.replace(range, args[1]);
+        })
+        .then((s) => pythonProcess.stdin.write(s + "\n"));
+      break;
     default:
       console.log("Couldn't parse this: " + data);
   }

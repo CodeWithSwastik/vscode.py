@@ -186,14 +186,14 @@ class TextEditorEdit:
     A complex edit that will be applied in one transaction on a TextEditor. 
     This holds a description of the edits and if the edits are valid (i.e. no overlapping regions, document was not changed in the meantime, etc.) they can be applied on a document associated with a text editor.
     """
-    def replace(self, location: Range, value: str) -> None:
+    def replace(self, location: Range, value: str) -> bool:
         if isinstance(location, Range):
             location = location.__dict__    
         location = json.dumps(location)
         print(f'EE: {location}|||{value}', flush=True, end="")
+        return eval(uinput().title()) 
+    def delete(self, location: Range) -> bool:
+        return self.replace(location, '')
 
-    def delete(self, location: Range) -> None:
-        self.replace(location, '')
-
-    def insert(self, location: Position, value:str) -> None:
-        self.replace(Range(location,location), value)
+    def insert(self, location: Position, value:str) -> bool:
+        return self.replace(Range(location,location), value)
