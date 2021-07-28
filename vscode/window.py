@@ -132,7 +132,7 @@ class TextDocument:
     Represents a text document, such as a source file. Text documents have lines and knowledge about an underlying resource like a file.
     """
     def __init__(self, data):
-        self.__dict__.update(data, camel_to_snake)
+        self.__dict__.update(data)
 
     def get_text(self, range: Range = None) -> str:
         """
