@@ -110,22 +110,53 @@ class ActiveTextEditor:
         res = json.loads(res.replace(r'\\', r'\\\\'))
         self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
         self.document = TextDocument(self.document)
-        
-class Range:
-    "A range represents an ordered pair of two positions. It is guaranteed that start.isBeforeOrEqual(end)"
-    def __init__(self, data):
-        self.__dict__.update(data)
-
-    # TODO: Range methods
+        if hasattr(self, 'selection'):
+            self.selection = Range.from_dict(self.selection)
 
 class Position:
     """
     Represents a line and character position, such as the position of the cursor.
     """
-    def __init__(self, data):
-        self.__dict__.update(data)
+    def __init__(self, line:int, character: int):
+        self.line = line
+        self.character = character
+
+    @staticmethod
+    def __init__(data):
+        return Position(0,0).__dict__.update(data)
+
+    def __eq__(self, other):
+        return self.line == other.line and self.character == other.character
 
     # TODO: Position methods
+        
+class Range:
+    "A range represents an ordered pair of two positions. It is guaranteed that start.isBeforeOrEqual(end)"
+    
+    def __init__(self, start: Position, end: Position):
+        self.start = start
+        self.end = end
+
+    @staticmethod
+    def from_dict(data):
+        return Range(Position.from_dict(data['start']),Position.from_dict(data['end']))
+
+    def __dict__(self):
+        return {'start': self.start.__dict__, 'end': self.end.__dict__}
+
+    @property
+    def is_empty(self):
+        return self.start == self.end
+
+    @property
+    def in_single_line(self):
+        return self.start.line == self.end.line
+
+    def __eq__(self, other):
+        return self.start == other.start and self.end == other
+
+    # TODO: Range methods
+
 
 class TextDocument:
     """
@@ -134,15 +165,15 @@ class TextDocument:
     def __init__(self, data):
         self.__dict__.update(data)
 
-    def get_text(self, range: Range = None) -> str:
+    def get_text(self, location: Range = None) -> str:
         """
         Get the text of this document. A substring can be retrieved by providing a range. The range will be adjusted.
         """
-        if range is not None:
-            if isinstance(range, Range):
-                range = range.__dict__
-            range = json.dumps(range)
-            print(f'GT: {range}', flush=True, end="")
+        if location is not None:
+            if isinstance(location, Range):
+                location = location.__dict__
+            location = json.dumps(location)
+            print(f'GT: {location}', flush=True, end="")
         else:
             print('GT', flush=True, end="")
 
@@ -150,3 +181,19 @@ class TextDocument:
     
     # TODO: TextDocument methods
 
+class TextEditorEdit:
+    """
+    A complex edit that will be applied in one transaction on a TextEditor. 
+    This holds a description of the edits and if the edits are valid (i.e. no overlapping regions, document was not changed in the meantime, etc.) they can be applied on a document associated with a text editor.
+    """
+    def replace(self, location: Range, value: str) -> None:
+        if isinstance(location, Range):
+            location = location.__dict__    
+        location = json.dumps(location)
+        print(f'EE: {location}|||{value}', flush=True, end="")
+
+    def delete(self, location: Range) -> None:
+        self.replace(location, '')
+
+    def insert(self, location: Position, value:str) -> None:
+        self.replace(Range(location,location), value)
