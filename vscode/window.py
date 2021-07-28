@@ -96,3 +96,17 @@ def set_status_bar_message(text: str, hide_after_timeout: int = None) -> Disposa
     )
     res = uinput()
     return Disposable(res)
+
+class ActiveTextEditor:
+    """
+    The currently active editor or undefined. The active editor is the one that currently has focus or, when none has focus, the one that has changed input most recently.
+    """
+
+    def __init__(self):
+        print('AT', flush=True, end="")
+        res = uinput()
+        if not res:
+            self = undefined
+        res = json.loads(res.replace(r'\\', r'\\\\'))
+        self.__dict__.update(res)
+        
