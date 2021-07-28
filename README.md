@@ -83,7 +83,7 @@ Press F5. This will run the extension and open a new vscode window in developmen
 
 Finally, test your command.
 
-- Open the command palette with Ctrl+P
+- Open the command palette with Ctrl+P in the development window.
 
 ![image](https://user-images.githubusercontent.com/61446939/126892044-f3b5f4d3-37de-4db5-acef-c6ddd841f1a5.png)
 
@@ -91,7 +91,7 @@ Finally, test your command.
 
 ![image](https://user-images.githubusercontent.com/61446939/126892096-9fc1cb2f-9b76-4d53-8099-e74d9f22e6e7.png)
 
-- It should show a popup like this in the bottem right corner
+- It should show a popup like this in the bottom right corner
 
 ![image](https://user-images.githubusercontent.com/61446939/126892110-f8d4bcf2-9ec0-43c2-a7d6-40288d91f000.png)
 
