@@ -103,4 +103,4 @@ Here's a list of some extensions built using vscode-ext. If you'd like to includ
 
 ## Documentation
 
-The docs are coming soon! In the meantime you can look at the examples in order to learn how vscode-ext works and what it offers!
+The docs are coming soon! In the meantime you can look at the [examples](https://github.com/CodeWithSwastik/vscode-ext/tree/main/examples) in order to learn how vscode-ext works and what it offers!
