@@ -41,6 +41,12 @@ launch_json = {
     ],
 }
 
+pre_imports = """# Built using vscode-ext
+
+import sys
+"""
+
+
 main_py = """
 def ipc_main():
     globals()[sys.argv[1]]()
@@ -48,10 +54,6 @@ def ipc_main():
 ipc_main()
 """
 
-pre_imports = """# Built using vscode-ext
-
-import sys
-"""
 
 def build_py(functions):
     with open(inspect.getfile(functions[0]), "r") as f:
@@ -98,10 +100,13 @@ context.subscriptions.push(
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
             + "async function () {\n"
         )
+        pyvar = "python" if os.name == 'nt' else 'python3'
         code_on_activate += (
-            f'let py = spawn("python", [pythonPath,"{command.func_name}"]);\n'
+            f'let funcName = "{command.func_name}"; let pyVar = "{pyvar}";'
         )
         code_on_activate += """
+let py = spawn(pyvar, [pythonPath, funcName]);
+
 py.stdout.on("data", (data) => {
     executeCommands(py, data, globalStorage);
 });
