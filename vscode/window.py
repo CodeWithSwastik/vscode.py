@@ -108,10 +108,11 @@ class ActiveTextEditor:
         if not res:
             self = undefined
         res = json.loads(res.replace(r'\\', r'\\\\'))
-        self.__dict__.update(res)
+        self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
         self.document = TextDocument(self.document)
         
 class Range:
+    "A range represents an ordered pair of two positions. It is guaranteed that start.isBeforeOrEqual(end)"
     def __init__(self, data):
         self.__dict__.update(data)
 
@@ -131,7 +132,7 @@ class TextDocument:
     Represents a text document, such as a source file. Text documents have lines and knowledge about an underlying resource like a file.
     """
     def __init__(self, data):
-        self.__dict__.update(data)
+        self.__dict__.update(data, camel_to_snake)
 
     def get_text(self, range: Range = None) -> str:
         """
@@ -148,3 +149,4 @@ class TextDocument:
         return uinput()
     
     # TODO: TextDocument methods
+
