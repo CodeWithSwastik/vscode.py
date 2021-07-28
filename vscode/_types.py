@@ -121,7 +121,26 @@ class Position:
     def __eq__(self, other):
         return self.line == other.line and self.character == other.character
 
-    # TODO: Position methods
+    def __sub__(self, other):
+        return self.compare(other)
+
+    def __lt__(self, other):
+        return self.line < other.line or (self.line == other.line and self.character < other.character)
+
+    def __le__(self, other):
+        return  self == other or self < other
+    
+    def __gt__(self, other):
+        return not self <= other
+
+    def __ge__(self, other):
+        return not self < other    
+        
+    def compare(self, other):
+        return 1 if self > other else -1 if self < other else 0
+
+    def __repr__(self):
+        return f'{self.line}:{self.character}'
         
 class Range:
     "A range represents an ordered pair of two positions. It is guaranteed that start.isBeforeOrEqual(end)"
@@ -146,10 +165,34 @@ class Range:
     def in_single_line(self):
         return self.start.line == self.end.line
 
+    def __repr__(self):
+        return f'[{self.start},{self.end}]'
+
     def __eq__(self, other):
         return self.start == other.start and self.end == other
 
-    # TODO: Range methods
+    def __contains__(self, other):
+        if isinstance(other, Position):
+            return self.start <= other <= self.end
+        else:
+            return self.start <= other.start and self.end >= other.end 
+
+    def intersection(self, other):
+        if self.end < other.start or other.end < self.start:
+            return undefined
+        
+        start = max(self.start, other.start)
+        end = min(self.end, other.end)
+
+        return Range(start, end)
+
+    def union(self, other):
+        start = min(self.start, other.start)
+        end = max(self.end, other.end)
+
+        return Range(start, end)
+
+
 
 
 class TextDocument:
@@ -158,8 +201,6 @@ class TextDocument:
     """
     def __init__(self, data):
         self.__dict__.update(data)
-
-
 
     def get_text(self, location: Range = None) -> str:
         """
