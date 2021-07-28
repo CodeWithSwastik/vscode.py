@@ -1,6 +1,6 @@
 import vscode
 
-ext = vscode.Extension(name="firstext", display_name="First Ext", version="0.0.1")
+ext = vscode.Extension(name="example", display_name="Example Ext", version="0.0.1")
 
 @ext.command()
 def input_box():

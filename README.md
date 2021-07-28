@@ -10,7 +10,7 @@
 
 ## About
 
-Create vscode extensions with python. 
+Create vscode extensions with python.
 
 ## Installation
 
@@ -20,7 +20,6 @@ Stable version:
 pip install vscode-ext
 ```
 
-
 ## Why use this?
 
 Why should you use this for building VScode extensions when you can use typescript? Here are some reasons:
@@ -28,6 +27,7 @@ Why should you use this for building VScode extensions when you can use typescri
 - vscode-ext builds the package.json for you! No need to switch between your extension.py and package.json in order to add commands. It also handles adding Activity Bars, Keybinds and Views.
 - vscode-ext provides a more pythonic way of creating the extension. Python also has some powerful modules that Javascript doesn't and you can include these with vscode-ext
 - vscode-ext extensions work perfectly with vsce and you can publish your extensions just like you would publish any other extension.
+
 ## Example Extension
 
 ```python
@@ -95,12 +95,12 @@ Finally, test your command.
 
 ![image](https://user-images.githubusercontent.com/61446939/126892110-f8d4bcf2-9ec0-43c2-a7d6-40288d91f000.png)
 
-
 ## Extensions built using vscode-ext
-Here's a list of some extensions built using vscode-ext. If you'd like to include your extension here feel free to create a PR.
-- [Youtube](https://github.com/CodeWithSwastik/youtube-ext) 
 
+Here's a list of some extensions built using vscode-ext. If you'd like to include your extension here feel free to create a PR.
+
+- [Youtube](https://github.com/CodeWithSwastik/youtube-ext)
 
 ## Documentation
 
-Coming soon!
+The docs are coming soon! In the meantime you can look at the examples in order to learn how vscode-ext works and what it offers!
