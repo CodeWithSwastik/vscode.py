@@ -1,3 +1,5 @@
+from .utils import *
+
 class ActivityBar:
     """
     Content settings for the activity bar.
@@ -102,3 +104,75 @@ class Disposable:
     def dispose(self):
         print(f'DI: {self.id}', flush=True, end='')
         
+class Position:
+    """
+    Represents a line and character position, such as the position of the cursor.
+    """
+    def __init__(self, line:int, character: int):
+        self.line = line
+        self.character = character
+
+    @staticmethod
+    def from_dict(data: dict):
+        pos = Position(0,0)
+        pos.__dict__.update(data)
+        return pos
+
+    def __eq__(self, other):
+        return self.line == other.line and self.character == other.character
+
+    # TODO: Position methods
+        
+class Range:
+    "A range represents an ordered pair of two positions. It is guaranteed that start.isBeforeOrEqual(end)"
+    
+    def __init__(self, start: Position, end: Position):
+        self.start = start
+        self.end = end
+
+    @staticmethod
+    def from_dict(data):
+        return Range(Position.from_dict(data['start']),Position.from_dict(data['end']))
+    
+    @property
+    def __dict__(self):
+        return {'start': self.start.__dict__, 'end': self.end.__dict__}
+
+    @property
+    def is_empty(self):
+        return self.start == self.end
+
+    @property
+    def in_single_line(self):
+        return self.start.line == self.end.line
+
+    def __eq__(self, other):
+        return self.start == other.start and self.end == other
+
+    # TODO: Range methods
+
+
+class TextDocument:
+    """
+    Represents a text document, such as a source file. Text documents have lines and knowledge about an underlying resource like a file.
+    """
+    def __init__(self, data):
+        self.__dict__.update(data)
+
+
+
+    def get_text(self, location: Range = None) -> str:
+        """
+        Get the text of this document. A substring can be retrieved by providing a range. The range will be adjusted.
+        """
+        if location is not None:
+            if isinstance(location, Range):
+                location = location.__dict__
+            location = json.dumps(location)
+            print(f'GT: {location}', flush=True, end="")
+        else:
+            print('GT', flush=True, end="")
+
+        return json_input()
+    
+    # TODO: TextDocument methods
