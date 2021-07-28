@@ -105,7 +105,7 @@ context.subscriptions.push(
             f'let funcName = "{command.func_name}"; let pyVar = "{pyvar}";'
         )
         code_on_activate += """
-let py = spawn(pyvar, [pythonPath, funcName]);
+let py = spawn(pyVar, [pythonPath, funcName]);
 
 py.stdout.on("data", (data) => {
     executeCommands(py, data, globalStorage);
