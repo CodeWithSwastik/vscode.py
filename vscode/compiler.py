@@ -48,16 +48,14 @@ def ipc_main():
 ipc_main()
 """
 
-force_imports = """
-# Built using vscode-ext
+pre_imports = """# Built using vscode-ext
 
-import os
 import sys
 """
 
 def build_py(functions):
     with open(inspect.getfile(functions[0]), "r") as f:
-        imports = force_imports + "".join([l for l in f.readlines() if not "build(" in l])
+        imports = pre_imports + "".join([l for l in f.readlines() if not "build(" in l])
     imports += "\n"
     main = main_py
     code = imports + main
