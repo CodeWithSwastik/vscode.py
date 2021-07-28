@@ -68,8 +68,9 @@ class QuickPickItem:
     Content settings for a Quick Pick Item.
     """
 
-    def __init__(self, label: str = None, description: str = None, **options) -> None:
+    def __init__(self, label: str = None, detail: str = None, description: str = None, **options) -> None:
         self.label = label
+        self.detail = detail
         self.description = description
         self.__dict__.update(options)
 

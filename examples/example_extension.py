@@ -37,6 +37,6 @@ def show_picker():
     res = vscode.window.show_quick_pick(data, vscode.ext.QuickPickOptions(match_on_detail=True))
     if not res:
         return
-    vscode.window.show_info_message(f"Nice you chose {res.label}")
+    vscode.window.show_info_message(f"Nice you selected: {res.label}")
 
 vscode.build(ext)
