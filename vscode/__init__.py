@@ -4,9 +4,9 @@ __license__ = "MIT"
 __copyright__ = "Copyright 2021 Swas.py"
 __version__ = "1.4.11"
 
+from . import types as ext
 from . import window
 from .compiler import build
+from .envMethods import env
 from .extension import Extension
-from .env_methods import env
-from . import types as ext
 from .types import *

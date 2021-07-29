@@ -1,7 +1,8 @@
-import os
-import json
-import time
 import inspect
+import json
+import os
+import time
+
 from .extension import Extension
 
 
@@ -84,18 +85,18 @@ def build_js(name, events, commands, activity_bar_config=None):
             f'let html = "{html}"; let id = "{activity_bar_config["id"]}";\n'
         )
         code_on_activate += """
-let thisProvider = {
-  resolveWebviewView: function (thisWebview, thisWebviewContext, thisToken) {
-    thisWebview.webview.options = { enableScript: true };
-    thisWebview.webview.html = html;
-  },
-};
-context.subscriptions.push(
-  vscode.window.registerWebviewViewProvider(id, thisProvider)
-);
-            
-            
-"""
+        let thisProvider = {
+        resolveWebviewView: function (thisWebview, thisWebviewContext, thisToken) {
+            thisWebview.webview.options = { enableScript: true };
+            thisWebview.webview.html = html;
+        },
+        };
+        context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(id, thisProvider)
+        );
+                    
+                    
+        """
     for command in commands:
         code_on_activate += (
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
@@ -106,15 +107,15 @@ context.subscriptions.push(
             f'let funcName = "{command.func_name}"; let pyVar = "{pyvar}";'
         )
         code_on_activate += """
-let py = spawn(pyVar, [pythonPath, funcName]);
+        let py = spawn(pyVar, [pythonPath, funcName]);
 
-py.stdout.on("data", (data) => {
-    executeCommands(py, data, globalStorage);
-});
-py.stderr.on("data", (data) => {
-    console.error(`An Error occurred in the python script: ${data}`);
-});
-"""
+        py.stdout.on("data", (data) => {
+            executeCommands(py, data, globalStorage);
+        });
+        py.stderr.on("data", (data) => {
+            console.error(`An Error occurred in the python script: ${data}`);
+        });
+        """
         code_on_activate += "});\n"
         code_on_activate += f"context.subscriptions.push({command.name});\n"
 
@@ -128,8 +129,7 @@ py.stderr.on("data", (data) => {
     code_on_deactivate += "}"
     main = code_on_activate + "\n" + code_on_deactivate
     exports = "module.exports = {activate,deactivate}"
-    code = f"{imports}\n{main}\n\n{exports}"
-    return code
+    return f"{imports}\n{main}\n\n{exports}"
 
 
 def create_files(package, javascript, python, publish):
@@ -192,6 +192,11 @@ def create_files(package, javascript, python, publish):
 def build(extension: Extension, publish: bool = False, config: dict = None) -> None:
     """
     Builds the extension.
+
+    Parameters:
+    - extension: The extension to build
+    - publish: If `True`, files needed for publishing will be created
+    - config: Configuration data
     """
     if config is None:
         config = {}

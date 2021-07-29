@@ -1,4 +1,5 @@
 import json
+
 from .undef import undefined
 
 
@@ -21,18 +22,18 @@ def json_input():
 
 
 def send_ipc(code, args=None):
-    obj = json.dumps({"code": code, "args": args if args else []})
+    obj = json.dumps({"code": code, "args": args or []})
     print(f"{obj}", flush=True, end="")
 
 
 def camel_to_snake(text: str) -> str:
-    return "".join(["_" + i.lower() if i.isupper() else i for i in text]).lstrip("_")
+    return "".join("_" + i.lower() if i.isupper() else i for i in text).lstrip("_")
 
 
 def apply_func_to_keys(dictionary: dict, func) -> dict:
     new = {}
-    for key in dictionary:
-        if isinstance(dictionary[key], dict):
+    for key, value in dictionary.items():
+        if isinstance(value, dict):
             new[func(key)] = apply_func_to_keys(dictionary[key], func)
         else:
             new[func(key)] = dictionary[key]
