@@ -100,6 +100,7 @@ Finally, test your command.
 Here's a list of some extensions built using vscode-ext. If you'd like to include your extension here feel free to create a PR.
 
 - [Youtube](https://github.com/CodeWithSwastik/youtube-ext)
+- [Wikipedia](https://github.com/SkullCrusher0003/wikipedia-ext)
 
 ## Documentation
 
