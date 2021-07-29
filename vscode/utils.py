@@ -19,10 +19,8 @@ def json_input():
     except json.decoder.JSONDecodeError:
         return res
 
-
-def camel_to_snake(text: str) -> str:
-    return "".join(["_" + i.lower() if i.isupper() else i for i in text]).lstrip("_")
-
+def camel_to_snake(text:str) -> str:
+    return ''.join(['_'+i.lower() if i.isupper() else i for i in text]).lstrip('_')
 
 def apply_func_to_keys(dictionary: dict, func) -> dict:
     new = {}
