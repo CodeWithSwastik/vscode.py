@@ -7,6 +7,6 @@ __version__ = "1.4.11"
 from . import window
 from .compiler import build
 from .extension import Extension
-from .envMethods import env
+from .env_methods import env
 from . import types as ext
 from .types import *

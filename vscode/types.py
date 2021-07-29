@@ -1,6 +1,7 @@
 import json
 from .utils import *
 
+
 class ActivityBar:
     """
     Content settings for the activity bar.
@@ -79,7 +80,6 @@ class QuickPickItem:
         self.detail = detail
         self.description = description
         self.__dict__.update(options)
-
 
 
 class Disposable:
@@ -220,6 +220,7 @@ class Selection(Range):
 
     def is_reversed(self):
         return self.active < self.anchor
+
 
 class TextLine:
     """

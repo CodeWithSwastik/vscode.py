@@ -25,7 +25,7 @@ def show_quick_pick(items: list, options: QuickPickOptions = None) -> QuickPickI
     res = json_input()
     if not res or isinstance(res, str):
         return res
-    elif isinstance(res,dict):
+    elif isinstance(res, dict):
         return QuickPickItem(**res)
     else:
         data = []
@@ -83,7 +83,9 @@ def set_status_bar_message(text: str, hide_after_timeout: int = None) -> Disposa
 
     hide_after_timeout: Timeout in seconds after which the message will be auto disposed.
     """
-    args = [text,hide_after_timeout*1000] if hide_after_timeout is not None else [text]
+    args = (
+        [text, hide_after_timeout * 1000] if hide_after_timeout is not None else [text]
+    )
     send_ipc("BM", args)
     res = json_input()
     return Disposable(res)
@@ -106,9 +108,7 @@ class ActiveTextEditor:
             for sel in self.selections:
                 data.append(Selection.from_dict(sel))
             self.selections = data
-            self.selection = data[0] 
-            
-
+            self.selection = data[0]
 
     @property
     def cursor(self) -> Position:
@@ -125,7 +125,7 @@ class ActiveTextEditor:
 
         if isinstance(location, Range):
             location = location.__dict__
-        send_ipc("EE",[location,value])
+        send_ipc("EE", [location, value])
         return eval(json_input().title())
 
     def delete(self, location: Range) -> bool:
