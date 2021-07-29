@@ -20,7 +20,7 @@ def show_quick_pick(items: list, options: QuickPickOptions = None) -> QuickPickI
 
     if isinstance(options, QuickPickOptions):
         options = options.__dict__
-    send_ipc("QP", [items, options])
+    send_ipc("QP", [data, options])
 
     res = json_input()
     if not res or isinstance(res, str):
