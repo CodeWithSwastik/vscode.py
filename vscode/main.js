@@ -90,7 +90,7 @@ function executeCommands(pythonProcess, data, globalStorage) {
         end.character
       );
       if (!vscode.window.activeTextEditor) {
-        return;
+        return pythonProcess.stdin.write("undefined\n");
       }
       vscode.window.activeTextEditor
         .edit((editB) => {
@@ -98,6 +98,15 @@ function executeCommands(pythonProcess, data, globalStorage) {
         })
         .then((s) => pythonProcess.stdin.write(s + "\n"));
       break;
+    case "LA":
+      if (!vscode.window.activeTextEditor) {
+        return pythonProcess.stdin.write("undefined\n");
+      }
+      let cline = vscode.window.activeTextEditor.document.lineAt(
+        parseInt(arg[0])
+      );
+      return pythonProcess.stdin.write(JSON.stringify(cline) + "\n");
+
     default:
       console.log("Couldn't parse this: " + data);
   }

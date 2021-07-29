@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = "1.4.5"
+version = "1.4.6"
 
 with open("README.md", "r", encoding="utf-8") as readme_file:
     long_description = readme_file.read()

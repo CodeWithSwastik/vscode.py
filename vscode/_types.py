@@ -203,6 +203,14 @@ class Range:
 
         return Range(start, end)
 
+class TextLine:
+    """
+    Represents a line of text, such as a line of source code.
+
+    TextLine objects are immutable. When a document changes, previously retrieved lines will not represent the latest state.
+    """
+    def __init__(self, data):
+        self.__dict__.update(apply_func_to_keys(data, camel_to_snake))
 
 class TextDocument:
     """
@@ -225,5 +233,19 @@ class TextDocument:
             print("GT", flush=True, end="")
 
         return json_input()
+
+    def line_at(self, location) -> TextLine:
+        """
+        Returns a text line denoted by the line number or Position. Note that the returned object is not live and changes to the document are not reflected.
+        
+        Note: If location.line > TextDocument.line_count, the last line will be returned.
+        """
+        if isinstance(location, Position):
+            location = location.line
+        if location > self.line_count:
+            location = self.line_count
+ 
+        print(f'LA: {location}', flush=True, end="")
+        return TextLine(json_input())
 
     # TODO: TextDocument methods
