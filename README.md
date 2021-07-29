@@ -101,6 +101,7 @@ Here's a list of some extensions built using vscode-ext. If you'd like to includ
 
 - [Youtube](https://github.com/CodeWithSwastik/youtube-ext)
 - [Wikipedia](https://github.com/SkullCrusher0003/wikipedia-ext)
+- [Virtual Assistant](https://github.com/SohamGhugare/vscode-virtual-assistant)
 
 ## Documentation
 
