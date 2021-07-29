@@ -107,7 +107,7 @@ class ActiveTextEditor:
             for sel in self.selections:
                 data.append(Selection.from_dict(sel))
             self.selections = data
-            self.selection = data[0]
+            self.selection = data[0] 
             
 
 
