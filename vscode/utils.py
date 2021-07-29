@@ -19,7 +19,10 @@ def json_input():
     except json.decoder.JSONDecodeError:
         return res
 
-
+def send_ipc(code, args=None):
+    obj = json.dumps({'code': code, 'args': args if args else []})
+    print(f'{obj}', flush=True, end='')
+    
 def camel_to_snake(text: str) -> str:
     return "".join(["_" + i.lower() if i.isupper() else i for i in text]).lstrip("_")
 

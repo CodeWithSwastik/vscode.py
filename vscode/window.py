@@ -1,7 +1,3 @@
-# IPC Commands are in the following format
-# {2digitcode}: {arg1}|||{arg2}|||{argn}
-
-import json
 from ._types import *
 from .utils import *
 
@@ -19,19 +15,23 @@ def show_quick_pick(items: list, options: QuickPickOptions = None) -> QuickPickI
         else:
             data.append(item)
 
-    items = json.dumps(data)
     if not options:
         options = {}
 
     if isinstance(options, QuickPickOptions):
         options = options.__dict__
-    options = json.dumps(options)
-    print(f"QP: {items}|||{options}", flush=True, end="")
+    send_ipc("QP", [items, options])
+
     res = json_input()
     if not res or isinstance(res, str):
         return res
-    else:
+    elif isinstance(res,dict):
         return QuickPickItem(**res)
+    else:
+        data = []
+        for r in res:
+            data.append(QuickPickItem(**r) if isinstance(r, dict) else r)
+        return data
 
 
 def show_input_box(options: InputBoxOptions = None) -> str:
@@ -44,18 +44,13 @@ def show_input_box(options: InputBoxOptions = None) -> str:
         options = {}
     if isinstance(options, InputBoxOptions):
         options = options.__dict__
-    options = json.dumps(options)
-    print(f"IB: {options}", flush=True, end="")
-    return uinput()
+    send_ipc("IB", [options])
+    return json_input()
 
 
 def _base(func: str, text: str, *args: str) -> str:
-    print(
-        f"SM: {func}|||{text}" + "|||" * bool(args) + "|||".join(args),
-        flush=True,
-        end="",
-    )
-    res = uinput()
+    send_ipc("SM", [func, text, *args])
+    res = json_input()
     return res
 
 
@@ -88,14 +83,9 @@ def set_status_bar_message(text: str, hide_after_timeout: int = None) -> Disposa
 
     hide_after_timeout: Timeout in seconds after which the message will be auto disposed.
     """
-
-    print(
-        f"BM: {text}"
-        + f"|||{hide_after_timeout*1000}" * (hide_after_timeout is not None),
-        flush=True,
-        end="",
-    )
-    res = uinput()
+    args = [text,hide_after_timeout*1000] if hide_after_timeout is not None else [text]
+    send_ipc("BM", args)
+    res = json_input()
     return Disposable(res)
 
 
@@ -105,11 +95,11 @@ class ActiveTextEditor:
     """
 
     def __init__(self):
-        print("AT", flush=True, end="")
-        res = uinput()
+        send_ipc("AT", [])
+        res = json_input()
         if not res:
             self = undefined
-        res = json.loads(res.replace(r"\\", r"\\\\"))
+        res = json.loads(res)
         self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
         self.document = TextDocument(self.document)
         if hasattr(self, "selections"):
@@ -131,14 +121,13 @@ class ActiveTextEditor:
     def replace(self, location: Range, value: str) -> bool:
         """
         Replace a certain text region with a new value.
-        You can use \r\n or \n in value and they will be normalized to the current document.
+        You can use \\r\\n or \\n in value and they will be normalized to the current document.
         """
 
         if isinstance(location, Range):
             location = location.__dict__
-        location = json.dumps(location)
-        print(f"EE: {location}|||{value}", flush=True, end="")
-        return eval(uinput().title())
+        send_ipc("EE",[location,value])
+        return eval(json_input().title())
 
     def delete(self, location: Range) -> bool:
         """
@@ -149,7 +138,7 @@ class ActiveTextEditor:
     def insert(self, location: Position, value: str) -> bool:
 
         """
-        Insert text at a location. You can use \r\n or \n in value and they will be normalized to the current document.
+        Insert text at a location. You can use \\r\\n or \\n in value and they will be normalized to the current document.
         """
 
         return self.replace(Range(location, location), value)

@@ -13,46 +13,55 @@ if (osvar == "win32") {
 }
 
 function executeCommands(pythonProcess, data, globalStorage) {
-  data = data
-    .toString()
-    .split("\n")
-    .filter((e) => e !== "");
-  debug = data.slice(0, data.length - 1);
+  let ogdata = data.toString();
+  data = ogdata.split("\n");
+  let debug = data.slice(0, data.length - 1);
   data = data[data.length - 1];
-  code = data.slice(0, 2);
-  args = data.substring(4).split("|||");
+  try {
+    data = JSON.parse(data);
+    code = data.code;
+    if (!code) {
+      throw Error;
+    }
+    args = data.args;
+  } catch {
+    return console.log("Debug message from extension.py: " + ogdata);
+  }
+  if (debug.length > 0) {
+    console.log("Debug message from extension.py: " + debug);
+  }
   switch (code) {
     case "SM":
       vscode.window[args[0]](...args.slice(1)).then((r) =>
-        pythonProcess.stdin.write(r + "\n")
+        pythonProcess.stdin.write(JSON.stringify(r) + "\n")
       );
       break;
     case "QP":
       vscode.window
-        .showQuickPick(JSON.parse(args[0]), JSON.parse(args[1]))
+        .showQuickPick(args[0], args[1])
         .then((r) => pythonProcess.stdin.write(JSON.stringify(r) + "\n"));
       break;
     case "IB":
       vscode.window
-        .showInputBox(JSON.parse(args[0]))
-        .then((s) => pythonProcess.stdin.write(s + "\n"));
+        .showInputBox(args[0])
+        .then((s) => pythonProcess.stdin.write(JSON.stringify(s) + "\n"));
       break;
     case "OE":
       vscode.env.openExternal(args[0]);
       break;
     case "EP":
-      pythonProcess.stdin.write(vscode.env[args[0]] + "\n");
+      pythonProcess.stdin.write(JSON.stringify(vscode.env[args[0]]) + "\n");
       break;
     case "BM":
       let dis;
       if (args.length > 1) {
-        dis = vscode.window.setStatusBarMessage(args[0], parseInt(args[1]));
+        dis = vscode.window.setStatusBarMessage(args[0], args[1]);
       } else {
         dis = vscode.window.setStatusBarMessage(args[0]);
       }
       let id = "id" + Math.random().toString(16).slice(2);
       globalStorage[id] = dis;
-      pythonProcess.stdin.write(id + "\n");
+      pythonProcess.stdin.write(JSON.stringify(id) + "\n");
       break;
     case "DI":
       globalStorage[args[0]].dispose();
@@ -68,7 +77,7 @@ function executeCommands(pythonProcess, data, globalStorage) {
       if (!editor) {
         res = undefined;
       } else if (args.length > 0) {
-        let { start, end } = JSON.parse(args[0]);
+        let { start, end } = args[0];
         let range = new vscode.Range(
           start.line,
           start.character,
@@ -82,7 +91,7 @@ function executeCommands(pythonProcess, data, globalStorage) {
       pythonProcess.stdin.write(JSON.stringify(res) + "\n");
       break;
     case "EE":
-      let { start, end } = JSON.parse(args[0]);
+      let { start, end } = args[0];
       let range = new vscode.Range(
         start.line,
         start.character,
@@ -102,16 +111,9 @@ function executeCommands(pythonProcess, data, globalStorage) {
       if (!vscode.window.activeTextEditor) {
         return pythonProcess.stdin.write("undefined\n");
       }
-      let cline = vscode.window.activeTextEditor.document.lineAt(
-        parseInt(args[0])
-      );
+      let cline = vscode.window.activeTextEditor.document.lineAt(args[0]);
       return pythonProcess.stdin.write(JSON.stringify(cline) + "\n");
-
     default:
-      console.log("Couldn't parse this: " + data);
-  }
-
-  if (debug.length > 0) {
-    console.log("Debug message from extension.py: " + debug);
+      console.log("Couldn't parse this: " + JSON.stringify(data));
   }
 }
