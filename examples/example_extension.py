@@ -2,8 +2,10 @@ import vscode
 
 ext = vscode.Extension(name="testpy", display_name="Test Py", version="0.0.2")
 ext.set_activity_bar(
-    vscode.ext.ActivityBar(id=ext.name, title=ext.display_name, icon="media/python.svg"),
-    vscode.ext.StaticWebview(f"{ext.name}.activity", html ='<h1>Welcome"!</h1>')
+    vscode.ext.ActivityBar(
+        id=ext.name, title=ext.display_name, icon="media/python.svg"
+    ),
+    vscode.ext.StaticWebview(f"{ext.name}.activity", html='<h1>Welcome"!</h1>'),
 )
 
 
@@ -23,10 +25,12 @@ def ask_question():
     if res == "Great":
         vscode.window.show_info_message("Woah nice!!")
     elif res == "Meh":
-        options = vscode.ext.InputBoxOptions(prompt='Sorry to hear that, could you tell us why?')
+        options = vscode.ext.InputBoxOptions(
+            prompt="Sorry to hear that, could you tell us why?"
+        )
         res = vscode.window.show_input_box(options)
         vscode.window.show_info_message(res)
-        
+
 
 @ext.command()
 def show_picker():
@@ -34,9 +38,12 @@ def show_picker():
         {"label": "apple", "detail": "A fruit"},
         {"label": "boring", "detail": "An adjective"},
     ]
-    res = vscode.window.show_quick_pick(data, vscode.ext.QuickPickOptions(match_on_detail=True))
+    res = vscode.window.show_quick_pick(
+        data, vscode.ext.QuickPickOptions(match_on_detail=True)
+    )
     if not res:
         return
     vscode.window.show_info_message(f"Nice you selected: {res.label}")
+
 
 vscode.build(ext)

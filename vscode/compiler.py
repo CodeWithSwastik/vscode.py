@@ -4,6 +4,7 @@ import time
 import inspect
 from .extension import Extension
 
+
 def create_package(data, config):
     package_name = data["name"]
     package = {
@@ -100,7 +101,7 @@ context.subscriptions.push(
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
             + "async function () {\n"
         )
-        pyvar = "python" if os.name == 'nt' else 'python3'
+        pyvar = "python" if os.name == "nt" else "python3"
         code_on_activate += (
             f'let funcName = "{command.func_name}"; let pyVar = "{pyvar}";'
         )
@@ -188,10 +189,9 @@ def create_files(package, javascript, python, publish):
                 f.write(".vscode/**")
 
 
-
-def build(extension: Extension, publish:bool=False, config:dict=None) -> None:
+def build(extension: Extension, publish: bool = False, config: dict = None) -> None:
     """
-    Builds the extension. 
+    Builds the extension.
     """
     if config is None:
         config = {}
@@ -199,8 +199,8 @@ def build(extension: Extension, publish:bool=False, config:dict=None) -> None:
         if extension.publisher is None:
             config["publisher"] = input("Enter publisher name: ")
         else:
-            config["publisher"] = extension.publisher 
-        
+            config["publisher"] = extension.publisher
+
     print(f"\033[1;37;49mBuilding Extension {extension.name}...", "\033[0m")
     start = time.time()
 

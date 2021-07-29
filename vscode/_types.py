@@ -1,5 +1,6 @@
 from .utils import *
 
+
 class ActivityBar:
     """
     Content settings for the activity bar.
@@ -65,12 +66,15 @@ class QuickPickOptions:
         self.placeHolder = place_holder
         self.matchOnDetail = match_on_detail
 
+
 class QuickPickItem:
     """
     Content settings for a Quick Pick Item.
     """
 
-    def __init__(self, label: str = None, detail: str = None, description: str = None, **options) -> None:
+    def __init__(
+        self, label: str = None, detail: str = None, description: str = None, **options
+    ) -> None:
         self.label = label
         self.detail = detail
         self.description = description
@@ -94,27 +98,31 @@ class Undefined:
 
 undefined = Undefined()
 
+
 class Disposable:
     """
     Represents a type which can release resources, such as event listening or a timer.
     """
+
     def __init__(self, id):
         self.id = id
 
     def dispose(self):
-        print(f'DI: {self.id}', flush=True, end='')
-        
+        print(f"DI: {self.id}", flush=True, end="")
+
+
 class Position:
     """
     Represents a line and character position, such as the position of the cursor.
     """
-    def __init__(self, line:int, character: int):
+
+    def __init__(self, line: int, character: int):
         self.line = line
         self.character = character
 
     @staticmethod
     def from_dict(data: dict):
-        pos = Position(0,0)
+        pos = Position(0, 0)
         pos.__dict__.update(data)
         return pos
 
@@ -125,37 +133,40 @@ class Position:
         return self.compare(other)
 
     def __lt__(self, other):
-        return self.line < other.line or (self.line == other.line and self.character < other.character)
+        return self.line < other.line or (
+            self.line == other.line and self.character < other.character
+        )
 
     def __le__(self, other):
-        return  self == other or self < other
-    
+        return self == other or self < other
+
     def __gt__(self, other):
         return not self <= other
 
     def __ge__(self, other):
-        return not self < other    
-        
+        return not self < other
+
     def compare(self, other):
         return 1 if self > other else -1 if self < other else 0
 
     def __repr__(self):
-        return f'{self.line}:{self.character}'
-        
+        return f"{self.line}:{self.character}"
+
+
 class Range:
     "A range represents an ordered pair of two positions. It is guaranteed that start.isBeforeOrEqual(end)"
-    
+
     def __init__(self, start: Position, end: Position):
         self.start = start
         self.end = end
 
     @staticmethod
     def from_dict(data):
-        return Range(Position.from_dict(data['start']),Position.from_dict(data['end']))
-    
+        return Range(Position.from_dict(data["start"]), Position.from_dict(data["end"]))
+
     @property
     def __dict__(self):
-        return {'start': self.start.__dict__, 'end': self.end.__dict__}
+        return {"start": self.start.__dict__, "end": self.end.__dict__}
 
     @property
     def is_empty(self):
@@ -166,7 +177,7 @@ class Range:
         return self.start.line == self.end.line
 
     def __repr__(self):
-        return f'[{self.start},{self.end}]'
+        return f"[{self.start},{self.end}]"
 
     def __eq__(self, other):
         return self.start == other.start and self.end == other
@@ -175,12 +186,12 @@ class Range:
         if isinstance(other, Position):
             return self.start <= other <= self.end
         else:
-            return self.start <= other.start and self.end >= other.end 
+            return self.start <= other.start and self.end >= other.end
 
     def intersection(self, other):
         if self.end < other.start or other.end < self.start:
             return undefined
-        
+
         start = max(self.start, other.start)
         end = min(self.end, other.end)
 
@@ -193,12 +204,11 @@ class Range:
         return Range(start, end)
 
 
-
-
 class TextDocument:
     """
     Represents a text document, such as a source file. Text documents have lines and knowledge about an underlying resource like a file.
     """
+
     def __init__(self, data):
         self.__dict__.update(data)
 
@@ -210,10 +220,10 @@ class TextDocument:
             if isinstance(location, Range):
                 location = location.__dict__
             location = json.dumps(location)
-            print(f'GT: {location}', flush=True, end="")
+            print(f"GT: {location}", flush=True, end="")
         else:
-            print('GT', flush=True, end="")
+            print("GT", flush=True, end="")
 
         return json_input()
-    
+
     # TODO: TextDocument methods

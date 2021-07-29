@@ -13,7 +13,9 @@ class Extension:
         publisher: str = None,
     ) -> None:
         if " " in name:
-            raise ValueError("The Extension name should not contain any spaces! If you want to include spaces please use the display_name attribute.")
+            raise ValueError(
+                "The Extension name should not contain any spaces! If you want to include spaces please use the display_name attribute."
+            )
         self.name = name
         self.display_name = display_name
         self.version = version
@@ -70,7 +72,7 @@ class Extension:
             keybind.update({"when": command.when})
         self.keybindings.append(keybind)
 
-    def set_repository(self, url: str, repo_type: str = 'git') -> None:
+    def set_repository(self, url: str, repo_type: str = "git") -> None:
         self.repository = {"type": repo_type, "url": url}
 
     def set_default_category(self, category) -> None:
