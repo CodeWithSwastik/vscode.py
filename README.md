@@ -43,7 +43,7 @@ def on_activate():
 def hello_world():
     vscode.window.show_info_message(f'Hello World from {ext.name}')
 
-@ext.command()
+@ext.command(keybind="ALT+5")
 def ask_question():
     res = vscode.window.show_info_message('How are you?', 'Great', 'Meh')
     if res == "Great":
