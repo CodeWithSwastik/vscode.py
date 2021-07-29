@@ -1,5 +1,6 @@
 import json
 
+
 class ActivityBar:
     """
     Content settings for the activity bar.
@@ -202,14 +203,51 @@ class Range:
 
         return Range(start, end)
 
+
+class Selection(Range):
+    """
+    Represents a text selection in an editor.
+    """
+
+    def __init__(
+        self, active: Position, anchor: Position, start: Position, end: Position
+    ):
+        self.active = active
+        self.anchor = anchor
+        self.start = start
+        self.end = end
+
+    @staticmethod
+    def from_dict(data):
+        return Selection(
+            Position.from_dict(data["active"]),
+            Position.from_dict(data["anchor"]),
+            Position.from_dict(data["start"]),
+            Position.from_dict(data["end"]),
+        )
+
+    @property
+    def __dict__(self):
+        return {
+            "active": self.active.__dict__,
+            "anchor": self.anchor.__dict__,
+            "start": self.start.__dict__,
+            "end": self.end.__dict__,
+        }
+
+    def is_reversed(self):
+        return self.active < self.anchor
+
 class TextLine:
     """
     Represents a line of text, such as a line of source code.
 
     TextLine objects are immutable. When a document changes, previously retrieved lines will not represent the latest state.
     """
+
     def __init__(self, data):
         self.__dict__.update(apply_func_to_keys(data, camel_to_snake))
+
 
 class TextDocument:
     """
@@ -236,18 +274,18 @@ class TextDocument:
     def line_at(self, location) -> TextLine:
         """
         Returns a text line denoted by the line number or Position. Note that the returned object is not live and changes to the document are not reflected.
-        
+
         Note: If location.line > TextDocument.line_count, the last line will be returned.
         """
         if isinstance(location, Position):
             location = location.line
-        if location > self.line_count:
-            location = self.line_count
- 
-        print(f'LA: {location}', flush=True, end="")
+        if location >= self.line_count:
+            location = self.line_count - 1
+        print(f"LA: {location}", flush=True, end="")
         return TextLine(json_input())
 
     # TODO: TextDocument methods
+
 
 def uinput():
     res = input()
@@ -266,8 +304,10 @@ def json_input():
     except json.decoder.JSONDecodeError:
         return res
 
-def camel_to_snake(text:str) -> str:
-    return ''.join(['_'+i.lower() if i.isupper() else i for i in text]).lstrip('_')
+
+def camel_to_snake(text: str) -> str:
+    return "".join(["_" + i.lower() if i.isupper() else i for i in text]).lstrip("_")
+
 
 def apply_func_to_keys(dictionary: dict, func) -> dict:
     new = {}

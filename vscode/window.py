@@ -113,7 +113,13 @@ class ActiveTextEditor:
         self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
         self.document = TextDocument(self.document)
         if hasattr(self, "selection"):
-            self.selection = Range.from_dict(self.selection)
+            self.selection = Selection.from_dict(self.selection)
+
+        if hasattr(self, "selections"):
+            data = []
+            for sel in self.selections:
+                data.append(Selection.from_dict(sel))
+            self.selections = data
 
     def replace(self, location: Range, value: str) -> bool:
         """

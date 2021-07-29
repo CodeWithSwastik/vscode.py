@@ -103,7 +103,7 @@ function executeCommands(pythonProcess, data, globalStorage) {
         return pythonProcess.stdin.write("undefined\n");
       }
       let cline = vscode.window.activeTextEditor.document.lineAt(
-        parseInt(arg[0])
+        parseInt(args[0])
       );
       return pythonProcess.stdin.write(JSON.stringify(cline) + "\n");
 
