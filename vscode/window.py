@@ -112,14 +112,21 @@ class ActiveTextEditor:
         res = json.loads(res.replace(r"\\", r"\\\\"))
         self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
         self.document = TextDocument(self.document)
-        if hasattr(self, "selection"):
-            self.selection = Selection.from_dict(self.selection)
-
         if hasattr(self, "selections"):
             data = []
             for sel in self.selections:
                 data.append(Selection.from_dict(sel))
             self.selections = data
+            self.selection = data[0]
+            
+
+
+    @property
+    def cursor(self) -> Position:
+        """
+        The cursor position of the 1st selection.
+        """
+        return self.selection.active
 
     def replace(self, location: Range, value: str) -> bool:
         """
