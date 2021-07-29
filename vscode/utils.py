@@ -1,5 +1,5 @@
 import json
-from ._types import undefined
+from .undef import undefined
 
 
 def uinput():

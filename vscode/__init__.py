@@ -8,5 +8,5 @@ from . import window
 from .compiler import build
 from .extension import Extension
 from .envMethods import env
-from . import _types as ext
-from ._types import *
+from . import types as ext
+from .types import *

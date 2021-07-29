@@ -77,7 +77,7 @@ function executeCommands(pythonProcess, data, globalStorage) {
       if (!editor) {
         res = undefined;
       } else if (args.length > 0) {
-        let { start, end } = args[0];
+        let { start, end } = JSON.parse(args[0]);
         let range = new vscode.Range(
           start.line,
           start.character,
@@ -91,7 +91,7 @@ function executeCommands(pythonProcess, data, globalStorage) {
       pythonProcess.stdin.write(JSON.stringify(res) + "\n");
       break;
     case "EE":
-      let { start, end } = args[0];
+      let { start, end } = JSON.parse(args[0]);
       let range = new vscode.Range(
         start.line,
         start.character,
@@ -105,15 +105,17 @@ function executeCommands(pythonProcess, data, globalStorage) {
         .edit((editB) => {
           editB.replace(range, args[1]);
         })
-        .then((s) => pythonProcess.stdin.write(s + "\n"));
+        .then((s) => pythonProcess.stdin.write(JSON.stringify(s) + "\n"));
       break;
     case "LA":
       if (!vscode.window.activeTextEditor) {
         return pythonProcess.stdin.write("undefined\n");
       }
-      let cline = vscode.window.activeTextEditor.document.lineAt(args[0]);
+      let cline = vscode.window.activeTextEditor.document.lineAt(
+        parseInt(args[0])
+      );
       return pythonProcess.stdin.write(JSON.stringify(cline) + "\n");
     default:
-      console.log("Couldn't parse this: " + JSON.stringify(data));
+      console.log("Couldn't parse this: " + data);
   }
 }

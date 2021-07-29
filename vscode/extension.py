@@ -1,4 +1,4 @@
-from ._types import *
+from .types import *
 
 
 class Extension:

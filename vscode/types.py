@@ -1,5 +1,5 @@
 import json
-
+from .utils import *
 
 class ActivityBar:
     """
@@ -81,23 +81,6 @@ class QuickPickItem:
         self.__dict__.update(options)
 
 
-class Undefined:
-    """
-    An instance of this class is returned everytime javascript returns undefined.
-    """
-
-    def __str__(self):
-        return "undefined"
-
-    def __bool__(self):
-        return False
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__)
-
-
-undefined = Undefined()
-
 
 class Disposable:
     """
@@ -108,7 +91,7 @@ class Disposable:
         self.id = id
 
     def dispose(self):
-        print(f"DI: {self.id}", flush=True, end="")
+        send_ipc("DI", [self.id])
 
 
 class Position:
@@ -265,9 +248,9 @@ class TextDocument:
             if isinstance(location, Range):
                 location = location.__dict__
             location = json.dumps(location)
-            print(f"GT: {location}", flush=True, end="")
+            send_ipc("GT", [location])
         else:
-            print("GT", flush=True, end="")
+            send_ipc("GT")
 
         return json_input()
 
@@ -281,39 +264,7 @@ class TextDocument:
             location = location.line
         if location >= self.line_count:
             location = self.line_count - 1
-        print(f"LA: {location}", flush=True, end="")
+        send_ipc("LA", [location])
         return TextLine(json_input())
 
     # TODO: TextDocument methods
-
-
-def uinput():
-    res = input()
-    if res.strip() == "undefined":
-        return undefined
-    else:
-        return res
-
-
-def json_input():
-    res = uinput()
-    if not res:
-        return res
-    try:
-        return json.loads(res)
-    except json.decoder.JSONDecodeError:
-        return res
-
-
-def camel_to_snake(text: str) -> str:
-    return "".join(["_" + i.lower() if i.isupper() else i for i in text]).lstrip("_")
-
-
-def apply_func_to_keys(dictionary: dict, func) -> dict:
-    new = {}
-    for key in dictionary:
-        if isinstance(dictionary[key], dict):
-            new[func(key)] = apply_func_to_keys(dictionary[key], func)
-        else:
-            new[func(key)] = dictionary[key]
-    return new
