@@ -371,7 +371,7 @@ def build_theme(theme: ColorTheme, config: dict = None):
         config["icon"] = theme.icon
     if theme.repository is not None:
         config["repository"] = theme.repository
-    if theme.keywords is not []:
+    if theme.keywords:
         config["keywords"] = theme.keywords
     if theme.publisher is not None:
         config["publisher"] = theme.publisher
