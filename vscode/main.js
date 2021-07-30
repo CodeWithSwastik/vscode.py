@@ -52,6 +52,9 @@ function executeCommands(pythonProcess, data, globalStorage) {
     case "EP":
       pythonProcess.stdin.write(JSON.stringify(vscode.env[args[0]]) + "\n");
       break;
+    case "GC":
+      pythonProcess.stdin.write(JSON.stringify(vscode.workspace.getConfiguration(args[0])) + "\n");
+      break;
     case "BM":
       let dis;
       if (args.length > 1) {

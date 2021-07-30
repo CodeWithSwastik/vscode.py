@@ -1,4 +1,8 @@
+from typing import List
+
+from .config import Config
 from .types import *
+from .utils import *
 
 
 class Extension:
@@ -8,6 +12,7 @@ class Extension:
         display_name: str,
         version: str,
         description: str = None,
+        config: List[Config] = None,
         icon: str = None,
         repository: dict = None,
         publisher: str = None,
@@ -20,6 +25,7 @@ class Extension:
         self.display_name = display_name
         self.version = version
         self.description = description
+        self.config = config
         self.icon = icon
         self.repository = repository
         self.publisher = publisher
@@ -96,6 +102,10 @@ class Extension:
                 raise TypeError(
                     "activity_bar_webview must be either an instance of vscode.StaticWebview or dict"
                 )
+
+    def get_config(self, target: str) -> None:
+        send_ipc("GC", [f"{self.name}.{target}"])
+        return json_input()
 
 
 class Command:
