@@ -34,7 +34,7 @@ def apply_func_to_keys(dictionary: dict, func) -> dict:
     new = {}
     for key, value in dictionary.items():
         if isinstance(value, dict):
-            new[func(key)] = apply_func_to_keys(dictionary[key], func)
+            new[func(key)] = apply_func_to_keys(value, func)
         else:
             new[func(key)] = dictionary[key]
     return new
