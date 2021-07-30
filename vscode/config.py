@@ -29,7 +29,7 @@ class EnumConfig(BaseConfig):
         return f"<vscode.EnumConfig name={self.name} description={self.description}>"
 
 class Config(BaseConfig):
-    def __init__(self, *, name: str, description: str, input_type, enums: List[BaseConfig] = [], default = None) -> None:
+    def __init__(self, *, name: str, description: str, input_type, enums: List[BaseConfig] = [], default = None, is_property: bool = True) -> None:
         if not isinstance(input_type, ConfigType):
             return
 
@@ -38,6 +38,7 @@ class Config(BaseConfig):
         self.type = input_type
         self.default = default
         self.enums = enums
+        self.is_property = is_property
 
     def to_dict(self) -> dict:
         out = super().to_dict()
