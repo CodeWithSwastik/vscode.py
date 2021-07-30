@@ -10,7 +10,7 @@
 
 ## About
 
-Create vscode extensions with python.
+Create vscode extensions and color themes with python.
 
 ## Installation
 
@@ -94,7 +94,21 @@ Finally, test your command.
 - It should show a popup like this in the bottom right corner
 
 ![image](https://user-images.githubusercontent.com/61446939/126892110-f8d4bcf2-9ec0-43c2-a7d6-40288d91f000.png)
+ 
+## Color Theme Example
 
+```python
+import vscode
+
+theme = vscode.ColorTheme(name='my-theme', display_name='My Theme', version='0.0.1')
+theme.set_colors(
+    background='#12171F',
+    foreground='#EFEFEF',
+    accent_colors=['#399EF4', '#DA6771', '#4EB071', '#FFF099']
+)
+vscode.build_theme(theme)
+```
+  
 ## Extensions built using vscode-ext
 
 Here's a list of some extensions built using vscode-ext. If you'd like to include your extension here feel free to create a PR.
@@ -103,7 +117,6 @@ Here's a list of some extensions built using vscode-ext. If you'd like to includ
 - [Wikipedia](https://github.com/SkullCrusher0003/wikipedia-ext)
 - [Internet Search](https://github.com/Dorukyum/internet-search)
 - [Virtual Assistant](https://github.com/SohamGhugare/vscode-virtual-assistant)
-
 
 ## Documentation
 

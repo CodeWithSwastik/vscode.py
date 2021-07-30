@@ -4,9 +4,10 @@ import os
 import time
 
 from .extension import Extension
+from .themes import ColorTheme
 
 
-def create_package(data, config):
+def create_package(data: dict, config: dict) -> dict:
     package_name = data["name"]
     package = {
         "name": package_name,
@@ -278,6 +279,109 @@ def build(extension: Extension, publish: bool = False, config: dict = None) -> N
     )
     python = build_py([c.func for c in ext_data["commands"]])
     create_files(package, javascript, python, publish)
+    end = time.time()
+    time_taken = round((end - start) * 1000, 2)
+    print(f"\033[1;37;49mBuild completed successfully in {time_taken} ms!", "\033[0m")
+
+
+# Build Themes
+
+
+def create_theme_package(data: dict, config: dict) -> dict:
+    package_name = data["name"]
+    display_name = data["display_name"]
+    package = {
+        "name": package_name,
+        "displayName": display_name,
+        "version": data["version"],
+        "engines": {"vscode": "^1.58.0"},
+        "categories": ["Themes"],
+        "contributes": {
+            "themes": [
+                {
+                    "label": display_name,
+                    "uiTheme": data.get("type"),
+                    "path": f"./themes/{package_name}-color-theme.json",
+                }
+            ]
+        },
+    }
+
+    package.update(config)
+    return package
+
+
+def create_theme_files(package: dict, theme: ColorTheme):
+    cwd = os.getcwd()
+
+    # ---- Static ----
+
+    vscode_path = os.path.join(cwd, ".vscode")
+    os.makedirs(vscode_path, exist_ok=True)
+    os.chdir(vscode_path)
+
+    with open("launch.json", "w") as f:
+        json.dump(launch_json, f, indent=2)
+
+    # ---- Dynamic ----
+    package_dir = os.path.join(cwd, "package.json")
+    if os.path.isfile(package_dir):
+        with open(package_dir, "r") as f:
+            try:
+                existing = json.load(f)
+                existing.update(package)
+            except json.decoder.JSONDecodeError:
+                existing = package
+    else:
+        existing = package
+    with open(package_dir, "w") as f:
+        json.dump(existing, f, indent=2)
+
+    themes_path = os.path.join(cwd, "themes")
+    os.makedirs(themes_path, exist_ok=True)
+    os.chdir(themes_path)
+    with open(f"{theme.name}-color-theme.json", "w") as f:
+        json.dump(theme.data, f, indent=2)
+
+    os.chdir(cwd)
+
+    if not os.path.isfile("requirements.txt"):
+        with open("requirements.txt", "w") as f:
+            f.write("vscode-ext")
+
+    if not os.path.isfile("README.md"):
+        with open("README.md", "w") as f:
+            pass
+
+    if not os.path.isfile("CHANGELOG.md"):
+        with open("CHANGELOG.md", "w") as f:
+            pass
+
+    if not os.path.isfile(".vscodeignore"):
+        with open(".vscodeignore", "w") as f:
+            f.write(".vscode/**")
+
+
+def build_theme(theme: ColorTheme, config: dict = None):
+    """
+    Builds the files needed for the theme.
+    """
+    if config is None:
+        config = {}
+    print(f"\033[1;37;49mBuilding Theme {theme.name}...", "\033[0m")
+    start = time.time()
+    if theme.description is not None:
+        config["description"] = theme.description
+    if theme.icon is not None:
+        config["icon"] = theme.icon
+    if theme.repository is not None:
+        config["repository"] = theme.repository
+    if theme.keywords:
+        config["keywords"] = theme.keywords
+    if theme.publisher is not None:
+        config["publisher"] = theme.publisher
+    package = create_theme_package(theme.__dict__, config)
+    create_theme_files(package, theme)
     end = time.time()
     time_taken = round((end - start) * 1000, 2)
     print(f"\033[1;37;49mBuild completed successfully in {time_taken} ms!", "\033[0m")
