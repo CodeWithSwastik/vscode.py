@@ -94,20 +94,7 @@ Finally, test your command.
 - It should show a popup like this in the bottom right corner
 
 ![image](https://user-images.githubusercontent.com/61446939/126892110-f8d4bcf2-9ec0-43c2-a7d6-40288d91f000.png)
-
-## Extensions built using vscode-ext
-
-Here's a list of some extensions built using vscode-ext. If you'd like to include your extension here feel free to create a PR.
-
-- [Youtube](https://github.com/CodeWithSwastik/youtube-ext)
-- [Wikipedia](https://github.com/SkullCrusher0003/wikipedia-ext)
-- [Internet Search](https://github.com/Dorukyum/internet-search)
-- [Virtual Assistant](https://github.com/SohamGhugare/vscode-virtual-assistant)
-
-## Documentation
-
-The docs are coming soon! In the meantime you can look at the [examples](https://github.com/CodeWithSwastik/vscode-ext/tree/main/examples) in order to learn how vscode-ext works and what it offers!
-
+ 
 ## Color Theme Example
 
 ```python
@@ -121,3 +108,16 @@ theme.set_colors(
 )
 vscode.build_theme(theme)
 ```
+  
+## Extensions built using vscode-ext
+
+Here's a list of some extensions built using vscode-ext. If you'd like to include your extension here feel free to create a PR.
+
+- [Youtube](https://github.com/CodeWithSwastik/youtube-ext)
+- [Wikipedia](https://github.com/SkullCrusher0003/wikipedia-ext)
+- [Internet Search](https://github.com/Dorukyum/internet-search)
+- [Virtual Assistant](https://github.com/SohamGhugare/vscode-virtual-assistant)
+
+## Documentation
+
+The docs are coming soon! In the meantime you can look at the [examples](https://github.com/CodeWithSwastik/vscode-ext/tree/main/examples) in order to learn how vscode-ext works and what it offers!
