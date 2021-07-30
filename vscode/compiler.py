@@ -6,7 +6,7 @@ from .extension import Extension
 from .themes import ColorTheme
 
 
-def create_package(data:dict, config:dict) -> dict:
+def create_package(data: dict, config: dict) -> dict:
     package_name = data["name"]
     package = {
         "name": package_name,
@@ -278,9 +278,11 @@ def build(extension: Extension, publish: bool = False, config: dict = None) -> N
     time_taken = round((end - start) * 1000, 2)
     print(f"\033[1;37;49mBuild completed successfully in {time_taken} ms!", "\033[0m")
 
-# Build Themes 
 
-def create_theme_package(data:dict, config:dict) -> dict:
+# Build Themes
+
+
+def create_theme_package(data: dict, config: dict) -> dict:
     package_name = data["name"]
     display_name = data["display_name"]
     package = {
@@ -293,17 +295,18 @@ def create_theme_package(data:dict, config:dict) -> dict:
             "themes": [
                 {
                     "label": display_name,
-                    "uiTheme": data.get('type'),
-                    "path": f"./themes/{package_name}-color-theme.json"
+                    "uiTheme": data.get("type"),
+                    "path": f"./themes/{package_name}-color-theme.json",
                 }
             ]
-        }
+        },
     }
-    
+
     package.update(config)
     return package
 
-def create_theme_files(package:dict, theme: ColorTheme):
+
+def create_theme_files(package: dict, theme: ColorTheme):
     cwd = os.getcwd()
 
     # ---- Static ----
@@ -335,7 +338,6 @@ def create_theme_files(package:dict, theme: ColorTheme):
     with open(f"{theme.name}-color-theme.json", "w") as f:
         json.dump(theme.data, f, indent=2)
 
-
     os.chdir(cwd)
 
     if not os.path.isfile("requirements.txt"):
@@ -354,10 +356,11 @@ def create_theme_files(package:dict, theme: ColorTheme):
         with open(".vscodeignore", "w") as f:
             f.write(".vscode/**")
 
-def build_theme(theme: ColorTheme, config: dict=None):
+
+def build_theme(theme: ColorTheme, config: dict = None):
     """
     Builds the files needed for the theme.
-    """ 
+    """
     if config is None:
         config = {}
     print(f"\033[1;37;49mBuilding Theme {theme.name}...", "\033[0m")
