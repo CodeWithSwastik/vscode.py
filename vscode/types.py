@@ -107,7 +107,23 @@ class OpenDialogOptions:
         self.filters = filters
         self.defaultUri = default_uri
 
+class SaveDialogOptions:
+    """
+    Options to configure the behaviour of a file save dialog.
+    """
 
+    def __init__(
+        self,
+        title: str = None,
+        save_label: str = None,
+        filters: dict = {},
+        default_uri: str = None
+    ) -> None:
+        self.title = title
+        self.saveLabel = save_label
+        self.filters = filters
+        self.defaultUri = default_uri
+    
 class Disposable:
     """
     Represents a type which can release resources, such as event listening or a timer.

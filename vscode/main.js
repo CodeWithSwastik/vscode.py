@@ -41,11 +41,6 @@ function executeCommands(pythonProcess, data, globalStorage) {
         .showQuickPick(args[0], args[1])
         .then((r) => pythonProcess.stdin.write(JSON.stringify(r) + "\n"));
       break;
-    case "OD":
-      vscode.window
-        .showOpenDialog(args[0])
-        .then((r) => pythonProcess.stdin.write(JSON.stringify(r) + "\n"));
-      break;
     case "IB":
       vscode.window
         .showInputBox(args[0])
