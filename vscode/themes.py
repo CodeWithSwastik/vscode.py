@@ -10,7 +10,7 @@ class BaseColorSet:
         self.background = background
         self.foreground = foreground
         if not len(colors) == 4:
-            raise ValueError('Length of accent colors must be 4')
+            raise ValueError("Length of accent colors must be 4")
         for i, color in enumerate(colors):
             setattr(self, f"color{i+1}", color)
 
@@ -97,7 +97,7 @@ class ColorSet:
             def __init__(self, data):
                 if data is not None:
                     self.__dict__.update(data)
-            
+
             def __getattr__(self, attr):
                 try:
                     return self.__dict__[attr]
@@ -938,6 +938,7 @@ def _applyWorkbenchColors(theme: dict, color_set: ColorSet) -> None:
 
     theme["colors"]["selection.background"] = color_set.base.color1
 
+
 class ColorTheme:
     def __init__(
         self,
@@ -1389,7 +1390,7 @@ class ColorTheme:
     def set_repository(self, url: str, repo_type: str = "git") -> None:
         self.repository = {"type": repo_type, "url": url}
 
-    def set_colors(self, background: str, foreground:str, accent_colors: list) -> None:
+    def set_colors(self, background: str, foreground: str, accent_colors: list) -> None:
         base = BaseColorSet(background, foreground, accent_colors)
         color_set = ColorSet(base, type=self.type)
         self.data = generate_theme(self.display_name, color_set)
