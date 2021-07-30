@@ -1,12 +1,9 @@
 from setuptools import setup, find_packages
 
-version = "1.4.11"
+version = "1.5.0"
  
 with open("README.md", "r", encoding="utf-8") as readme_file:
     long_description = readme_file.read()
-
-# with open("requirements.txt", "r", encoding="utf-8") as req_file:
-#     requirements = req_file.readlines()
 
 setup(
     name="vscode-ext",
