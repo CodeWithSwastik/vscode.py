@@ -2,6 +2,7 @@ import os
 import json
 import time
 import inspect
+from .utils import combine_list_dicts
 from .extension import Extension
 from .themes import ColorTheme
 
@@ -218,11 +219,25 @@ def build(extension: Extension, publish: bool = False, config: dict = None) -> N
         commands.append(cmd)
         activation_events.append(event)
 
+    main_config = []
+    non_property_config = []
+    for contrib_config in extension.config:
+        contrib_config.name = f"{extension.name}.{contrib_config.name}"
+        if contrib_config.is_property:
+            main_config.append(contrib_config.to_dict())
+        else:
+            non_property_config.append(contrib_config.to_dict())
+
     package_config = config
     package_config.update(
         {
             "contributes": {
                 "commands": commands,
+                "configuration": {
+                    "title": extension.display_name,
+                    "properties": combine_list_dicts(main_config),
+                    **combine_list_dicts(non_property_config),
+                }
             },
             "activationEvents": activation_events,
         }

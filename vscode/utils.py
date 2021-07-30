@@ -1,4 +1,5 @@
 import json
+from collections import ChainMap
 from .undef import undefined
 
 
@@ -37,3 +38,7 @@ def apply_func_to_keys(dictionary: dict, func) -> dict:
         else:
             new[func(key)] = dictionary[key]
     return new
+
+
+def combine_list_dicts(li) -> dict:
+    return dict(ChainMap(*li[::-1]))
