@@ -1,5 +1,7 @@
+from .config import Config
 from .types import *
-from typing import Optional, Callable, Union
+from .utils import *
+from typing import Optional, Callable, Union, List
 
 
 class Extension:
@@ -14,6 +16,7 @@ class Extension:
         display_name: str,
         version: str,
         description: Optional[str] = None,
+        config: List[Config] = [],
         icon: Optional[str] = None,
         publisher: Optional[str] = None,
         repository: Optional[dict] = None,
@@ -29,6 +32,7 @@ class Extension:
             display_name: The display name of the extension.
                 This will be shown in the marketplace and to the user.
             version: The version of the extension.
+			config: a list of `Config` classes for the extension.
             icon : The icon for the extension.
             publisher: The name of the publisher of this extension.
             repository: The repository of this extension. This can be set with `set_repository`
@@ -44,6 +48,7 @@ class Extension:
         self.display_name = display_name
         self.version = version
         self.description = description
+        self.config = config
         self.icon = icon
         self.repository = repository
         self.publisher = publisher
@@ -120,6 +125,13 @@ class Extension:
         self.events[name] = func
         return func
 
+    def get_config(self, target: str):
+        """
+        A method to get a configuration key.
+        """
+        send_ipc("GC", [self.name, target])
+        return json_input()
+	
     def register_keybind(self, command: "Command") -> None:
         """
         A method called internally to register a keybind.

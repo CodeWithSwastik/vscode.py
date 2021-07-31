@@ -1,10 +1,11 @@
 import json
+from collections import ChainMap
 
 from .undef import undefined
 
 
 def uinput():
-    res = input()
+	res = input()
     if res.strip() == "undefined":
         return undefined
     else:
@@ -39,6 +40,9 @@ def apply_func_to_keys(dictionary: dict, func) -> dict:
             new[func(key)] = dictionary[key]
     return new
 
+
+def combine_list_dicts(li) -> dict:
+    return dict(ChainMap(*li[::-1]))
 
 def convert_snake_to_camel(text: str) -> str:
     temp = text.split("_")

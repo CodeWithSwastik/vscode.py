@@ -2,7 +2,7 @@ import inspect
 import json
 import os
 import time
-
+from .utils import combine_list_dicts
 from .extension import Extension
 from .themes import ColorTheme
 
@@ -228,11 +228,23 @@ def build(extension: Extension, publish: bool = False, config: dict = None) -> N
         commands.append(cmd)
         activation_events.append(event)
 
+    main_config = []
+    for contrib_config in extension.config:
+        contrib_config.name = f"{extension.name}.{contrib_config.name}"
+        contrib_dict = contrib_config.__dict__
+        del contrib_dict["name"]
+        contrib_dict = {contrib_config.name: contrib_dict}
+        main_config.append(contrib_dict)
+
     package_config = config
     package_config.update(
         {
             "contributes": {
                 "commands": commands,
+                "configuration": {
+                    "title": extension.display_name,
+                    "properties": combine_list_dicts(main_config) if len(main_config) else {},
+                }
             },
             "activationEvents": activation_events,
         }
