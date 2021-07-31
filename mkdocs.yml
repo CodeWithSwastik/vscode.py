@@ -1,5 +1,7 @@
 site_name: vscode-ext
 site_description: Create vscode extensions with Python
+repo_url: https://github.com/codewithswastik/vscode-ext
+edit_uri: blob/main/docs/
 
 nav:
   - Home:
@@ -35,8 +37,6 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.keys
   - admonition
-
-repo_url: https://github.com/codewithswastik/vscode-ext
 
 extra:
   social:
