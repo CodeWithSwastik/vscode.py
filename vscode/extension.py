@@ -118,8 +118,8 @@ class Extension:
                     "activity_bar_webview must be either an instance of vscode.StaticWebview or dict"
                 )
 
-    def get_config(self, target: str) -> None:
-        send_ipc("GC", [f"{self.name}.{target}"])
+    def get_config(self, target: str):
+        send_ipc("GC", [self.name, target])
         return json_input()
 
 
