@@ -2,7 +2,7 @@ from typing import List, Union, Type
 from enum import Enum
 
 
-__all__ = ("ConfigType", "EnumConfig", "Config")
+__all__ = ("EnumConfig", "Config")
 
 
 class ConfigType(Enum):
@@ -47,7 +47,9 @@ class Config(BaseConfig):
         if input_type not in (bool, str, int):
             raise TypeError("input_type must be either the bool, str or int class")
 
-        input_type = {bool: ConfigType.boolean, str: ConfigType.string, int: ConfigType.integer}     
+        types = {bool: ConfigType.boolean, str: ConfigType.string, int: ConfigType.integer}
+        input_type = types[input_type]     
+        
         super().__init__(name=name, description=description)
 
         self.type = input_type.name
