@@ -38,3 +38,27 @@ def apply_func_to_keys(dictionary: dict, func) -> dict:
         else:
             new[func(key)] = dictionary[key]
     return new
+
+def convert_snake_to_camel(self, text: str) -> str:
+    temp = text.split("_")
+    return temp[0] + "".join(ele.title() for ele in temp[1:])
+
+def convert_snake_to_title(self, text) -> str:
+    return text.replace("_", " ").title()
+
+def convert_python_condition(self, condition) -> str:
+    condition = " ".join(
+        i if "_" not in i else self.convert_snake_to_camel(i)
+        for i in condition.split(" ")
+    )
+    condition = condition.replace(" and ", " && ")
+    condition = condition.replace(" or ", " || ")
+    if " not " in condition:
+        if "(" not in condition or ")" not in condition:
+            raise SyntaxError(
+                "Use parenthesis '()' while using 'not' otherwise your conditions might not work as expected!"
+            )
+        else:
+            condition = condition.replace(" not ", " !")
+
+    return condition
