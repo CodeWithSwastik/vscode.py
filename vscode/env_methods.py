@@ -3,6 +3,9 @@ from .utils import *
 
 class Env:
     def open_external(self, target: str) -> None:
+        """
+        Open an external url with the device's default browser
+        """
         send_ipc("OE", [target])
 
     @property

@@ -28,9 +28,7 @@ def show_quick_pick(items: list, options: QuickPickOptions = None) -> QuickPickI
     elif isinstance(res, dict):
         return QuickPickItem(**res)
     else:
-        data = []
-        for r in res:
-            data.append(QuickPickItem(**r) if isinstance(r, dict) else r)
+        data = [QuickPickItem(**r) if isinstance(r, dict) else r for r in res]
         return data
 
 
@@ -50,8 +48,7 @@ def show_input_box(options: InputBoxOptions = None) -> str:
 
 def _base(func: str, text: str, *args: str) -> str:
     send_ipc("SM", [func, text, *args])
-    res = json_input()
-    return res
+    return json_input()
 
 
 def show_info_message(text: str, *args: str) -> str:
@@ -121,9 +118,7 @@ class ActiveTextEditor:
         self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
         self.document = TextDocument(self.document)
         if hasattr(self, "selections"):
-            data = []
-            for sel in self.selections:
-                data.append(Selection.from_dict(sel))
+            data = [Selection.from_dict(sel) for sel in self.selections]
             self.selections = data
             self.selection = data[0]
 
