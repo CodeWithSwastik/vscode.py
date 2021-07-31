@@ -32,7 +32,7 @@ class EnumConfig(BaseConfig):
 class Config(BaseConfig):
     def __init__(self, *, name: str, description: str, input_type, enums: List[BaseConfig] = [], default = None) -> None:
         if not isinstance(input_type, ConfigType):
-            return
+           raise TypeError('input_type must be a ConfigType') 
 
         super().__init__(name=name, description=description)
 
