@@ -1,4 +1,4 @@
-'''// Built using vscode-ext
+"""// Built using vscode-ext
 const vscode = require("vscode");
 const spawn = require("child_process").spawn;
 const path = require("path");
@@ -119,4 +119,4 @@ function executeCommands(pythonProcess, data, globalStorage) {
       console.log("Couldn't parse this: " + data);
   }
 }
-'''
+"""

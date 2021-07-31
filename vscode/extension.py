@@ -32,7 +32,7 @@ class Extension:
             display_name: The display name of the extension.
                 This will be shown in the marketplace and to the user.
             version: The version of the extension.
-			config: a list of `Config` classes for the extension.
+                        config: a list of `Config` classes for the extension.
             icon : The icon for the extension.
             publisher: The name of the publisher of this extension.
             repository: The repository of this extension. This can be set with `set_repository`
@@ -131,7 +131,7 @@ class Extension:
         """
         send_ipc("GC", [self.name, target])
         return json_input()
-	
+
     def register_keybind(self, command: "Command") -> None:
         """
         A method called internally to register a keybind.

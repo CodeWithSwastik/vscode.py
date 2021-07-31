@@ -69,7 +69,7 @@ def build_py(functions):
 
 def build_js(name, events, commands, activity_bar_config=None):
     cwd = os.getcwd()
-    #python_path = os.path.join(cwd, "build", "extension.py").replace("\\", "\\\\")
+    # python_path = os.path.join(cwd, "build", "extension.py").replace("\\", "\\\\")
 
     imports = ""
     directory, _ = os.path.split(inspect.getfile(build_py))
@@ -78,8 +78,8 @@ def build_js(name, events, commands, activity_bar_config=None):
             imports += f.read()
     except FileNotFoundError:
         with open(os.path.join(directory, "data.py"), "r") as f:
-            imports += f.read().replace("'''","")
-        
+            imports += f.read().replace("'''", "")
+
     on_activate = events.get("activate")
     code_on_activate = "function activate(context) {\nlet globalStorage = {}\n"
     if on_activate:
@@ -243,8 +243,10 @@ def build(extension: Extension, publish: bool = False, config: dict = None) -> N
                 "commands": commands,
                 "configuration": {
                     "title": extension.display_name,
-                    "properties": combine_list_dicts(main_config) if len(main_config) else {},
-                }
+                    "properties": combine_list_dicts(main_config)
+                    if len(main_config)
+                    else {},
+                },
             },
             "activationEvents": activation_events,
         }
