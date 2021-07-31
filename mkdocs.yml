@@ -2,15 +2,13 @@ site_name: vscode-ext
 site_description: Create vscode extensions with Python
 
 nav:
-  - Home:
-      - Overview: index.md
-      - Releases:
-          - Changelog: changelog.md
+  - Home: index.md
   - Getting Started:
       - Installation: getting-started.md
       - Creating your first extension: creating-your-extension.md
-      - Publishing your extension: publish-your-extension.md
-
+      - Creating a color theme: color-theme.md
+      - Releases:
+          - Changelog: changelog.md
   - Documentation: documentation/index.md
 theme:
   name: material
