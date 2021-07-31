@@ -1,12 +1,18 @@
 site_name: vscode-ext
+site_description: Create vscode extensions with Python
+
 nav:
-  - Home: index.md
+  - Home:
+      - Overview: index.md
+      - Releases:
+          - Changelog: changelog.md
   - Getting Started:
       - Installation: getting-started.md
       - Creating your first extension: creating-your-extension.md
-      - Releases:
-          - Changelog: changelog.md
+      - Creating a color theme: color-theme.md
+      - Publishing your extension: publish-your-extension.md
 
+  - Documentation: documentation/index.md
 theme:
   name: material
   palette:
@@ -31,3 +37,7 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/codewithswastik/vscode-ext
+
+plugins:
+  - search
+  - mkdocstrings
