@@ -40,6 +40,10 @@ class Extension:
         keybind: str = None,
         when: str = None,
     ) -> None:
+        """
+        Register a command.
+        Alternative for `.command`.
+        """
         name = func.__name__ if name is None else name
         category = self.default_category if category is None else category
         command = Command(name, func, title, category, keybind, when)
@@ -55,6 +59,11 @@ class Extension:
         keybind: str = None,
         when: str = None,
     ):
+        """
+        A decorator for registering commands.
+        Alternative for `.register_command`
+        """
+
         def decorator(func):
             self.register_command(func, name, title, category, keybind, when)
             return func
@@ -62,6 +71,9 @@ class Extension:
         return decorator
 
     def event(self, func):
+        """
+        A decorator for registering event handlers.
+        """
         name = func.__name__.replace("on_", "")
         self.events[name] = func
         return func
@@ -76,6 +88,9 @@ class Extension:
         self.repository = {"type": repo_type, "url": url}
 
     def set_default_category(self, category) -> None:
+        """
+        Set a default category for new commands.
+        """
         self.default_category = category
 
     def set_activity_bar(self, activity_bar, webview=None) -> None:
@@ -109,11 +124,7 @@ class Command:
         when: str = None,
     ):
         self.name = self.convert_snake_to_camel(name)
-        if title is None:
-            self.title = self.convert_snake_to_title(name)
-        else:
-            self.title = title
-
+        self.title = self.convert_snake_to_title(name) if title is None else title
         self.func = func
         self.func_name = self.func.__name__
         self.category = None if category is False else category
@@ -138,7 +149,7 @@ class Command:
         condition = condition.replace(" and ", " && ")
         condition = condition.replace(" or ", " || ")
         if " not " in condition:
-            if not ("(" in condition and ")" in condition):
+            if "(" not in condition or ")" not in condition:
                 raise SyntaxError(
                     "Use parenthesis '()' while using 'not' otherwise your conditions might not work as expected!"
                 )
