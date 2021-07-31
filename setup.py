@@ -5,6 +5,12 @@ version = "1.5.1"
 with open("README.md", "r", encoding="utf-8") as readme_file:
     long_description = readme_file.read()
 
+with open("vscode/main.js", "r", encoding="utf-8") as js_file:
+    data = f"'''{js_file.read()}'''"
+
+with open("vscode/data.py", "w", encoding="utf-8") as data_py:
+    data_py.write(data)
+
 setup(
     name="vscode-ext",
     version=version,
@@ -14,7 +20,6 @@ setup(
     author="Swas.py",
     author_email="cwswas.py@gmail.com",
     packages=find_packages(),
-    include_package_data=True,
     url = "https://github.com/CodeWithSwastik/vscode-ext", 
     project_urls={
     "Issue tracker": "https://github.com/CodeWithSwastik/vscode-ext/issues",

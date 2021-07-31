@@ -69,12 +69,17 @@ def build_py(functions):
 
 def build_js(name, events, commands, activity_bar_config=None):
     cwd = os.getcwd()
-    python_path = os.path.join(cwd, "build", "extension.py").replace("\\", "\\\\")
+    #python_path = os.path.join(cwd, "build", "extension.py").replace("\\", "\\\\")
 
     imports = ""
-    directory, filename = os.path.split(inspect.getfile(build_py))
-    with open(os.path.join(directory, "main.js"), "r") as f:
-        imports += f.read()
+    directory, _ = os.path.split(inspect.getfile(build_py))
+    try:
+        with open(os.path.join(directory, "main.js"), "r") as f:
+            imports += f.read()
+    except FileNotFoundError:
+        with open(os.path.join(directory, "data.py"), "r") as f:
+            imports += f.read().replace("'''","")
+        
     on_activate = events.get("activate")
     code_on_activate = "function activate(context) {\nlet globalStorage = {}\n"
     if on_activate:

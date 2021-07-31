@@ -3,11 +3,13 @@ from .types import *
 from .utils import *
 from typing import Optional, Callable, Union, List
 
+
 class Extension:
     """Represents a vscode extension.
 
     A number of options can be passed to the `Extension`.
     """
+
     def __init__(
         self,
         name: str,
@@ -21,15 +23,16 @@ class Extension:
     ) -> None:
         """
         Initialize the extension.
-        
+
         Note:
             There must be no spaces in the extension name.
 
         Args:
             name: The name of the extension.
-            display_name: The display name of the extension. 
+            display_name: The display name of the extension.
                 This will be shown in the marketplace and to the user.
             version: The version of the extension.
+			config: a list of `Config` classes for the extension.
             icon : The icon for the extension.
             publisher: The name of the publisher of this extension.
             repository: The repository of this extension. This can be set with `set_repository`
@@ -69,14 +72,14 @@ class Extension:
         """
         Register a command.
         This is usually not called, instead the command() shortcut decorators should be used instead.
-        
+
 
         Args:
             func: The function to register as a command.
-            name: The internal name of the command. 
-            title: The title of the command. This is shown in the command palette. 
-            category: The category that this command belongs to. 
-                Default categories set by Extensions will be overriden if this is not None. 
+            name: The internal name of the command.
+            title: The title of the command. This is shown in the command palette.
+            category: The category that this command belongs to.
+                Default categories set by Extensions will be overriden if this is not None.
                 False should be passed in order to override a default category.
             keybind: The keybind for this command.
             when: A condition for when keybinds should be functional.
@@ -99,10 +102,10 @@ class Extension:
         """
         A decorator for registering commands.
         Args:
-            name: The internal name of the command. 
-            title: The title of the command. This is shown in the command palette. 
-            category: The category that this command belongs to. 
-                Default categories set by Extensions will be overriden if this is not None. 
+            name: The internal name of the command.
+            title: The title of the command. This is shown in the command palette.
+            category: The category that this command belongs to.
+                Default categories set by Extensions will be overriden if this is not None.
                 False should be passed in order to override a default category.
             keybind: The keybind for this command.
             when: A condition for when keybinds should be functional.
@@ -114,7 +117,7 @@ class Extension:
 
         return decorator
 
-    def event(self, func: Callable[[],str]):
+    def event(self, func: Callable[[], str]):
         """
         A decorator for registering event handlers.
         """
@@ -122,7 +125,14 @@ class Extension:
         self.events[name] = func
         return func
 
-    def register_keybind(self, command: 'Command') -> None:
+    def get_config(self, target: str):
+        """
+        A method to get a configuration key.
+        """
+        send_ipc("GC", [self.name, target])
+        return json_input()
+	
+    def register_keybind(self, command: "Command") -> None:
         """
         A method called internally to register a keybind.
         """
@@ -148,7 +158,11 @@ class Extension:
         """
         self.default_category = category
 
-    def set_activity_bar(self, activity_bar: Union[ActivityBar, dict], webview: Optional[Union[StaticWebview, dict]]=None) -> None:
+    def set_activity_bar(
+        self,
+        activity_bar: Union[ActivityBar, dict],
+        webview: Optional[Union[StaticWebview, dict]] = None,
+    ) -> None:
         """
         Set an activity bar.
         """
@@ -170,10 +184,6 @@ class Extension:
                     "activity_bar_webview must be either an instance of vscode.StaticWebview or dict"
                 )
 
-    def get_config(self, target: str):
-        send_ipc("GC", [self.name, target])
-        return json_input()
-
 
 class Command:
     """
@@ -182,6 +192,7 @@ class Command:
     These should not be created manually, instead they should be created via the
     decorator or functional interface.
     """
+
     def __init__(
         self,
         name: str,
@@ -193,16 +204,16 @@ class Command:
     ):
         """
         Initialize a command.
-        
+
         Args:
-            name: The internal name of the command. 
+            name: The internal name of the command.
             func: The function to register as a command.
-            title: The title of the command. This is shown in the command palette. 
-            category: The category that this command belongs to. 
+            title: The title of the command. This is shown in the command palette.
+            category: The category that this command belongs to.
             keybind: The keybind for this command.
             when: A condition for when keybinds should be functional.
         """
-        
+
         self.name = convert_snake_to_camel(name)
         self.title = convert_snake_to_title(name) if title is None else title
         self.func = func
