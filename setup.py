@@ -16,7 +16,7 @@ setup(
     packages=find_packages(),
     package_data={
         # If any package contains *.js files, include them:
-        "": ["*.js"],
+        "vscode": ["main.js"],
     },
     include_package_data=True,
     url = "https://github.com/CodeWithSwastik/vscode-ext", 
