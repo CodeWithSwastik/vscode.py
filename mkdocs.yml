@@ -1,4 +1,6 @@
 site_name: vscode-ext
+site_description: Create vscode extensions with Python
+
 nav:
   - Home: index.md
   - Getting Started:
@@ -31,3 +33,7 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/codewithswastik/vscode-ext
+
+plugins:
+  - search
+  - mkdocstrings
