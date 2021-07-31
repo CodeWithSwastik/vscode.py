@@ -30,7 +30,7 @@ class EnumConfig(BaseConfig):
         return f"<vscode.EnumConfig name={self.name} description={self.description}>"
 
 class Config(BaseConfig):
-    def __init__(self, *, name: str, description: str, input_type, enums: List[BaseConfig] = [], default = None) -> None:
+    def __init__(self, *, name: str, description: str, input_type, enums: List[EnumConfig] = [], default = None) -> None:
         if not isinstance(input_type, ConfigType):
            raise TypeError('input_type must be a ConfigType') 
 
