@@ -18,7 +18,8 @@ class BaseConfig:
     def from_dict(cls, conf_dict):
         return cls(**conf_dict)
 
-    def to_dict(self):
+    @property
+    def __dict__(self):
         return {"name": self.name, "description": self.description}
 
     def __repr__(self):
@@ -35,13 +36,14 @@ class Config(BaseConfig):
 
         super().__init__(name=name, description=description)
 
-        self.type = input_type
+        self.type = input_type.name
         self.default = default
         self.enums = enums
         self.is_property = is_property
 
-    def to_dict(self) -> dict:
-        out = super().to_dict()
+    @property
+    def __dict__(self) -> dict:
+        out = super().__dict__
 
         out["type"] = self.type
         out["default"] = self.default
