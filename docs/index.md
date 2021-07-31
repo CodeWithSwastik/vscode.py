@@ -1,4 +1,6 @@
-# Welcome to vscode-ext
+# vscode-ext
+
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/CodeWithSwastik/vscode-ext/graphs/commit-activity) [![Downloads](https://static.pepy.tech/personalized-badge/vscode-ext?period=total&units=international_system&left_color=orange&right_color=brightgreen&left_text=Downloads)](https://pepy.tech/project/vscode-ext) [![PyPI version](https://badge.fury.io/py/vscode-ext.svg)](https://pypi.python.org/pypi/vscode-ext/) [![GitHub stars](https://img.shields.io/github/stars/CodeWithSwastik/vscode-ext.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/CodeWithSwastik/vscode-ext/stargazers/) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Create vscode extensions and color themes with python.
 

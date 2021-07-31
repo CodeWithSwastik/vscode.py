@@ -1,4 +1,4 @@
-## Tutorial
+## Guide
 
 ### Step 1
 
@@ -8,7 +8,7 @@ Create a python file inside a folder.
 
 ### Step 2
 
-Write the code for your extension. For this tutorial we have used the [Example Extension](#example-extension)
+Write the code for your extension. For this guide we have used the [Example Extension](#example-extension)
 
 ![image](https://user-images.githubusercontent.com/61446939/126891803-8da2e8e8-174f-451b-9103-4fbf001c4e7b.png)
 
