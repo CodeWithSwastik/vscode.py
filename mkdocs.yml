@@ -17,7 +17,7 @@ nav:
   - Documentation:
       - Extension: documentation/extension.md
       - Command: documentation/command.md
-
+      - Types: documentation/types.md
 theme:
   name: material
   palette:
