@@ -73,7 +73,12 @@ def build_js(name, events, commands, activity_bar_config=None):
 
     imports = ""
     directory, filename = os.path.split(inspect.getfile(build_py))
-    imports = __import__('.data').js_data
+    try:
+        with open(os.path.join(directory, "main.js"), "r") as f:
+            imports += f.read()
+    except FileNotFoundError:
+        with open(os.path.join(directory, "data.py"), "r") as f:
+            imports += f.read().replace("'''","")
         
     on_activate = events.get("activate")
     code_on_activate = "function activate(context) {\nlet globalStorage = {}\n"
