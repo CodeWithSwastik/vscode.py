@@ -238,7 +238,7 @@ def build(extension: Extension, publish: bool = False, config: dict = None) -> N
                 "commands": commands,
                 "configuration": {
                     "title": extension.display_name,
-                    "properties": combine_list_dicts(main_config),
+                    "properties": combine_list_dicts(main_config) if len(main_config) else {},
                 }
             },
             "activationEvents": activation_events,

@@ -1,9 +1,7 @@
-from typing import List
-
 from .config import Config
 from .types import *
 from .utils import *
-from typing import Optional, Callable, Union
+from typing import Optional, Callable, Union, List
 
 class Extension:
     """Represents a vscode extension.
@@ -16,7 +14,7 @@ class Extension:
         display_name: str,
         version: str,
         description: Optional[str] = None,
-        config: List[Config] = None,
+        config: List[Config] = [],
         icon: Optional[str] = None,
         publisher: Optional[str] = None,
         repository: Optional[dict] = None,
