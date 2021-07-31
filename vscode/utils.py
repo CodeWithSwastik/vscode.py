@@ -43,7 +43,7 @@ def convert_snake_to_camel(text: str) -> str:
     temp = text.split("_")
     return temp[0] + "".join(ele.title() for ele in temp[1:])
 
-def convert_snake_to_title(self, text) -> str:
+def convert_snake_to_title(text) -> str:
     return text.replace("_", " ").title()
 
 def convert_python_condition(condition) -> str:
