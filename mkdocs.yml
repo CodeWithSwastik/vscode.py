@@ -8,7 +8,7 @@ nav:
       - Creating your first extension: creating-your-extension.md
       - Releases:
           - Changelog: changelog.md
-
+  - Documentation: documentation/index.md
 theme:
   name: material
   palette:

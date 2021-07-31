@@ -82,6 +82,7 @@ class QuickPickItem:
         self.description = description
         self.__dict__.update(options)
 
+
 class OpenDialogOptions:
     """
     Options to configure the behaviour of a file open dialog.
@@ -98,7 +99,7 @@ class OpenDialogOptions:
         can_select_folders: bool = False,
         open_label: str = None,
         filters: dict = {},
-        default_uri: str = None
+        default_uri: str = None,
     ) -> None:
         self.title = title
         self.canSelectMany = can_select_many
@@ -107,6 +108,7 @@ class OpenDialogOptions:
         self.openLabel = open_label
         self.filters = filters
         self.defaultUri = default_uri
+
 
 class SaveDialogOptions:
     """
@@ -118,13 +120,14 @@ class SaveDialogOptions:
         title: str = None,
         save_label: str = None,
         filters: dict = {},
-        default_uri: str = None
+        default_uri: str = None,
     ) -> None:
         self.title = title
         self.saveLabel = save_label
         self.filters = filters
         self.defaultUri = default_uri
-    
+
+
 class Disposable:
     """
     Represents a type which can release resources, such as event listening or a timer.
