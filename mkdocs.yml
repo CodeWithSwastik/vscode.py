@@ -9,6 +9,7 @@ nav:
   - Getting Started:
       - Installation: getting-started.md
       - Creating your first extension: creating-your-extension.md
+      - Creating a color theme: color-theme.md
       - Publishing your extension: publish-your-extension.md
 
   - Documentation: documentation/index.md
