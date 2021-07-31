@@ -69,10 +69,10 @@ def build_py(functions):
 
 def build_js(name, events, commands, activity_bar_config=None):
     cwd = os.getcwd()
-    python_path = os.path.join(cwd, "build", "extension.py").replace("\\", "\\\\")
+    #python_path = os.path.join(cwd, "build", "extension.py").replace("\\", "\\\\")
 
     imports = ""
-    directory, filename = os.path.split(inspect.getfile(build_py))
+    directory, _ = os.path.split(inspect.getfile(build_py))
     try:
         with open(os.path.join(directory, "main.js"), "r") as f:
             imports += f.read()

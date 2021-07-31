@@ -20,11 +20,6 @@ setup(
     author="Swas.py",
     author_email="cwswas.py@gmail.com",
     packages=find_packages(),
-    package_data={
-        # If any package contains *.js files, include them:
-        "vscode": ["main.js"],
-    },
-    include_package_data=True,
     url = "https://github.com/CodeWithSwastik/vscode-ext", 
     project_urls={
     "Issue tracker": "https://github.com/CodeWithSwastik/vscode-ext/issues",
