@@ -90,6 +90,23 @@ def set_status_bar_message(text: str, hide_after_timeout: int = None) -> Disposa
     res = json_input()
     return Disposable(res)
 
+def show_open_dialog(options: OpenDialogOptions = None) -> list:
+    if isinstance(options, OpenDialogOptions):
+        options = options.__dict__
+    elif options is None:
+        options = {}
+
+    send_ipc("SM", ["showOpenDialog", options])
+    return json_input()
+
+
+def show_save_dialog(options: SaveDialogOptions = None) -> dict:
+    if isinstance(options, SaveDialogOptions):
+        options = options.__dict__
+    elif options is None:
+        options = {}
+    send_ipc("SM", ["showSaveDialog", options])
+    return json_input()
 
 class ActiveTextEditor:
     """

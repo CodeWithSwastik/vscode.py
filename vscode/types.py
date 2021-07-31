@@ -81,7 +81,49 @@ class QuickPickItem:
         self.description = description
         self.__dict__.update(options)
 
+class OpenDialogOptions:
+    """
+    Options to configure the behaviour of a file open dialog.
 
+    Note 1: On Windows and Linux, a file dialog cannot be both a file selector and a folder selector, so if you set both canSelectFiles and canSelectFolders to true on these platforms, a folder selector will be shown.
+    Note 2: Explicitly setting canSelectFiles and canSelectFolders to false is futile and the editor then silently adjusts the options to select files.
+    """
+
+    def __init__(
+        self,
+        title: str = None,
+        can_select_many: bool = None,
+        can_select_files: bool = True,
+        can_select_folders: bool = False,
+        open_label: str = None,
+        filters: dict = {},
+        default_uri: str = None
+    ) -> None:
+        self.title = title
+        self.canSelectMany = can_select_many
+        self.canSelectFiles = can_select_files
+        self.canSelectFolders = can_select_folders
+        self.openLabel = open_label
+        self.filters = filters
+        self.defaultUri = default_uri
+
+class SaveDialogOptions:
+    """
+    Options to configure the behaviour of a file save dialog.
+    """
+
+    def __init__(
+        self,
+        title: str = None,
+        save_label: str = None,
+        filters: dict = {},
+        default_uri: str = None
+    ) -> None:
+        self.title = title
+        self.saveLabel = save_label
+        self.filters = filters
+        self.defaultUri = default_uri
+    
 class Disposable:
     """
     Represents a type which can release resources, such as event listening or a timer.
