@@ -2,12 +2,7 @@ import inspect
 import json
 import os
 import time
-<<<<<<< HEAD
-import inspect
 from .utils import combine_list_dicts
-=======
-
->>>>>>> 07719334f96499c5a7ad6064843af7f194c667b8
 from .extension import Extension
 from .themes import ColorTheme
 
@@ -232,10 +227,13 @@ def build(extension: Extension, publish: bool = False, config: dict = None) -> N
     non_property_config = []
     for contrib_config in extension.config:
         contrib_config.name = f"{extension.name}.{contrib_config.name}"
+        contrib_dict = contrib_config.__dict__
+        del contrib_dict["name"]
+        contrib_dict = {contrib_config.name: contrib_dict}
         if contrib_config.is_property:
-            main_config.append(contrib_config.__dict__)
+            main_config.append(contrib_dict)
         else:
-            non_property_config.append(contrib_config.__dict__)
+            non_property_config.append(contrib_dict)
 
     package_config = config
     package_config.update(
