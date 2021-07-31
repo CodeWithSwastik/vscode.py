@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union, Type
 from enum import Enum
 
 
@@ -39,13 +39,15 @@ class Config(BaseConfig):
         *,
         name: str,
         description: str,
-        input_type,
+        input_type: Type[Union[str, int, bool]],
         enums: List[EnumConfig] = [],
         default=None,
     ) -> None:
-        if not isinstance(input_type, ConfigType):
-            raise TypeError("input_type must be a ConfigType")
 
+        if input_type not in (bool, str, int):
+            raise TypeError("input_type must be either the bool, str or int class")
+
+        input_type = {bool: ConfigType.boolean, str: ConfigType.string, int: ConfigType.integer}     
         super().__init__(name=name, description=description)
 
         self.type = input_type.name

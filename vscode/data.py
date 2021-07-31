@@ -1,4 +1,4 @@
-"""// Built using vscode-ext
+'''// Built using vscode-ext
 const vscode = require("vscode");
 const spawn = require("child_process").spawn;
 const path = require("path");
@@ -51,6 +51,9 @@ function executeCommands(pythonProcess, data, globalStorage) {
       break;
     case "EP":
       pythonProcess.stdin.write(JSON.stringify(vscode.env[args[0]]) + "\n");
+      break;
+    case "GC":
+      pythonProcess.stdin.write(JSON.stringify(vscode.workspace.getConfiguration(args[0]).get(args[1])) + "\n");
       break;
     case "BM":
       let dis;
@@ -119,4 +122,4 @@ function executeCommands(pythonProcess, data, globalStorage) {
       console.log("Couldn't parse this: " + data);
   }
 }
-"""
+'''
