@@ -1,6 +1,7 @@
 import json
 
 from .utils import *
+from typing import Optional
 
 
 class ActivityBar:
@@ -9,6 +10,12 @@ class ActivityBar:
     """
 
     def __init__(self, id: str, title: str, icon: str) -> None:
+        """
+        Args:
+            id: The unique id of the activity bar.
+            title: The title shown to the user.
+            icon: The icon of the activity bar.
+        """
         self.id = id
         self.title = title
         self.icon = icon
@@ -19,7 +26,13 @@ class StaticWebview:
     Content settings for a Static Webview.
     """
 
-    def __init__(self, id: str, html: str, title: str = None) -> None:
+    def __init__(self, id: str, html: str, title: Optional[str] = None) -> None:
+        """
+        Args:
+            id: The unique id of the static webview.
+            title: The title shown to the user.
+            html: The html to rendered in the webview.
+        """
         self.id = id
         self.html = html
         self.title = title
@@ -87,8 +100,10 @@ class OpenDialogOptions:
     """
     Options to configure the behaviour of a file open dialog.
 
-    Note 1: On Windows and Linux, a file dialog cannot be both a file selector and a folder selector, so if you set both canSelectFiles and canSelectFolders to true on these platforms, a folder selector will be shown.
-    Note 2: Explicitly setting canSelectFiles and canSelectFolders to false is futile and the editor then silently adjusts the options to select files.
+    Note: 
+        On Windows and Linux, a file dialog cannot be both a file selector and a folder selector, so if you set both canSelectFiles and canSelectFolders to true on these platforms, a folder selector will be shown.
+    Note:
+        Explicitly setting can_select_files and can_select_folders to false is futile and the editor then silently adjusts the options to select files.
     """
 
     def __init__(
