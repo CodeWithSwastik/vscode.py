@@ -1,0 +1,3 @@
+# Command
+
+::: vscode.Command

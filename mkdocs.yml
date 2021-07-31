@@ -1,5 +1,7 @@
 site_name: vscode-ext
 site_description: Create vscode extensions with Python
+repo_url: https://github.com/codewithswastik/vscode-ext
+edit_uri: blob/main/docs/
 
 nav:
   - Home:
@@ -12,7 +14,10 @@ nav:
       - Creating a color theme: color-theme.md
       - Publishing your extension: publish-your-extension.md
 
-  - Documentation: documentation/index.md
+  - Documentation:
+      - Extension: documentation/extension.md
+      - Command: documentation/command.md
+
 theme:
   name: material
   palette:
@@ -31,7 +36,7 @@ markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.keys
-repo_url: https://github.com/codewithswastik/vscode-ext
+  - admonition
 
 extra:
   social:
@@ -40,4 +45,9 @@ extra:
 
 plugins:
   - search
-  - mkdocstrings
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: false
