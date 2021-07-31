@@ -1,0 +1,33 @@
+site_name: vscode-ext
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started.md
+      - Creating your first extension: creating-your-extension.md
+      - Releases:
+          - Changelog: changelog.md
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: red
+    accent: deep orange
+  icon:
+    repo: fontawesome/brands/github
+  logo: vscode-ext.png
+  favicon: vscode-ext.png
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.top
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.keys
+repo_url: https://github.com/codewithswastik/vscode-ext
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/codewithswastik/vscode-ext
