@@ -39,17 +39,19 @@ def apply_func_to_keys(dictionary: dict, func) -> dict:
             new[func(key)] = dictionary[key]
     return new
 
+
 def convert_snake_to_camel(text: str) -> str:
     temp = text.split("_")
     return temp[0] + "".join(ele.title() for ele in temp[1:])
 
+
 def convert_snake_to_title(text) -> str:
     return text.replace("_", " ").title()
 
+
 def convert_python_condition(condition) -> str:
     condition = " ".join(
-        i if "_" not in i else convert_snake_to_camel(i)
-        for i in condition.split(" ")
+        i if "_" not in i else convert_snake_to_camel(i) for i in condition.split(" ")
     )
     condition = condition.replace(" and ", " && ")
     condition = condition.replace(" or ", " || ")

@@ -45,13 +45,22 @@ class InputBoxOptions:
 
     def __init__(
         self,
-        title: str = None,
-        password: bool = None,
-        ignore_focus_out: bool = None,
-        prompt: str = None,
-        place_holder: str = None,
-        value: str = None,
+        title: Optional[str] = None,
+        password: Optional[bool] = None,
+        ignore_focus_out: Optional[bool] = None,
+        prompt: Optional[str] = None,
+        place_holder: Optional[str] = None,
+        value: Optional[str] = None,
     ) -> None:
+        """
+        Args:
+            title: An optional string that represents the title of the input box.
+            password: Controls if a password input is shown. Password input hides the typed text.
+            ignore_focus_out: Set to True to keep the input box open when focus moves to another part of the editor or to another window. This setting is ignored on iPad and is always False.
+            place_holder: An optional string to show as placeholder in the input box to guide the user what to type.
+            prompt: The text to display underneath the input box.
+            value: The value to prefill in the input box.
+        """
         self.title = title
         self.password = password
         self.ignoreFocusOut = ignore_focus_out
@@ -67,13 +76,22 @@ class QuickPickOptions:
 
     def __init__(
         self,
-        title: str = None,
-        can_pick_many: bool = None,
-        ignore_focus_out: bool = None,
-        match_on_description: bool = None,
-        place_holder: str = None,
-        match_on_detail: bool = None,
+        title: Optional[str] = None,
+        can_pick_many: Optional[bool] = None,
+        ignore_focus_out: Optional[bool] = None,
+        match_on_description: Optional[bool] = None,
+        place_holder: Optional[str] = None,
+        match_on_detail: Optional[bool] = None,
     ) -> None:
+        """
+        Args:
+            title: An optional string that represents the title of the quick pick.
+            can_pick_many: An optional flag to make the picker accept multiple selections, if true the result is an array of picks.
+            ignore_focus_out: Set to True to keep the input box open when focus moves to another part of the editor or to another window. This setting is ignored on iPad and is always False.
+            place_holder: An optional string to show as placeholder in the input box to guide the user what to type.
+            match_on_description: An optional flag to include the description when filtering the picks.
+            match_on_detail: An optional flag to include the detail when filtering the picks.
+        """
         self.title = title
         self.canPickMany = can_pick_many
         self.ignoreFocusOut = ignore_focus_out
@@ -84,11 +102,15 @@ class QuickPickOptions:
 
 class QuickPickItem:
     """
-    Content settings for a Quick Pick Item.
+    Represents an item that can be selected from a list of items.
     """
 
     def __init__(
-        self, label: str = None, detail: str = None, description: str = None, **options
+        self,
+        label: Optional[str] = None,
+        detail: Optional[str] = None,
+        description: Optional[str] = None,
+        **options,
     ) -> None:
         self.label = label
         self.detail = detail
@@ -100,9 +122,8 @@ class OpenDialogOptions:
     """
     Options to configure the behaviour of a file open dialog.
 
-    Note: 
-        On Windows and Linux, a file dialog cannot be both a file selector and a folder selector, so if you set both canSelectFiles and canSelectFolders to true on these platforms, a folder selector will be shown.
     Note:
+        On Windows and Linux, a file dialog cannot be both a file selector and a folder selector, so if you set both canSelectFiles and canSelectFolders to true on these platforms, a folder selector will be shown.
         Explicitly setting can_select_files and can_select_folders to false is futile and the editor then silently adjusts the options to select files.
     """
 
