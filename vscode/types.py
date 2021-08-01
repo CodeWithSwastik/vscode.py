@@ -1,5 +1,5 @@
 import json
-
+import time
 from .utils import *
 from typing import Optional
 from enum import IntEnum
@@ -186,7 +186,13 @@ class Disposable:
 
     def dispose(self):
         send_ipc("DI", [self.id])
+        time.sleep(0.1) # Makes sure it is properly disposed.
 
+    def __enter__(self):
+        pass
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.dispose()
 
 class Position:
     """

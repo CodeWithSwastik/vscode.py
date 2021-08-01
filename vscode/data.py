@@ -124,7 +124,7 @@ function executeCommands(pythonProcess, data, globalStorage) {
       return pythonProcess.stdin.write(JSON.stringify(cline) + "\n");
     case "ST":
       vscode.window
-        .showTextDocument(args[0], args[1])
+        .showTextDocument(vscode.Uri.file(args[0]), args[1])
         .then((s) => pythonProcess.stdin.write(JSON.stringify(s) + "\n"));
       break;
     default:
