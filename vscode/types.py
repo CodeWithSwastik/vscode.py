@@ -2,7 +2,7 @@ import json
 
 from .utils import *
 from typing import Optional
-
+from enum import IntEnum
 
 class ActivityBar:
     """
@@ -134,7 +134,7 @@ class OpenDialogOptions:
         can_select_files: bool = True,
         can_select_folders: bool = False,
         open_label: str = None,
-        filters: dict = {},
+        filters: Optional[dict] = None,
         default_uri: str = None,
     ) -> None:
         self.title = title
@@ -142,7 +142,7 @@ class OpenDialogOptions:
         self.canSelectFiles = can_select_files
         self.canSelectFolders = can_select_folders
         self.openLabel = open_label
-        self.filters = filters
+        self.filters = filters if filters is not None else {}
         self.defaultUri = default_uri
 
 
@@ -155,14 +155,26 @@ class SaveDialogOptions:
         self,
         title: str = None,
         save_label: str = None,
-        filters: dict = {},
+        filters: Optional[dict] = None,
         default_uri: str = None,
     ) -> None:
         self.title = title
         self.saveLabel = save_label
-        self.filters = filters
+        self.filters = filters if filters is not None else {}
         self.defaultUri = default_uri
 
+class ViewColumn(IntEnum):
+    active = -1
+    beside = -2
+    eight = 8
+    five = 5
+    four = 4
+    nine = 9
+    one = 1 
+    seven = 7
+    six = 6
+    three = 3
+    two = 2
 
 class Disposable:
     """
@@ -351,3 +363,20 @@ class TextDocument:
         return TextLine(json_input())
 
     # TODO: TextDocument methods
+
+class TextDocumentShowOptions: 
+    """
+    Represents options to configure the behavior of showing a document in an editor.
+    """
+
+    def __init__(
+        self,
+        preserve_focus: Optional[bool] = None,
+        preview: Optional[bool] = None,
+        selection: Optional[Range] = None,
+        view_column:  Optional[ViewColumn] = None,
+    ) -> None:
+        self.preserveFocus = preserve_focus
+        self.preview = preview
+        self.selection = selection
+        self.viewColumn = view_column.value if view_column is not None else None  
