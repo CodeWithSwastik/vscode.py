@@ -18,6 +18,7 @@ nav:
       - Extension: documentation/extension.md
       - Command: documentation/command.md
       - Types: documentation/types.md
+      - Window: documentation/window.md
       - Configuration: documentation/config.md
 
 theme:

@@ -53,7 +53,11 @@ function executeCommands(pythonProcess, data, globalStorage) {
       pythonProcess.stdin.write(JSON.stringify(vscode.env[args[0]]) + "\n");
       break;
     case "GC":
-      pythonProcess.stdin.write(JSON.stringify(vscode.workspace.getConfiguration(args[0]).get(args[1])) + "\n");
+      pythonProcess.stdin.write(
+        JSON.stringify(
+          vscode.workspace.getConfiguration(args[0]).get(args[1])
+        ) + "\n"
+      );
       break;
     case "BM":
       let dis;
@@ -118,6 +122,11 @@ function executeCommands(pythonProcess, data, globalStorage) {
         parseInt(args[0])
       );
       return pythonProcess.stdin.write(JSON.stringify(cline) + "\n");
+    case "ST":
+      vscode.window
+        .showTextDocument(args[0], args[1])
+        .then((s) => pythonProcess.stdin.write(JSON.stringify(s) + "\n"));
+      break;
     default:
       console.log("Couldn't parse this: " + data);
   }

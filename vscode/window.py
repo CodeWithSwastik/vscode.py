@@ -106,23 +106,23 @@ def show_save_dialog(options: SaveDialogOptions = None) -> dict:
     send_ipc("SM", ["showSaveDialog", options])
     return json_input()
 
+class TextEditor:
 
-class ActiveTextEditor:
-    """
-    The currently active editor or undefined. The active editor is the one that currently has focus or, when none has focus, the one that has changed input most recently.
-    """
-
-    def __init__(self):
-        send_ipc("AT", [])
-        res = json_input()
-        if not res:
-            self = undefined
+    def __init__(self, data: dict = None):
+        if not data:
+            send_ipc("AT", [])
+            res = json_input()
+            if not res:
+                self = undefined
+        else:
+            res = data
         self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
         self.document = TextDocument(self.document)
         if hasattr(self, "selections"):
             data = [Selection.from_dict(sel) for sel in self.selections]
             self.selections = data
             self.selection = data[0]
+
 
     @property
     def cursor(self) -> Position:
@@ -155,3 +155,17 @@ class ActiveTextEditor:
         """
 
         return self.replace(Range(location, location), value)
+
+class ActiveTextEditor(TextEditor):
+    """
+    The currently active editor or undefined. The active editor is the one that currently has focus or, when none has focus, the one that has changed input most recently.
+    """
+    pass
+
+def show_text_document(uri: str, options: Optional[TextDocumentShowOptions] = None) -> TextEditor:
+    if isinstance(options, TextDocumentShowOptions):
+        options = options.__dict__
+    elif options is None:
+        options = {}
+    send_ipc("ST", [uri, options])
+    return TextEditor(json_input())
