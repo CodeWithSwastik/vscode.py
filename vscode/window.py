@@ -1,6 +1,7 @@
 from .types import *
 from .utils import *
-
+from .webviews import *
+from uuid import uuid1
 
 def show_quick_pick(items: list, options: QuickPickOptions = None) -> QuickPickItem:
     """
@@ -169,3 +170,19 @@ def show_text_document(uri: str, options: Optional[TextDocumentShowOptions] = No
         options = {}
     send_ipc("ST", [uri, options])
     return TextEditor(json_input())
+
+def create_webview(webview: Webview, column: ViewColumn = ViewColumn.one, options: dict = None) -> Webview:
+    if not isinstance(webview, Webview):
+        raise TypeError('webview must be a subclass of the type vscode.Webview')
+    if not isinstance(column, ViewColumn):
+        raise TypeError('column must be a of the type vscode.ViewColumn')
+    if column is None:
+        column = ViewColumn.one
+    if options is None:
+        options = {}
+    webview.ipc_id = f'id{uuid1()}'
+    send_ipc("CW", [webview.ipc_id, "test", webview.name, column, options])
+    _ = uinput() # Awaiting confirmation
+    if hasattr(webview, "on_ready"):
+        webview.on_ready()
+    return webview

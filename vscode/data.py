@@ -30,33 +30,34 @@ function executeCommands(pythonProcess, data, globalStorage) {
   if (debug.length > 0) {
     console.log("Debug message from extension.py: " + debug);
   }
+  pythonProcess.send_ipc = function (msg) {
+    this.stdin.write(JSON.stringify(msg) + "\n");
+  };
   switch (code) {
     case "SM":
       vscode.window[args[0]](...args.slice(1)).then((r) =>
-        pythonProcess.stdin.write(JSON.stringify(r) + "\n")
+        pythonProcess.send_ipc(r)
       );
       break;
     case "QP":
       vscode.window
         .showQuickPick(args[0], args[1])
-        .then((r) => pythonProcess.stdin.write(JSON.stringify(r) + "\n"));
+        .then((r) => pythonProcess.send_ipc(r));
       break;
     case "IB":
       vscode.window
         .showInputBox(args[0])
-        .then((s) => pythonProcess.stdin.write(JSON.stringify(s) + "\n"));
+        .then((s) => pythonProcess.send_ipc(s));
       break;
     case "OE":
       vscode.env.openExternal(args[0]);
       break;
     case "EP":
-      pythonProcess.stdin.write(JSON.stringify(vscode.env[args[0]]) + "\n");
+      pythonProcess.send_ipc(vscode.env[args[0]]);
       break;
     case "GC":
-      pythonProcess.stdin.write(
-        JSON.stringify(
-          vscode.workspace.getConfiguration(args[0]).get(args[1])
-        ) + "\n"
+      pythonProcess.send_ipc(
+        vscode.workspace.getConfiguration(args[0]).get(args[1])
       );
       break;
     case "BM":
@@ -68,15 +69,13 @@ function executeCommands(pythonProcess, data, globalStorage) {
       }
       let id = "id" + Math.random().toString(16).slice(2);
       globalStorage[id] = dis;
-      pythonProcess.stdin.write(JSON.stringify(id) + "\n");
+      pythonProcess.send_ipc(id);
       break;
     case "DI":
       globalStorage[args[0]].dispose();
-      break;
+      return pythonProcess.send_ipc(args[0]);
     case "AT":
-      pythonProcess.stdin.write(
-        JSON.stringify(vscode.window.activeTextEditor) + "\n"
-      );
+      pythonProcess.send_ipc(vscode.window.activeTextEditor);
       break;
     case "GT":
       let editor = vscode.window.activeTextEditor;
@@ -95,7 +94,7 @@ function executeCommands(pythonProcess, data, globalStorage) {
       } else {
         res = editor.document.getText();
       }
-      pythonProcess.stdin.write(JSON.stringify(res) + "\n");
+      pythonProcess.send_ipc(res);
       break;
     case "EE":
       let { start, end } = JSON.parse(args[0]);
@@ -112,7 +111,7 @@ function executeCommands(pythonProcess, data, globalStorage) {
         .edit((editB) => {
           editB.replace(range, args[1]);
         })
-        .then((s) => pythonProcess.stdin.write(JSON.stringify(s) + "\n"));
+        .then((s) => pythonProcess.send_ipc(s));
       break;
     case "LA":
       if (!vscode.window.activeTextEditor) {
@@ -121,14 +120,47 @@ function executeCommands(pythonProcess, data, globalStorage) {
       let cline = vscode.window.activeTextEditor.document.lineAt(
         parseInt(args[0])
       );
-      return pythonProcess.stdin.write(JSON.stringify(cline) + "\n");
+      return pythonProcess.send_ipc(cline);
     case "ST":
       vscode.window
         .showTextDocument(vscode.Uri.file(args[0]), args[1])
-        .then((s) => pythonProcess.stdin.write(JSON.stringify(s) + "\n"));
+        .then((s) => pythonProcess.send_ipc(s));
+      break;
+    case "CW":
+      globalStorage[args[0]] = new Webview(pythonProcess, ...args.slice(1));
+      return pythonProcess.send_ipc(args[0]);
+    case "WB":
+      globalStorage[args[0]].executeCommands(args[1]);
       break;
     default:
       console.log("Couldn't parse this: " + data);
+  }
+}
+
+class Webview {
+  constructor(pythonProcess, viewType, name, column, options) {
+    this.pythonProcess = pythonProcess;
+    this.panel = vscode.window.createWebviewPanel(
+      viewType,
+      name,
+      column || vscode.ViewColumn.One,
+      options
+    );
+    this.disposables = [];
+
+    // Add listeners here
+    this.panel.onDidDispose(() => this.dispose(), null, this.disposables);
+  }
+  executeCommands(data) {
+    switch (data.code) {
+      case "SET-HTML":
+        this.panel.webview.html = data.args[0];
+        this.pythonProcess.send_ipc(true);
+        break;
+    }
+  }
+  dispose() {
+    this.panel.dispose();
   }
 }
 '''

@@ -22,7 +22,7 @@ def json_input():
         return res
 
 
-def send_ipc(code, args=None):
+def send_ipc(code: str, args: list=None):
     obj = json.dumps({"code": code, "args": args or []})
     print(f"{obj}", flush=True, end="")
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- No errors being logged when there is an error in the js file.
+
 ### Deprecated
 
 - `vscode.ext` has now been deprecated and will be removed by 1.6.0, all of the ext functions/classes can now be accessed through `vscode` directly.

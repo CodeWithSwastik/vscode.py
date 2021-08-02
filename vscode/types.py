@@ -170,7 +170,8 @@ class Disposable:
 
     def dispose(self):
         send_ipc("DI", [self.id])
-        time.sleep(0.1) # Makes sure it is properly disposed.
+        _ = uinput() # Awaiting confirmation
+
 
     def __enter__(self):
         pass

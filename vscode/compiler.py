@@ -116,7 +116,11 @@ def build_js(name, events, commands, activity_bar_config=None):
         let py = spawn(pyVar, [pythonPath, funcName]);
 
         py.stdout.on("data", (data) => {
+            try {
             executeCommands(py, data, globalStorage);
+            } catch (e) {
+            console.error(e);
+            }
         });
         py.stderr.on("data", (data) => {
             console.error(`An Error occurred in the python script: ${data}`);
