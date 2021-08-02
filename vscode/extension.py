@@ -2,7 +2,7 @@ from .config import Config
 from .types import *
 from .utils import *
 from typing import Optional, Callable, Union, List
-
+from .webviews import *
 
 class Extension:
     """Represents a vscode extension.
