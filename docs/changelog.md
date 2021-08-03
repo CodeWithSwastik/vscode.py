@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - No errors being logged when there is an error in the js file.
+- ActiveTextEditor raising error instead of undefined
 
 ### Deprecated
 
