@@ -115,6 +115,7 @@ class TextEditor:
             res = json_input()
             if not res:
                 self = undefined
+                return
         else:
             res = data
         self.__dict__.update(apply_func_to_keys(res, camel_to_snake))
