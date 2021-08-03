@@ -181,6 +181,7 @@ def create_webview(webview: Webview, column: ViewColumn = ViewColumn.one, option
     if options is None:
         options = {}
     webview.ipc_id = f'id{uuid1()}'
+
     send_ipc("CW", [webview.ipc_id, "test", webview.name, column, options])
     _ = uinput() # Awaiting confirmation
     if hasattr(webview, "on_ready"):

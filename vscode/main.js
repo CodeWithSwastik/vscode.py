@@ -150,6 +150,9 @@ class Webview {
 
     // Add listeners here
     this.panel.onDidDispose(() => this.dispose(), null, this.disposables);
+    // this.panel.webview.onDidReceiveMessage((msg) => {
+    //   this.pythonProcess.send_ipc({ name: "onDidReceiveMessage", msg });
+    // });
   }
   executeCommands(data) {
     switch (data.code) {
@@ -157,6 +160,17 @@ class Webview {
         this.panel.webview.html = data.args[0];
         this.pythonProcess.send_ipc(true);
         break;
+      case "SET-TITLE":
+        this.panel.title = data.args[0];
+        this.pythonProcess.send_ipc(true);
+        break;
+      case "POST-MSG":
+        this.panel.webview
+          .postMessage(data.args[0])
+          .then((s) => this.pythonProcess.send_ipc(s));
+        break;
+      case "DISPOSE":
+        this.dispose();
     }
   }
   dispose() {
