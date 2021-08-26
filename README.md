@@ -116,6 +116,7 @@ Here's a list of some extensions built using vscode-ext. If you'd like to includ
 - [Wikipedia](https://github.com/SkullCrusher0003/wikipedia-ext)
 - [Internet Search](https://github.com/Dorukyum/internet-search)
 - [Virtual Assistant](https://github.com/SohamGhugare/vscode-virtual-assistant)
+- [YoExtension](https://github.com/yo56789/YoExtension)
 
 ## Documentation
 
