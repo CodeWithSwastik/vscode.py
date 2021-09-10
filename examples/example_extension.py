@@ -5,7 +5,7 @@ ext.set_activity_bar(
     vscode.ext.ActivityBar(
         id=ext.name, title=ext.display_name, icon="media/python.svg"
     ),
-    vscode.webview.StaticWebview(f"{ext.name}.activity", html='<h1>Welcome"!</h1>'),
+    vscode.webviews.StaticWebview(f"{ext.name}.activity", html='<h1>Welcome"!</h1>'),
 )
 
 
