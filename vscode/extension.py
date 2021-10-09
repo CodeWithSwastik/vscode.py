@@ -16,7 +16,9 @@ class Extension:
         display_name: str,
         version: str,
         description: Optional[str] = None,
+        categories: Optional[list] = None,
         config: List[Config] = [],
+        vscode_version: Optional[str] = None,
         icon: Optional[str] = None,
         publisher: Optional[str] = None,
         repository: Optional[dict] = None,
@@ -53,6 +55,8 @@ class Extension:
         self.repository = repository
         self.publisher = publisher
 
+        self.categories = categories
+        self.vscode_version = vscode_version
         self.commands = []
         self.events = {}
         self.default_category = None
