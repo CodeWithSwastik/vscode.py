@@ -13,8 +13,8 @@ def create_package(data: dict, config: dict) -> dict:
         "name": package_name,
         "displayName": data.get("display_name", package_name),
         "version": data["version"],
-        "engines": {"vscode": "^1.58.0"},
-        "categories": ["Other"],
+        "engines": {"vscode": data.get("vscode_version", "^1.58.0")},
+        "categories": data.get("categories", ["Other"]),
         "main": "./build/extension.js",
     }
     package.update(config)
