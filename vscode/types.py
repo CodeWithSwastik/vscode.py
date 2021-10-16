@@ -147,7 +147,7 @@ class SaveDialogOptions:
         self.filters = filters if filters is not None else {}
         self.defaultUri = default_uri
 
-class WorkPlaceFolderPickOptions:
+class WorkspaceFolderPickOptions:
     """
     Options to configure the behavior of the workspace folder list.
     """
