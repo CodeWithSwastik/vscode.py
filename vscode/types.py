@@ -147,6 +147,19 @@ class SaveDialogOptions:
         self.filters = filters if filters is not None else {}
         self.defaultUri = default_uri
 
+class WorkPlaceFolderPickOptions:
+    """
+    Options to configure the behavior of the workspace folder list.
+    """
+
+    def __init__(
+        self,
+        ignore_focus_out: Optional[bool] = False,
+        placeholder: Optional[str] = None
+    ) -> None:
+        self.ignoreFocusOut = ignore_focus_out
+        self.placeHolder = placeholder
+
 class ViewColumn(IntEnum):
     active = -1
     beside = -2
