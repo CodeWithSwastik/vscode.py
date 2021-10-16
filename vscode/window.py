@@ -108,7 +108,7 @@ def show_save_dialog(options: SaveDialogOptions = None) -> dict:
     return json_input()
 
 def show_workspace_folder_pick(options: WorkPlaceFolderPickOptions = None) -> dict:
-    if isinstance(options, WorkPlaceFolderPickOptions):
+    if isinstance(options, WorkspaceFolderPickOptions):
         options = options.__dict__
     elif options is None:
         options = {}
