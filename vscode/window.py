@@ -107,7 +107,7 @@ def show_save_dialog(options: SaveDialogOptions = None) -> dict:
     send_ipc("SM", ["showSaveDialog", options])
     return json_input()
 
-def show_workspace_folder_pick(options: WorkPlaceFolderPickOptions = None) -> dict:
+def show_workspace_folder_pick(options: WorkspaceFolderPickOptions = None) -> dict:
     if isinstance(options, WorkspaceFolderPickOptions):
         options = options.__dict__
     elif options is None:
