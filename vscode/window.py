@@ -107,6 +107,14 @@ def show_save_dialog(options: SaveDialogOptions = None) -> dict:
     send_ipc("SM", ["showSaveDialog", options])
     return json_input()
 
+def show_workspace_folder_pick(options: WorkspaceFolderPickOptions = None) -> dict:
+    if isinstance(options, WorkspaceFolderPickOptions):
+        options = options.__dict__
+    elif options is None:
+        options = {}
+    send_ipc("SM", ["showWorkspaceFolderPick", options])
+    return json_input()
+
 class TextEditor:
 
     def __init__(self, data: dict = None):
