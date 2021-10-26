@@ -4,6 +4,13 @@ from .utils import *
 from typing import Optional, Callable, Union, List
 from .webviews import *
 
+
+__all__ = (
+    'Extension',
+    'Command'
+)
+
+
 class Extension:
     """Represents a vscode extension.
 

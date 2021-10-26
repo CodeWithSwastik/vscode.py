@@ -7,6 +7,12 @@ from .extension import Extension
 from .themes import ColorTheme
 
 
+__all__ = (
+    'build',
+    'build_theme'
+)
+
+
 def create_package(data: dict, config: dict) -> dict:
     package_name = data["name"]
     package = {

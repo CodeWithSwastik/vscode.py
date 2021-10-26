@@ -1,3 +1,6 @@
+__all__ = ('undefined',)
+
+
 class Undefined:
     """
     An instance of this class is returned everytime javascript returns undefined.
