@@ -5,6 +5,9 @@ from .undef import undefined
 # https://github.com/Tyriar/vscode-theme-generator
 
 
+__all__ = ('ColorTheme',)
+
+
 class BaseColorSet:
     def __init__(self, background: str, foreground: str, colors: list):
         self.background = background

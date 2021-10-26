@@ -1,6 +1,9 @@
 from .utils import *
 
 
+__all__ = ('env',)
+
+
 class Env:
     def open_external(self, target: str) -> None:
         """

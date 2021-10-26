@@ -1,6 +1,13 @@
 from typing import Optional
 from .utils import *
 
+
+__all__ = (
+    'Webview',
+    'StaticWebview'
+)
+
+
 class Webview:
     def __init__(self, name: str):
         self.name = name

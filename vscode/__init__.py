@@ -5,10 +5,10 @@ __copyright__ = "Copyright 2021 Swas.py"
 __version__ = "1.5.4"
 
 from . import window
-from .compiler import build, build_theme
+from .compiler import *
 from .extension import *
-from .themes import ColorTheme
-from .env_methods import env
+from .themes import *
+from .env_methods import *
 from . import types as ext
 from .types import *
 from .webviews import *

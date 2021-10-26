@@ -4,6 +4,28 @@ from .utils import *
 from typing import Optional
 from enum import IntEnum
 
+from .undef import undefined
+
+
+__all__ = (
+    'ActivityBar',
+    'InputBoxOptions',
+    'QuickPickOptions',
+    'QuickPickItem',
+    'OpenDialogOptions',
+    'SaveDialogOptions',
+    'WorkspaceFolderPickOptions',
+    'ViewColumn',
+    'Disposable',
+    'Position',
+    'Range',
+    'Selection',
+    'TextLine',
+    'TextDocumentShowOptions',
+    'TextDocument'
+)
+
+
 class ActivityBar:
     """
     Content settings for the activity bar.
