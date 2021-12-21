@@ -8,10 +8,8 @@ from vscode.context import Context
 from vscode.compiler import build
 from vscode.utils import *
 
-__all__ = (
-    'Extension',
-    'Command'
-)
+__all__ = ("Extension", "Command")
+
 
 class Extension:
     """
@@ -22,14 +20,13 @@ class Extension:
         self.name = name.lower().replace(" ", "-")
         self.display_name = name
 
-
         self.commands = []
         self.events = {}
         self.default_category = None
         self.keybindings = []
 
     def __repr__(self):
-        return f"<vscode.Extension {self.name}>"  
+        return f"<vscode.Extension {self.name}>"
 
     def register_command(
         self,
@@ -96,17 +93,19 @@ class Extension:
         self.keybindings.append(keybind)
 
     def run(self):
-        
+
         if len(sys.argv) > 1:
+
             async def main():
                 async with websockets.serve(self.receive_websockets, "localhost", 8765):
                     await asyncio.Future()  # run forever
+
             uri = "ws://localhost:8765"
-            print(f"Listening on {uri}") # js will read this
+            print(f"Listening on {uri}")  # js will read this
 
             asyncio.run(main())
         else:
-            build(self)      
+            build(self)
 
     async def receive_websockets(self, websocket, path):
         while True:
@@ -120,6 +119,7 @@ class Extension:
                 else:
                     await websocket.send(f"Invalid Command '{name}'")
                 
+
 
 class Command:
     """
@@ -158,7 +158,7 @@ class Command:
         self.func_name = self.func.__name__
         self.category = None if category is False else category
         self.keybind = keybind.upper() if keybind is not None else None
-        self.when = python_condition_to_js_condition(when) 
+        self.when = python_condition_to_js_condition(when)
 
     def __repr__(self):
         return f"<vscode.Command {self.name}>"
