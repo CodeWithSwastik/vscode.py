@@ -87,7 +87,7 @@ class Extension:
         """
         A method called internally to register a keybind.
         """
-        keybind = {"command": command.extension(self.name), "key": command.keybind}
+        keybind = {"command": command.extension_string, "key": command.keybind}
         if command.when:
             keybind.update({"when": command.when})
         self.keybindings.append(keybind)
