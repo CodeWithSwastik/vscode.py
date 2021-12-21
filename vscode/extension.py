@@ -95,17 +95,18 @@ class Extension:
     def run(self):
 
         if len(sys.argv) > 1:
-
-            async def main():
-                async with websockets.serve(self.receive_websockets, "localhost", 8765):
-                    await asyncio.Future()  # run forever
-
-            uri = "ws://localhost:8765"
-            print(f"Listening on {uri}")  # js will read this
-
-            asyncio.run(main())
+            self.run_webserver()
         else:
             build(self)
+
+    def run_webserver(self):
+        async def main():
+            async with websockets.serve(self.receive_websockets, "localhost", 8765):
+                await asyncio.Future()  # run forever
+
+        uri = "ws://localhost:8765"
+        print(f"Listening on {uri}")  # js will read this
+        asyncio.run(main())
 
     async def receive_websockets(self, websocket, path):
         while True:
