@@ -112,12 +112,12 @@ class Command:
         """
 
         self.name = snake_case_to_camel_case(name)
-        self.title = snake_case_to_title_case(name) if title is None else title
+        self.title = snake_case_to_title_case(name)
         self.func = func
         self.func_name = self.func.__name__
         self.category = None if category is False else category
         self.keybind = keybind.upper() if keybind is not None else None
-        self.when = python_condition_to_js_condition(when) if when is not None else None
+        self.when = python_condition_to_js_condition(when) 
 
     def extension(self, ext_name: str) -> str:
         """
