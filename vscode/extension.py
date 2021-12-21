@@ -100,6 +100,8 @@ class Extension:
             async def main():
                 async with websockets.serve(self.receive_websockets, "localhost", 8765):
                     await asyncio.Future()  # run forever
+            uri = "ws://localhost:8765"
+            print(f"Listening on {uri}") # js will read this
 
             asyncio.run(main())
         else:
@@ -107,14 +109,15 @@ class Extension:
 
     async def receive_websockets(self, websocket, path):
         while True:
-            data = await websocket.recv()
-            name = json.loads(data).get('name')
-            print(f"<<< {name}")
+            data = json.loads(await websocket.recv())
+            if data["type"] == 1:
+                name = data.get('name')
+                print(f"<<< {name}")
 
-            greeting = f"Hello {name}!"
+                greeting = f"Hello {name}!"
 
-            await websocket.send(greeting)
-            print(f">>> {greeting}")
+                await websocket.send(greeting)
+                print(f">>> {greeting}")
 
 class Command:
     """
