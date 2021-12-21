@@ -1,8 +1,12 @@
 **/__pycache__
 /vscode_ext.egg-info
+/venv
 /dist
 /build
 /media
 /.vscode
+/node_modules
 package.json
+package-lock.json
 test.py
+test.js
