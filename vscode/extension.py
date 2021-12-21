@@ -4,6 +4,7 @@ import asyncio
 import websockets
 from typing import Any, Callable, Optional
 
+from vscode.context import Context
 from vscode.compiler import build
 from vscode.utils import *
 
@@ -112,12 +113,13 @@ class Extension:
             data = json.loads(await websocket.recv())
             if data["type"] == 1:
                 name = data.get('name')
-                print(f"<<< {name}")
-
-                greeting = f"Hello {name}!"
-
-                await websocket.send(greeting)
-                print(f">>> {greeting}")
+                if any(name in (cmd:=i).name for i in self.commands):
+                    ctx = Context(ws=websocket)
+                    ctx.command = cmd
+                    asyncio.ensure_future(cmd.func(ctx))
+                else:
+                    await websocket.send(f"Invalid Command '{name}'")
+                
 
 class Command:
     """
