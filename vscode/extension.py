@@ -1,5 +1,11 @@
+import sys
+import json
+import asyncio
+import websockets
 from typing import Any, Callable, Optional
-from .utils import *
+
+from vscode.compiler import build
+from vscode.utils import *
 
 __all__ = (
     'Extension',
@@ -20,6 +26,9 @@ class Extension:
         self.events = {}
         self.default_category = None
         self.keybindings = []
+
+    def __repr__(self):
+        return f"<vscode.Extension {self.name}>"  
 
     def register_command(
         self,
@@ -84,7 +93,29 @@ class Extension:
         if command.when:
             keybind.update({"when": command.when})
         self.keybindings.append(keybind)
+
+    def run(self):
         
+        if len(sys.argv) > 1:
+            async def main():
+                async with websockets.serve(self.receive_websockets, "localhost", 8765):
+                    await asyncio.Future()  # run forever
+
+            asyncio.run(main())
+        else:
+            build(self)      
+
+    async def receive_websockets(self, websocket, path):
+        while True:
+            data = await websocket.recv()
+            name = json.loads(data).get('name')
+            print(f"<<< {name}")
+
+            greeting = f"Hello {name}!"
+
+            await websocket.send(greeting)
+            print(f">>> {greeting}")
+
 class Command:
     """
     A class that implements the protocol for commands that can be used via the command palette.
@@ -114,17 +145,21 @@ class Command:
 
         self.name = snake_case_to_camel_case(name)
         self.title = snake_case_to_title_case(name)
+
+        if not asyncio.iscoroutinefunction(func):
+            raise TypeError("Callback must be a coroutine.")
+
         self.func = func
         self.func_name = self.func.__name__
         self.category = None if category is False else category
         self.keybind = keybind.upper() if keybind is not None else None
         self.when = python_condition_to_js_condition(when) 
 
+    def __repr__(self):
+        return f"<vscode.Command {self.name}>"
+
     def extension(self, ext_name: str) -> str:
         """
         The string representation for an extension.
         """
         return f"{ext_name}.{self.name}"
-
-    def __repr__(self):
-        return f"<vscode.Command {self.name}>"

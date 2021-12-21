@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .extension import Extension
+    from vscode.extension import Extension
 
 def create_package_json(data: dict, config: dict) -> dict:
     package_name = data["name"]
@@ -16,5 +16,5 @@ def create_package_json(data: dict, config: dict) -> dict:
     package.update(config)
     return package
 
-def build(extension: Extension) -> None:
+def build(extension) -> None:
     pass
