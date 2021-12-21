@@ -12,7 +12,8 @@ class Extension:
     """
 
     def __init__(self, name: str) -> None:
-        self.name = name
+        self.name = name.lower().replace(" ", "-")
+        self.display_name = name
 
 
         self.commands = []
