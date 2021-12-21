@@ -7,18 +7,25 @@ if TYPE_CHECKING:
     from vscode.extension import Extension
 
 
-def create_package_json(data: dict) -> dict:
-    package_name = data["name"]
+def create_package_json(extension) -> None:
     package = {
-        "name": package_name,
-        "displayName": data.get("display_name", package_name),
+        "name": extension.name,
+        "displayName": extension.display_name,
         "version": "0.0.1",
-        "engines": {
-            "vscode": "^1.58.0"
-        },
+        "engines": {"vscode": "^1.58.0"},
         "categories": ["Other"],
-        "main": "./build/extension.js",
+        "main": "./extension.js",
+        "contributes": {
+            "commands": [cmd.to_dict() for cmd in extension.commands],
+        },
+        "activationEvents": [
+            "onCommand:" + cmd.extension_string for cmd in extension.commands
+        ],
     }
+
+    if extension.keybindings:
+        package["contributes"].update({"keybindings": extension.keybindings})
+
     # package.update(config)
 
     cwd = os.getcwd()
@@ -42,7 +49,7 @@ def build(extension) -> None:
     start = time.time()
 
     print(f"\033[1;37;49mCreating package.json...", "\033[0m")
-    create_package_json(extension.__dict__)
+    create_package_json(extension)
 
     print(f"\033[1;37;49mCreating extension.js...", "\033[0m")
 

@@ -52,7 +52,7 @@ class Extension:
         """
         name = func.__name__ if name is None else name
         category = self.default_category if category is None else category
-        command = Command(name, func, title, category, keybind, when)
+        command = Command(name, func, self, title, category, keybind, when)
         if keybind:
             self.register_keybind(command)
         self.commands.append(command)
@@ -111,14 +111,13 @@ class Extension:
         while True:
             data = json.loads(await websocket.recv())
             if data["type"] == 1:
-                name = data.get('name')
-                if any(name in (cmd:=i).name for i in self.commands):
+                name = data.get("name")
+                if any(name in (cmd := i).name for i in self.commands):
                     ctx = Context(ws=websocket)
                     ctx.command = cmd
                     asyncio.ensure_future(cmd.func(ctx))
                 else:
                     await websocket.send(f"Invalid Command '{name}'")
-                
 
 
 class Command:
@@ -132,6 +131,7 @@ class Command:
         self,
         name: str,
         func: Callable,
+        ext: Extension,
         title: Optional[str] = None,
         category: Optional[str] = None,
         keybind: Optional[str] = None,
@@ -142,6 +142,7 @@ class Command:
         Args:
             name: The internal name of the command.
             func: The function to register as a command.
+            ext: The extension this command is registered in.
             title: The title of the command. This is shown in the command palette.
             category: The category that this command belongs to.
             keybind: The keybind for this command.
@@ -150,6 +151,7 @@ class Command:
 
         self.name = snake_case_to_camel_case(name)
         self.title = snake_case_to_title_case(name)
+        self.ext = ext
 
         if not asyncio.iscoroutinefunction(func):
             raise TypeError("Callback must be a coroutine.")
@@ -163,8 +165,12 @@ class Command:
     def __repr__(self):
         return f"<vscode.Command {self.name}>"
 
-    def extension(self, ext_name: str) -> str:
-        """
-        The string representation for an extension.
-        """
-        return f"{ext_name}.{self.name}"
+    @property
+    def extension_string(self) -> str:
+        return f"{self.ext.name}.{self.name}"
+
+    def to_dict(self) -> str:
+        cmd = {"command": self.extension_string, "title": self.title}
+        if self.category is not None:
+            cmd.update({"category": self.category})
+        return cmd
