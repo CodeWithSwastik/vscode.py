@@ -67,15 +67,6 @@ def create_launch_json():
 
     os.chdir(cwd)
 
-REGISTER_COMMANDS = """
-function registerCommands(context) {
-  context.subscriptions.push(
-    vscode.commands.registerCommand("my-extension.helloWorld", () =>
-        commandCallback("helloWorld")
-    );
-  );
-}
-"""
 def create_extension_js(extension):
     with open(os.path.join(os.path.split(__file__)[0], "ext_code.js"), "r") as f1:
         imports, contents = f1.read().split("// func: registerCommands")
