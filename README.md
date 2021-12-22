@@ -27,6 +27,13 @@ Why should you use this for building VScode extensions when you can use typescri
 - vscode-ext provides a more pythonic way of creating the extension. Python also has some powerful modules that Javascript doesn't and you can include these with vscode-ext
 - vscode-ext extensions work perfectly with vsce and you can publish your extensions just like you would publish any other extension.
 
+---
+**NOTE**
+
+vscode-ext is being currently rewritten and thus all prs should be directed to the `rewrite` branch rather than the `main` branch. 
+  
+---
+  
 ## Example Extension
 
 ```python
