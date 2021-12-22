@@ -3,7 +3,9 @@ const vscode = require("vscode");
 const spawn = require("child_process").spawn;
 const path = require("path");
 const pythonPath = path.join(__dirname, "test.py");
-let wslib = require("ws");
+const wslib = require("ws");
+
+let ws;
 
 function activate(context) {
   console.log("Test has been activated");
@@ -16,13 +18,13 @@ function activate(context) {
     console.log(mes);
     let arr = mes.split(" ");
     if (arr.length == 3 && arr[arr.length - 1].startsWith("ws://localhost:")) {
-      const ws = new wslib.WebSocket(arr[arr.length - 1]);
+      ws = new wslib.WebSocket(arr[arr.length - 1]);
       ws.on("open", () => {
         console.log("Connected!");
-        ws.send(JSON.stringify({ type: 1, name: "helloWorld" }));
 
         ws.on("message", async (message) => {
           console.log("received: %s", message.toString());
+          vscode.window.showInformationMessage(message.toString());
         });
 
         ws.on("close", () => {
@@ -34,11 +36,15 @@ function activate(context) {
   py.stderr.on("data", (data) => {
     console.error(`An Error occurred in the python script: ${data}`);
   });
+  async function test() {
+    if (ws && ws.readyState == 1) {
+      ws.send(JSON.stringify({ type: 1, name: "helloWorld" }));
+    } else {
+      setTimeout(test, 100);
+    }
+  }
 
-  let search = vscode.commands.registerCommand(
-    "my-extension.helloWorld",
-    async function () {}
-  );
+  let search = vscode.commands.registerCommand("my-extension.helloWorld", test);
   context.subscriptions.push(search);
 }
 
