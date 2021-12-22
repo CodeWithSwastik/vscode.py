@@ -109,7 +109,11 @@ class Extension:
 
     async def receive_websockets(self, websocket, path):
         while True:
-            data = json.loads(await websocket.recv())
+            try:
+                message = await websocket.recv()
+            except websockets.ConnectionClosedOK:
+                break
+            data = json.loads(message)
             if data["type"] == 1:
                 name = data.get("name")
                 if any(name in (cmd := i).name for i in self.commands):
