@@ -43,16 +43,43 @@ def create_package_json(extension) -> None:
     with open(package_dir, "w") as f:
         json.dump(new_package, f, indent=2)
 
+def create_launch_json():
+    launch_json = {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Run Extension",
+                "type": "extensionHost",
+                "request": "launch",
+                "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+            },
+        ],
+    }
+
+    cwd = os.getcwd()
+
+    vscode_path = os.path.join(cwd, ".vscode")
+    os.makedirs(vscode_path, exist_ok=True)
+    os.chdir(vscode_path)
+
+    with open("launch.json", "w") as f:
+        json.dump(launch_json, f, indent=2)
+
+    os.chdir(cwd)
 
 def build(extension) -> None:
     print(f"\033[1;37;49m🚀 Building Extension '{extension.name}' ...", "\033[0m")
     start = time.time()
 
+    create_launch_json()
     print(f"\033[1;37;49mCreating package.json...", "\033[0m")
     create_package_json(extension)
 
     print(f"\033[1;37;49mCreating extension.js...", "\033[0m")
-
+    with open(os.path.join(os.path.split(__file__)[0], "ext_code.js"), "r") as f1:
+        with open("extension.js", "w") as f2:
+            f2.write(f1.read())
+        
     end = time.time()
     time_taken = round((end - start) * 1000, 2)
     print(f"\033[1;37;49mBuild completed successfully in {time_taken} ms! ✨", "\033[0m")

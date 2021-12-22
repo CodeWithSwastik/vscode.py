@@ -6,7 +6,11 @@
 /media
 /.vscode
 /node_modules
+
 package.json
 package-lock.json
+
 test.py
 test.js
+extension.py
+extension.js

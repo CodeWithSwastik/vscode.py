@@ -100,13 +100,13 @@ class Extension:
             build(self)
 
     def run_webserver(self):
-        async def main():
+        async def webserver():
             async with websockets.serve(self.receive_websockets, "localhost", 8765):
                 await asyncio.Future()  # run forever
 
         uri = "ws://localhost:8765"
         print(f"Listening on {uri}")  # js will read this
-        asyncio.run(main())
+        asyncio.run(webserver())
 
     async def receive_websockets(self, websocket, path):
         while True:
