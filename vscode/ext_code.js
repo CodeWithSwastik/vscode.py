@@ -11,7 +11,11 @@ function activate(context) {
   let py = spawn(pyVar, [pythonPath, "test"]);
 
   py.stdout.on("data", (data) => {
-    console.log(data);
+    console.log(data.toString());
+    let arr = data.toString().trim().split(" ");
+    if (arr[arr.length - 1].startsWith("ws://localhost:")) {
+      console.log("Found ws");
+    }
   });
   py.stderr.on("data", (data) => {
     console.error(`An Error occurred in the python script: ${data}`);

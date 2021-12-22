@@ -93,7 +93,6 @@ class Extension:
         self.keybindings.append(keybind)
 
     def run(self):
-
         if len(sys.argv) > 1:
             self.run_webserver()
         else:
@@ -105,7 +104,7 @@ class Extension:
                 await asyncio.Future()  # run forever
 
         uri = "ws://localhost:8765"
-        print(f"Listening on {uri}")  # js will read this
+        print(f"Listening on {uri}", flush=True)  # js will read this
         asyncio.run(webserver())
 
     async def receive_websockets(self, websocket, path):
