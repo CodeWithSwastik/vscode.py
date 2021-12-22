@@ -7,10 +7,7 @@ from .extension import Extension
 from .themes import ColorTheme
 
 
-__all__ = (
-    'build',
-    'build_theme'
-)
+__all__ = ("build", "build_theme")
 
 
 def create_package(data: dict, config: dict) -> dict:
@@ -114,10 +111,7 @@ def build_js(name, events, commands, activity_bar_config=None):
             f"let {command.name} = vscode.commands.registerCommand('{command.extension(name)}',"
             + "async function () {\n"
         )
-        pyvar = "python" if os.name == "nt" else "python3"
-        code_on_activate += (
-            f'let funcName = "{command.func_name}"; let pyVar = "{pyvar}";'
-        )
+        code_on_activate += f'let funcName = "{command.func_name}"; let pyVar = pyEnv;'
         code_on_activate += """
         let py = spawn(pyVar, [pythonPath, funcName]);
 
