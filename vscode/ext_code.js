@@ -4,8 +4,17 @@ const spawn = require("child_process").spawn;
 const path = require("path");
 const pythonPath = path.join(__dirname, "test.py");
 const wslib = require("ws");
-
 let ws;
+
+function commandCallback(command) {
+  if (ws && ws.readyState == 1) {
+    ws.send(JSON.stringify({ type: 1, name: command }));
+  } else {
+    setTimeout(() => commandCallback(command), 100);
+  }
+}
+
+// func: registerCommands
 
 function activate(context) {
   console.log("Test has been activated");
@@ -36,18 +45,8 @@ function activate(context) {
   py.stderr.on("data", (data) => {
     console.error(`An Error occurred in the python script: ${data}`);
   });
-  async function commandCallback(command) {
-    if (ws && ws.readyState == 1) {
-      ws.send(JSON.stringify({ type: 1, name: command }));
-    } else {
-      setTimeout(() => commandCallback(command), 100);
-    }
-  }
 
-  let search = vscode.commands.registerCommand("my-extension.helloWorld", () =>
-    commandCallback("helloWorld")
-  );
-  context.subscriptions.push(search);
+  registerCommands(context);
 }
 
 function deactivate() {}

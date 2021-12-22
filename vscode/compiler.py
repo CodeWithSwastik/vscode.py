@@ -67,6 +67,32 @@ def create_launch_json():
 
     os.chdir(cwd)
 
+REGISTER_COMMANDS = """
+function registerCommands(context) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand("my-extension.helloWorld", () =>
+        commandCallback("helloWorld")
+    );
+  );
+}
+"""
+def create_extension_js(extension):
+    with open(os.path.join(os.path.split(__file__)[0], "ext_code.js"), "r") as f1:
+        imports, contents = f1.read().split("// func: registerCommands")
+
+    commands_code = "function registerCommands(context) {\n\t"
+    for cmd in extension.commands:
+        commands_code += "context.subscriptions.push(\n\t\t" \
+            "vscode.commands.registerCommand" \
+            f"(\"{cmd.extension_string}\", () =>\n\t\t\t"\
+            f"commandCallback(\"{cmd.name}\")\n\t\t)\n\t);\n\t" 
+    
+    commands_code += "\n}"
+    
+
+    with open("extension.js", "w") as f2:
+        f2.write(f"{imports}\n{commands_code}\n{contents}")
+
 def build(extension) -> None:
     print(f"\033[1;37;49m🚀 Building Extension '{extension.name}' ...", "\033[0m")
     start = time.time()
@@ -76,9 +102,7 @@ def build(extension) -> None:
     create_package_json(extension)
 
     print(f"\033[1;37;49mCreating extension.js...", "\033[0m")
-    with open(os.path.join(os.path.split(__file__)[0], "ext_code.js"), "r") as f1:
-        with open("extension.js", "w") as f2:
-            f2.write(f1.read())
+    create_extension_js(extension)
         
     end = time.time()
     time_taken = round((end - start) * 1000, 2)
