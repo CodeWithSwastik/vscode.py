@@ -21,15 +21,15 @@ function activate(context) {
       ws = new wslib.WebSocket(arr[arr.length - 1]);
       ws.on("open", () => {
         console.log("Connected!");
+        ws.send(JSON.stringify({ type: 2, event: "activate" }));
+      });
+      ws.on("message", async (message) => {
+        console.log("received: %s", message.toString());
+        vscode.window.showInformationMessage(message.toString());
+      });
 
-        ws.on("message", async (message) => {
-          console.log("received: %s", message.toString());
-          vscode.window.showInformationMessage(message.toString());
-        });
-
-        ws.on("close", () => {
-          console.log("closed");
-        });
+      ws.on("close", () => {
+        console.log("closed");
       });
     }
   });

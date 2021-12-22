@@ -92,6 +92,14 @@ class Extension:
             keybind.update({"when": command.when})
         self.keybindings.append(keybind)
 
+    def event(self, func: Callable):
+        """
+        A decorator for registering event handlers.
+        """
+        name = func.__name__.replace("on_", "").lower()
+        self.events[name] = func
+        return func
+
     def run(self):
         if len(sys.argv) > 1:
             self.run_webserver()
@@ -114,7 +122,7 @@ class Extension:
             except websockets.ConnectionClosedOK:
                 break
             data = json.loads(message)
-            if data["type"] == 1:
+            if data["type"] == 1: # Command 
                 name = data.get("name")
                 if any(name in (cmd := i).name for i in self.commands):
                     ctx = Context(ws=websocket)
@@ -123,6 +131,11 @@ class Extension:
                 else:
                     await websocket.send(f"Invalid Command '{name}'")
 
+            elif data["type"] == 2: # Event
+                event = data.get("event").lower()
+                if event in self.events:
+                    asyncio.ensure_future(self.events[event]())
+               
 
 class Command:
     """
