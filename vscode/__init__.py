@@ -6,3 +6,4 @@ __version__ = "2.0.0"
 
 from .extension import *
 from .compiler import *
+from .window import *
