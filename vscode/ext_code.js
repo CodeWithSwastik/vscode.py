@@ -36,15 +36,17 @@ function activate(context) {
   py.stderr.on("data", (data) => {
     console.error(`An Error occurred in the python script: ${data}`);
   });
-  async function test() {
+  async function commandCallback(command) {
     if (ws && ws.readyState == 1) {
-      ws.send(JSON.stringify({ type: 1, name: "helloWorld" }));
+      ws.send(JSON.stringify({ type: 1, name: command }));
     } else {
-      setTimeout(test, 100);
+      setTimeout(() => commandCallback(command), 100);
     }
   }
 
-  let search = vscode.commands.registerCommand("my-extension.helloWorld", test);
+  let search = vscode.commands.registerCommand("my-extension.helloWorld", () =>
+    commandCallback("helloWorld")
+  );
   context.subscriptions.push(search);
 }
 
