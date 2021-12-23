@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import json
 from abc import ABC, abstractmethod
-from typing import Iterable, Optional, Union
 from dataclasses import dataclass
+from typing import Iterable, Optional, Union
 
 from .enums import ViewColumn
 
@@ -21,10 +22,12 @@ __all__ = (
     "ErrorMessage",
 )
 
+
 class Showable(ABC):
     @abstractmethod
     async def _show(self, ws):
         ...
+
 
 class Window:
     def __init__(self, ws) -> None:
@@ -35,7 +38,6 @@ class Window:
             raise ValueError(f"item must be a Showable")
 
         return await item._show(self.ws)
-
 
 
 class Position:
@@ -201,13 +203,43 @@ class QuickInput:
         pass
 
 
-class QuickPick(QuickInput):
-    pass
+class QuickPick(Showable, QuickInput):
+    def __init__(self) -> None:
+        super().__init__()
+
+    async def _show(self, ws):
+        return await ws.run_code("vscode.window.showInputBox()", wait_for_response=True)
 
 
 class InputBox(Showable, QuickInput):
+    def __init__(
+        self,
+        title: Optional[str] = None,
+        password: Optional[bool] = None,
+        ignore_focus_out: Optional[bool] = None,
+        prompt: Optional[str] = None,
+        place_holder: Optional[str] = None,
+        value: Optional[str] = None,
+    ) -> None:
+        self.title = title
+        self.password = password
+        self.ignore_focus_out = ignore_focus_out
+        self.prompt = prompt
+        self.place_holder = place_holder
+        self.value = value
+
     async def _show(self, ws):
-        return await ws.run_code("vscode.window.showInputBox()", wait_for_response=True)
+        options_dict = {
+            "title": self.title,
+            "password": self.password,
+            "ignoreFocusOut": self.ignore_focus_out,
+            "prompt": self.prompt,
+            "placeHolder": self.place_holder,
+            "value": self.value,
+        }
+        return await ws.run_code(
+            f"vscode.window.showInputBox({json.dumps(options_dict)})", wait_for_response=True
+        )
 
 
 @dataclass
@@ -224,12 +256,11 @@ class Message(Showable):
         base = f'vscode.window.show{self.type.capitalize()}Message("{self.content}"'
         if self.items:
             return await ws.run_code(
-                base + ''.join(f', "{i}"' for i in self.items)+')',
-                wait_for_response=True
+                base + "".join(f', "{i}"' for i in self.items) + ")",
+                wait_for_response=True,
             )
         else:
-            return await ws.run_code(base +')')
-             
+            return await ws.run_code(base + ")")
 
 
 @dataclass
