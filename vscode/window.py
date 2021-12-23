@@ -220,16 +220,16 @@ class QuickPick(Showable, QuickInput):
     ) -> None:  # TODO: add options as kwargs
         self.items = items
 
-    async def _show(self, ws):
+    async def _show(self, ws) -> Optional[QuickPickItem]:
         options = [
             {snake_case_to_camel_case(k): v for k, v in i.__dict__.items()} for i in self.items
         ]
         print(json.dumps(options))
         chosen = await ws.run_code(
             f"vscode.window.showQuickPick({json.dumps(options)})",
-            wait_for_response=True,
         )
-        return QuickPickItem(**{camel_case_to_snake_case(k): v for k, v in chosen.items()})
+        if chosen:
+            return QuickPickItem(**{camel_case_to_snake_case(k): v for k, v in chosen.items()})
 
 
 class InputBox(Showable, QuickInput):
