@@ -45,7 +45,7 @@ function activate(context) {
           } else if (data.type == 2) {
             eval(
               data.code +
-                `.then(res => ws.send(JSON.stringify({ type: 3, res, uuid: ${data.uuid} })));`
+                `.then(res => ws.send(JSON.stringify({ type: 3, res, uuid: "${data.uuid}" })));`
             );
           }
         } catch (e) {

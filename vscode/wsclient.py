@@ -1,4 +1,5 @@
 import json
+import uuid
 import socket
 import asyncio
 import websockets
@@ -15,6 +16,8 @@ class WSClient:
         self.extension = extension
         self.port = port
         self.ws = None
+
+        self.responses = {}
 
     @property
     def uri(self) -> str:
@@ -47,7 +50,17 @@ class WSClient:
             data = json.loads(message)
             await self.extension.parse_ws_data(data)
 
-    async def send(self, **kwargs):
-        return await self.ws.send(json.dumps(kwargs))
+    async def run_code(self, code, wait_for_response=False):
+        if wait_for_response:
+            uid = str(uuid.uuid4())
+            await self.ws.send(json.dumps({"type": 2, "code": code, "uuid": uid}))
+            return await self.wait_for_response(uid)
+        else:
+            return await self.ws.send(json.dumps({"type": 1, "code": code}))
 
+    async def wait_for_response(self, uid):
+        while not uid in self.responses:
+            await asyncio.sleep(0.1)
+        return self.responses.pop(uid)
 
+        

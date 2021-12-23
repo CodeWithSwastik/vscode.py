@@ -133,8 +133,8 @@ class Extension:
             if event in self.events:
                 asyncio.ensure_future(self.events[event]())
         elif data["type"] == 3: # Eval Response:
-            print(data, flush=True)
-        else:
+            self.ws.responses[data["uuid"]] = data["res"]
+        else: # Unrecognized 
             print(data, flush=True)
 
 class Command:

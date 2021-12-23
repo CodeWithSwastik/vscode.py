@@ -9,8 +9,7 @@ class Window:
         self.ws = ws
 
     async def show(self, item):
-        code = f'vscode.window.showInformationMessage("{item.content} {item.type}");'
-        await self.ws.send(type=1, code=code)
+        await self.ws.run_code(item.jscode)
 
 
 @dataclass
@@ -18,6 +17,10 @@ class Message:
     content: str
     title: Optional[str] = None
     modal: Optional[bool] = None
+
+    @property
+    def jscode(self):
+        return f'vscode.window.show{self.type.capitalize()}Message("{self.content}");'
 
 
 @dataclass
