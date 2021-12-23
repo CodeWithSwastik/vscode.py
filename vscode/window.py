@@ -5,7 +5,16 @@ from typing import Optional, Union
 
 from .enums import ViewColumn
 
-__all__ = ("Window", "Message", "InfoMessage", "WarningMessage", "ErrorMessage")
+__all__ = (
+    "Window",
+    "TextEditor",
+    "TextDocument",
+    "TextLine",
+    "Message",
+    "InfoMessage",
+    "WarningMessage",
+    "ErrorMessage",
+)
 
 
 class Window:
@@ -40,7 +49,7 @@ class Position:
 
     def compare_to(self, other: Position) -> int:
         return 1 if self > other else -1 if self < other else 0
-    
+
     def is_after(self, other: Position) -> bool:
         return self.compareTo(other) == 1
 

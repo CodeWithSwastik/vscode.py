@@ -1,5 +1,7 @@
 from enum import IntEnum
 
+__all__ = ("ViewColumn",)
+
 
 class ViewColumn(IntEnum):
     Beside = -2
