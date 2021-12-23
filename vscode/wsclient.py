@@ -25,9 +25,9 @@ class WSClient:
             self.port = self.get_free_port()
         async def webserver():
             async with websockets.serve(self.handler, "localhost", self.port):
+                print(f"Listening on {self.uri}", flush=True)  # js will read this
                 await asyncio.Future()  # run forever
 
-        print(f"Listening on {self.uri}", flush=True)  # js will read this
         asyncio.run(webserver())
 
     def get_free_port(self):
