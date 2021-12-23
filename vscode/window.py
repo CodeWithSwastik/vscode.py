@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Iterable, Optional, Union
 
 from .enums import ViewColumn
 
@@ -26,7 +26,7 @@ class Window:
         self.ws = ws
 
     async def show(self, item):
-        await self.ws.run_code(item.jscode)
+        return await item._show(self.ws)
 
 
 class Position:
@@ -209,12 +209,18 @@ class WindowState:
 @dataclass
 class Message:
     content: str
-    title: Optional[str] = None
-    modal: Optional[bool] = None
+    items: Optional[Iterable] = None
 
-    @property
-    def jscode(self):
-        return f'vscode.window.show{self.type.capitalize()}Message("{self.content}");'
+    async def _show(self, ws):
+        base = f'vscode.window.show{self.type.capitalize()}Message("{self.content}"'
+        if self.items:
+            return await ws.run_code(
+                base + ''.join(f', "{i}"' for i in self.items)+')',
+                wait_for_response=True
+            )
+        else:
+            return await ws.run_code(base +')')
+             
 
 
 @dataclass

@@ -2,7 +2,7 @@
 const vscode = require("vscode");
 const spawn = require("child_process").spawn;
 const path = require("path");
-const pythonPath = path.join(__dirname, "<filepath>");
+const pythonExtensionPath = path.join(__dirname, "<filepath>");
 const wslib = require("ws");
 let ws;
 
@@ -19,8 +19,8 @@ function commandCallback(command) {
 function activate(context) {
   console.log("Test has been activated");
 
-  let pyVar = "python";
-  let py = spawn(pyVar, [pythonPath, "test"]);
+  let pyVar = "python.exe";
+  let py = spawn(pyVar, [pythonExtensionPath, "test"]);
 
   py.stdout.on("data", (data) => {
     let mes = data.toString().trim();
