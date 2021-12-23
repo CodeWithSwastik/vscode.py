@@ -2,7 +2,7 @@
 const vscode = require("vscode");
 const spawn = require("child_process").spawn;
 const path = require("path");
-const pythonPath = path.join(__dirname, "test.py");
+const pythonPath = path.join(__dirname, "<filepath>");
 const wslib = require("ws");
 let ws;
 

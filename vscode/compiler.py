@@ -1,6 +1,7 @@
 import os
 import time
 import json
+import inspect
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -80,10 +81,13 @@ REGISTER_COMMANDS_TEMPLATE = """
 """
 
 
+
 def create_extension_js(extension):
     with open(os.path.join(os.path.split(__file__)[0], "extension_code.js"), "r") as f1:
         imports, contents = f1.read().split("// func: registerCommands")
 
+    file = os.path.split(inspect.stack()[-1].filename)[-1]
+    imports = imports.replace("<filepath>", file)
     commands_code = "function registerCommands(context) {\n\t"
     for cmd in extension.commands:
         args = cmd.extension_string, cmd.name
