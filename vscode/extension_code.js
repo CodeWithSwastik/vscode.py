@@ -47,6 +47,9 @@ function activate(context) {
               data.code +
                 `.then(res => ws.send(JSON.stringify({ type: 3, res, uuid: "${data.uuid}" })));`
             );
+          } else if (data.type == 3) {
+            let res = eval(data.code);
+            ws.send(JSON.stringify({ type: 3, res, uuid: data.uuid }));
           }
         } catch (e) {
           console.log(e);

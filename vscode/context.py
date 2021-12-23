@@ -1,4 +1,6 @@
+from vscode.env import Env
 from vscode.window import Window
+from vscode.workspace import Workspace
 
 __all__ = ("Context",)
 
@@ -8,6 +10,8 @@ class Context:
         self.ws = ws
         self.command = None
         self.window = Window(self.ws)
+        self.env = Env(self.ws)
+        self.workspace = Workspace(self.ws)
 
     @property
     def show(self):

@@ -84,7 +84,6 @@ REGISTER_COMMANDS_TEMPLATE = """
 """
 
 
-
 def create_extension_js(extension):
     with open(os.path.join(os.path.split(__file__)[0], "extension_code.js"), "r") as f1:
         imports, contents = f1.read().split("// func: registerCommands")
@@ -108,8 +107,7 @@ def build(extension) -> None:
 
     if not os.path.isdir("./venv"):
         print(f"\033[1;37;49mSetting up the virtual environment...", "\033[0m")
-        venv.create('./venv', with_pip=True)
-
+        venv.create("./venv", with_pip=True)
 
     create_launch_json()
     print(f"\033[1;37;49mCreating package.json...", "\033[0m")
@@ -119,8 +117,7 @@ def build(extension) -> None:
     create_extension_js(extension)
 
     if not os.path.isdir("./node_modules/ws"):
-        os.system('npm i ws --save-dev')
-
+        os.system("npm i ws --save-dev")
 
     end = time.time()
     time_taken = round((end - start) * 1000, 2)

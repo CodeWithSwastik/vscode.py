@@ -21,10 +21,12 @@ __all__ = (
     "ErrorMessage",
 )
 
+
 class Showable(ABC):
     @abstractmethod
     async def _show(self, ws):
         ...
+
 
 class Window:
     def __init__(self, ws) -> None:
@@ -35,7 +37,6 @@ class Window:
             raise ValueError(f"item must be a Showable")
 
         return await item._show(self.ws)
-
 
 
 class Position:
@@ -207,7 +208,7 @@ class QuickPick(QuickInput):
 
 class InputBox(Showable, QuickInput):
     async def _show(self, ws):
-        return await ws.run_code("vscode.window.showInputBox()", wait_for_response=True)
+        return await ws.run_code("vscode.window.showInputBox()")
 
 
 @dataclass
@@ -224,12 +225,10 @@ class Message(Showable):
         base = f'vscode.window.show{self.type.capitalize()}Message("{self.content}"'
         if self.items:
             return await ws.run_code(
-                base + ''.join(f', "{i}"' for i in self.items)+')',
-                wait_for_response=True
+                base + "".join(f', "{i}"' for i in self.items) + ")",
             )
         else:
-            return await ws.run_code(base +')')
-             
+            return await ws.run_code(base + ")", wait_for_response=False)
 
 
 @dataclass
