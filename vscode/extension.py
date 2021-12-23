@@ -1,9 +1,8 @@
 import sys
-import json
 import asyncio
-import websockets
 from typing import Any, Callable, Optional
 
+from vscode.context import Context
 from vscode.wsclient import WSClient
 from vscode.compiler import build
 from vscode.utils import *
@@ -107,6 +106,25 @@ class Extension:
             self.ws.run_webserver()
         else:
             build(self)
+
+    async def parse_ws_data(self, data: dict):
+        if data["type"] == 1: # Command 
+            name = data.get("name")
+            if any(name == (cmd:=i).name for i in self.commands):
+                ctx = Context(ws=self)
+                ctx.command = cmd
+                asyncio.ensure_future(cmd.func(ctx))
+            else:
+                print(f"Invalid Command '{name}'", flush=True)
+
+        elif data["type"] == 2: # Event
+            event = data.get("event").lower()
+            if event in self.events:
+                asyncio.ensure_future(self.events[event]())
+        elif data["type"] == 3: # Eval Response:
+            print(data, flush=True)
+        else:
+            print(data, flush=True)
 
 class Command:
     """
