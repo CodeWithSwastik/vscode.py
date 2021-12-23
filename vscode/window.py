@@ -153,10 +153,10 @@ class TextDocument:
     async def save(self):
         pass
 
-    async def validatePosition(self, position):
+    async def validatePosition(self, position: Position) -> Position:
         pass
 
-    async def validateRange(self, range):
+    async def validateRange(self, range: Range) -> Range:
         pass
 
 
