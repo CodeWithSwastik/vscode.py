@@ -14,9 +14,6 @@ def create_package_json(extension) -> None:
     package = {
         "name": extension.name,
         "displayName": extension.display_name,
-        "version": "0.0.1",
-        "engines": {"vscode": "^1.58.0"},
-        "categories": ["Other"],
         "main": "./extension.js",
         "contributes": {
             "commands": [cmd.to_dict() for cmd in extension.commands],
@@ -24,6 +21,11 @@ def create_package_json(extension) -> None:
         "activationEvents": [
             "onCommand:" + cmd.extension_string for cmd in extension.commands
         ],
+    }
+    first_info = {
+        "version": "0.0.1",
+        "engines": {"vscode": "^1.58.0"},
+        "categories": ["Other"],
     }
 
     if extension.keybindings:
@@ -40,9 +42,9 @@ def create_package_json(extension) -> None:
                 new_package = json.load(f)
                 new_package.update(package)
             except json.decoder.JSONDecodeError:
-                new_package = package
+                new_package = package.update(first_info)
     else:
-        new_package = package
+        new_package = package.update(first_info)
     with open(package_dir, "w") as f:
         json.dump(new_package, f, indent=2)
 
