@@ -16,6 +16,7 @@ __all__ = (
     "TextLine",
     "Terminal",
     "QuickPick",
+    "QuickPickItem",
     "InputBox",
     "WindowState",
     "Message",
@@ -216,9 +217,9 @@ class QuickPickItem:
 
 class QuickPick(Showable, QuickInput):
     def __init__(
-        self, items: List[QuickPickItem]
+        self, items: List[str, QuickPickItem]
     ) -> None:  # TODO: add options as kwargs
-        self.items = items
+        self.items = [QuickPickItem(i) if isinstance(i, str) else i for i in items]
 
     async def _show(self, ws) -> Optional[QuickPickItem]:
         options = [
