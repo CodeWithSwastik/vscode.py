@@ -10,6 +10,10 @@ __all__ = (
     "TextEditor",
     "TextDocument",
     "TextLine",
+    "Terminal",
+    "QuickPick",
+    "InputBox",
+    "WindowState",
     "Message",
     "InfoMessage",
     "WarningMessage",
@@ -172,6 +176,29 @@ class Terminal:
 
     async def show(self, preserve_focus: bool):
         pass
+
+
+class QuickInput:
+    def __init__(self, data) -> None:
+        for key, val in data.items():
+            setattr(key, val)
+
+    async def dispose(self):
+        pass
+
+    async def hide(self):
+        pass
+
+    async def show(self):
+        pass
+
+
+class QuickPick(QuickInput):
+    pass
+
+
+class InputBox(QuickInput):
+    pass
 
 
 @dataclass
