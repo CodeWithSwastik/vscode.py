@@ -38,7 +38,8 @@ function activate(context) {
         try {
           let data = JSON.parse(message.toString());
           if (data.type == 1) {
-            eval(data.code);
+            let result = eval(data.code);
+            ws.send(JSON.stringify({ type: 3, result, uuid: 1 }));
           }
         } catch (e) {}
       });

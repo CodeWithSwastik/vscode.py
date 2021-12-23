@@ -135,6 +135,9 @@ class Extension:
                 event = data.get("event").lower()
                 if event in self.events:
                     asyncio.ensure_future(self.events[event]())
+                
+            else:
+                print(data, flush=True)
                
 
 class Command:
