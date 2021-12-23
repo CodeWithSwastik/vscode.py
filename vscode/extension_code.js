@@ -24,10 +24,14 @@ function activate(context) {
 
   py.stdout.on("data", (data) => {
     let mes = data.toString().trim();
-    console.log(mes);
+    if (ws) {
+      console.log(mes);
+    }
     let arr = mes.split(" ");
     if (arr.length == 3 && arr[arr.length - 1].startsWith("ws://localhost:")) {
       ws = new wslib.WebSocket(arr[arr.length - 1]);
+      console.log("Connecting to " + arr[arr.length - 1]);
+
       ws.on("open", () => {
         console.log("Connected!");
         ws.send(JSON.stringify({ type: 2, event: "activate" }));
