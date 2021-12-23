@@ -14,13 +14,7 @@ function commandCallback(command) {
   }
 }
 
-function registerCommands(context) {
-  context.subscriptions.push(
-    vscode.commands.registerCommand("my-extension.helloWorld", () =>
-      commandCallback("helloWorld")
-    )
-  );
-}
+// func: registerCommands
 
 function activate(context) {
   console.log("Test has been activated");
@@ -28,7 +22,7 @@ function activate(context) {
   let pyVar = "python";
   let py = spawn(pyVar, [pythonPath, "test"]);
 
-  py.stdout.on("data", async (data) => {
+  py.stdout.on("data", (data) => {
     let mes = data.toString().trim();
     console.log(mes);
     let arr = mes.split(" ");
