@@ -1,6 +1,7 @@
 import os
 import time
 import json
+import venv
 import inspect
 from typing import TYPE_CHECKING
 
@@ -105,12 +106,21 @@ def build(extension) -> None:
     print(f"\033[1;37;49m🚀 Building Extension '{extension.name}' ...", "\033[0m")
     start = time.time()
 
+    if not os.path.isdir("./venv"):
+        print(f"\033[1;37;49mSetting up the virtual environment...", "\033[0m")
+        venv.create('./venv', with_pip=True)
+
+
     create_launch_json()
     print(f"\033[1;37;49mCreating package.json...", "\033[0m")
     create_package_json(extension)
 
     print(f"\033[1;37;49mCreating extension.js...", "\033[0m")
     create_extension_js(extension)
+
+    if not os.path.isdir("./node_modules/ws"):
+        os.system('npm i ws --save-dev')
+
 
     end = time.time()
     time_taken = round((end - start) * 1000, 2)
