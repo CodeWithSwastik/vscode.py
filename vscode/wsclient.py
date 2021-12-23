@@ -7,6 +7,7 @@ class WSClient:
     """
     This class manages the websocket connection.
     """
+
     BASE_URI = "ws://localhost:"
 
     def __init__(self, extension, port: int = 8765) -> None:
@@ -25,7 +26,6 @@ class WSClient:
 
         print(f"Listening on {self.uri}", flush=True)  # js will read this
         asyncio.run(webserver())
-
 
     async def handler(self, websocket, path):
         self.ws = websocket

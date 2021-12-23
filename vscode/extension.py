@@ -111,7 +111,7 @@ class Extension:
         if data["type"] == 1: # Command 
             name = data.get("name")
             if any(name == (cmd:=i).name for i in self.commands):
-                ctx = Context(ws=self)
+                ctx = Context(ws=self.ws)
                 ctx.command = cmd
                 asyncio.ensure_future(cmd.func(ctx))
             else:
