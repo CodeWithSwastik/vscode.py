@@ -7,7 +7,7 @@ class Context:
     def __init__(self, ws) -> None:
         self.ws = ws
         self.command = None
-        self.window = Window(self)
+        self.window = Window(self.ws)
 
     @property
     def show(self):

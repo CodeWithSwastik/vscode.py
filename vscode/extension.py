@@ -4,7 +4,7 @@ import asyncio
 import websockets
 from typing import Any, Callable, Optional
 
-from vscode.context import Context
+from vscode.wsclient import WSClient
 from vscode.compiler import build
 from vscode.utils import *
 
@@ -24,6 +24,8 @@ class Extension:
         self.events = {}
         self.default_category = None
         self.keybindings = []
+
+        self.ws = WSClient(self)
 
     def __repr__(self):
         return f"<vscode.Extension {self.name}>"
@@ -102,43 +104,9 @@ class Extension:
 
     def run(self):
         if len(sys.argv) > 1:
-            self.run_webserver()
+            self.ws.run_webserver()
         else:
             build(self)
-
-    def run_webserver(self):
-        async def webserver():
-            async with websockets.serve(self.receive_websockets, "localhost", 8765):
-                await asyncio.Future()  # run forever
-
-        uri = "ws://localhost:8765"
-        print(f"Listening on {uri}", flush=True)  # js will read this
-        asyncio.run(webserver())
-
-    async def receive_websockets(self, websocket, path):
-        while True:
-            try:
-                message = await websocket.recv()
-            except websockets.ConnectionClosedOK:
-                break
-            data = json.loads(message)
-            if data["type"] == 1: # Command 
-                name = data.get("name")
-                if any(name in (cmd := i).name for i in self.commands):
-                    ctx = Context(ws=websocket)
-                    ctx.command = cmd
-                    asyncio.ensure_future(cmd.func(ctx))
-                else:
-                    await websocket.send(f"Invalid Command '{name}'")
-
-            elif data["type"] == 2: # Event
-                event = data.get("event").lower()
-                if event in self.events:
-                    asyncio.ensure_future(self.events[event]())
-                
-            else:
-                print(data, flush=True)
-               
 
 class Command:
     """

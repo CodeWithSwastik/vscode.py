@@ -34,7 +34,6 @@ function activate(context) {
       });
       ws.on("message", async (message) => {
         console.log("received: %s", message.toString());
-        vscode.window.showInformationMessage(message.toString());
         try {
           let data = JSON.parse(message.toString());
           if (data.type == 1) {
@@ -42,7 +41,7 @@ function activate(context) {
           } else if (data.type == 2) {
             eval(
               data.code +
-                `.then(r => ws.send(JSON.stringify({ type: 3, r, uuid: ${data.uuid} })));`
+                `.then(res => ws.send(JSON.stringify({ type: 3, res, uuid: ${data.uuid} })));`
             );
           }
         } catch (e) {

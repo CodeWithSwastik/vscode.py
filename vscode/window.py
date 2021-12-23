@@ -5,11 +5,12 @@ __all__ = ("Window", "Message", "InfoMessage", "WarningMessage", "ErrorMessage")
 
 
 class Window:
-    def __init__(self, ctx) -> None:
-        self.ctx = ctx
+    def __init__(self, ws) -> None:
+        self.ws = ws
 
     async def show(self, item):
-        await self.ctx.ws.send(f"{item.content} {item.type}")
+        code = f'vscode.window.showInformationMessage("{item.content} {item.type}");'
+        await self.ws.send(type=1, code=code)
 
 @dataclass
 class Message:
