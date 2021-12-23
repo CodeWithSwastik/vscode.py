@@ -14,7 +14,13 @@ function commandCallback(command) {
   }
 }
 
-// func: registerCommands
+function registerCommands(context) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand("my-extension.helloWorld", () =>
+      commandCallback("helloWorld")
+    )
+  );
+}
 
 function activate(context) {
   console.log("Test has been activated");
@@ -22,7 +28,7 @@ function activate(context) {
   let pyVar = "python";
   let py = spawn(pyVar, [pythonPath, "test"]);
 
-  py.stdout.on("data", (data) => {
+  py.stdout.on("data", async (data) => {
     let mes = data.toString().trim();
     console.log(mes);
     let arr = mes.split(" ");
@@ -38,10 +44,16 @@ function activate(context) {
         try {
           let data = JSON.parse(message.toString());
           if (data.type == 1) {
-            let result = eval(data.code);
-            ws.send(JSON.stringify({ type: 3, result, uuid: 1 }));
+            eval(data.code);
+          } else if (data.type == 2) {
+            eval(
+              data.code +
+                `.then(r => ws.send(JSON.stringify({ type: 3, r, uuid: ${data.uuid} })));`
+            );
           }
-        } catch (e) {}
+        } catch (e) {
+          console.log(e);
+        }
       });
 
       ws.on("close", () => {
