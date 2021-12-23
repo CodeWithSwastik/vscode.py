@@ -38,28 +38,28 @@ class Position:
     def __ge__(self, other):
         return not self < other
 
-    def compareTo(self, other: Position) -> int:
+    def compare_to(self, other: Position) -> int:
         return 1 if self > other else -1 if self < other else 0
     
-    def isAfter(self, other: Position) -> bool:
+    def is_after(self, other: Position) -> bool:
         return self.compareTo(other) == 1
 
-    def isAfterOrEqual(self, other: Position) -> bool:
+    def is_after_or_equal(self, other: Position) -> bool:
         return self.compareTo(other) in (0, 1)
 
-    def isBefore(self, other: Position) -> bool:
+    def is_before(self, other: Position) -> bool:
         return self.compareTo(other) == -1
 
-    def isBeforeOrEqual(self, other: Position) -> bool:
+    def is_before_or_equal(self, other: Position) -> bool:
         return self.compareTo(other) in (-1, 0)
 
-    def isEqual(self, other: Position) -> bool:
+    def is_equal(self, other: Position) -> bool:
         return self.compareTo(other) == 0
 
     def __repr__(self):
         return f"{self.line}:{self.character}"
 
-    def translate(lineDelta: int, characterDelta: int) -> Position:
+    def translate(line_delta: int, character_delta: int) -> Position:
         pass
 
 
@@ -69,11 +69,11 @@ class Range:
         self.end = end
 
     @property
-    def isEmpty(self) -> bool:
+    def is_empty(self) -> bool:
         return self.start == self.end
 
     @property
-    def inSingleLine(self) -> bool:
+    def in_single_line(self) -> bool:
         return self.start.line == self.end.line
 
     def __eq__(self, other):
@@ -100,20 +100,7 @@ class TextEditor:
     async def edit(self, callback):
         pass
 
-    async def insertSnippet(
-        self,
-        snippet,
-        location: Union[Position, Range],
-        *,
-        undoStopAfter: bool = True,
-        undoStopBefore: bool = True,
-    ):
-        pass
-
-    async def revealRange(self, range: Range, revealType) -> Range:
-        pass
-
-    async def setDecorations(self, decorationType, rangesOrOptions):
+    async def reveal_range(self, range: Range, reveal_type) -> Range:
         pass
 
     async def show(self, column: ViewColumn):
@@ -122,11 +109,11 @@ class TextEditor:
 
 @dataclass
 class TextLine:
-    firstNonWhitespaceCharacterIndex: int
-    isEmptyOrWhitespace: bool
-    lineNumber: int
+    first_non_whitespace_character_index: int
+    is_empty_or_whitespace: bool
+    line_number: int
     range: Range
-    rangeIncludingLineBreak: Range
+    range_including_line_break: Range
     text: str
 
 
@@ -135,28 +122,28 @@ class TextDocument:
         for key, val in data.items():
             setattr(key, val)
 
-    async def getText(self, range: Range) -> str:
+    async def get_text(self, range: Range) -> str:
         pass
 
-    async def getWordRangeAtPosition(self, position: Position, regex) -> Range:
+    async def get_word_range_at_position(self, position: Position, regex) -> Range:
         pass
 
-    async def lineAt(self, lineOrPosition: Union[int, Position]) -> TextLine:
+    async def line_at(self, line_or_position: Union[int, Position]) -> TextLine:
         pass
 
-    async def offsetAt(self, position: Position) -> TextLine:
+    async def offset_at(self, position: Position) -> TextLine:
         pass
 
-    async def positionAt(self, offset: int) -> Position:
+    async def position_at(self, offset: int) -> Position:
         pass
 
     async def save(self):
         pass
 
-    async def validatePosition(self, position: Position) -> Position:
+    async def validate_position(self, position: Position) -> Position:
         pass
 
-    async def validateRange(self, range: Range) -> Range:
+    async def validate_range(self, range: Range) -> Range:
         pass
 
 
