@@ -1,9 +1,20 @@
-import asyncio
+class Clipboard:
+    def __init__(self, ws) -> None:
+        self.ws = ws
 
+    async def read(self):
+        await self.ws.run_code(f"vscode.env.clipboard.readText()")    
+
+    async def write(self, text: str):
+        await self.ws.run_code(
+            f"vscode.env.clipboard.readText(`{text}`)", 
+            wait_for_response=False
+        )
 
 class Env:
     def __init__(self, ws) -> None:
         self.ws = ws
+        self.clipboard = Clipboard(self.ws)
 
     async def _get_property(self, property):
         return await self.ws.run_code(f"vscode.env.{property}", thenable=False)
@@ -19,10 +30,6 @@ class Env:
     @property
     async def app_root(self):
         return await self._get_property("appRoot")
-
-    @property
-    async def clipboard(self):
-        return await self._get_property("clipboard")
 
     @property
     async def is_new_app_install(self) -> bool:
