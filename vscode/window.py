@@ -259,8 +259,7 @@ class InputBox(Showable, QuickInput):
             "value": self.value,
         }
         return await ws.run_code(
-            f"vscode.window.showInputBox({json.dumps(options_dict)})",
-            wait_for_response=True,
+            f"vscode.window.showInputBox({json.dumps(options_dict)})"
         )
 
 
@@ -279,10 +278,9 @@ class Message(Showable):
         if self.items:
             return await ws.run_code(
                 base + "".join(f', "{i}"' for i in self.items) + ")",
-                wait_for_response=True,
             )
         else:
-            return await ws.run_code(base + ")")
+            return await ws.run_code(base + ")", wait_for_response=False)
 
 
 @dataclass
