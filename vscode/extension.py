@@ -42,14 +42,20 @@ class Extension:
         Register a command.
         This is usually not called, instead the command() shortcut decorators should be used instead.
         Args:
-            func: The function to register as a command.
-            name: The internal name of the command.
-            title: The title of the command. This is shown in the command palette.
-            category: The category that this command belongs to.
+            func: 
+                The function to register as a command.
+            name: 
+                The internal name of the command.
+            title: 
+                The title of the command. This is shown in the command palette.
+            category: 
+                The category that this command belongs to.
                 Default categories set by Extensions will be overriden if this is not None.
                 False should be passed in order to override a default category.
-            keybind: The keybind for this command.
-            when: A condition for when keybinds should be functional.
+            keybind: 
+                The keybind for this command.
+            when: 
+                A condition for when keybinds should be functional.
         """
         name = func.__name__ if name is None else name
         category = self.default_category if category is None else category
@@ -69,13 +75,18 @@ class Extension:
         """
         A decorator for registering commands.
         Args:
-            name: The internal name of the command.
-            title: The title of the command. This is shown in the command palette.
-            category: The category that this command belongs to.
+            name: 
+                The internal name of the command.
+            title: 
+                The title of the command. This is shown in the command palette.
+            category: 
+                The category that this command belongs to.
                 Default categories set by Extensions will be overriden if this is not None.
                 False should be passed in order to override a default category.
-            keybind: The keybind for this command.
-            when: A condition for when keybinds should be functional.
+            keybind: 
+                The keybind for this command.
+            when: 
+                A condition for when keybinds should be functional.
         """
 
         def decorator(func):
@@ -146,13 +157,20 @@ class Command:
         """
         Initialize a command.
         Args:
-            name: The internal name of the command.
-            func: The function to register as a command.
-            ext: The extension this command is registered in.
-            title: The title of the command. This is shown in the command palette.
-            category: The category that this command belongs to.
-            keybind: The keybind for this command.
-            when: A condition for when keybinds should be functional.
+            name: 
+                The internal name of the command.
+            func: 
+                The function to register as a command.
+            ext: 
+                The extension this command is registered in.
+            title: 
+                The title of the command. This is shown in the command palette.
+            category: 
+                The category that this command belongs to.
+            keybind: 
+                The keybind for this command.
+            when: 
+                A condition for when keybinds should be functional.
         """
 
         self.name = snake_case_to_camel_case(name)
