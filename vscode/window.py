@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import json
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Iterable, Optional, Union
+from dataclasses import asdict, dataclass
+from typing import Iterable, List, Optional, Union
+
+from vscode.utils import camel_case_to_snake_case, snake_case_to_camel_case
 
 from .enums import ViewColumn
 
@@ -203,12 +205,31 @@ class QuickInput:
         pass
 
 
+@dataclass
+class QuickPickItem:
+    label: str
+    always_show: Optional[bool] = None
+    description: Optional[str] = None
+    detail: Optional[str] = None
+    picked: Optional[bool] = None
+
+
 class QuickPick(Showable, QuickInput):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(
+        self, items: List[QuickPickItem]
+    ) -> None:  # TODO: add options as kwargs
+        self.items = items
 
     async def _show(self, ws):
-        return await ws.run_code("vscode.window.showInputBox()", wait_for_response=True)
+        options = [
+            {snake_case_to_camel_case(k): v for k, v in i.__dict__.items()} for i in self.items
+        ]
+        print(json.dumps(options))
+        chosen = await ws.run_code(
+            f"vscode.window.showQuickPick({json.dumps(options)})",
+            wait_for_response=True,
+        )
+        return QuickPickItem(**{camel_case_to_snake_case(k): v for k, v in chosen.items()})
 
 
 class InputBox(Showable, QuickInput):
@@ -238,7 +259,8 @@ class InputBox(Showable, QuickInput):
             "value": self.value,
         }
         return await ws.run_code(
-            f"vscode.window.showInputBox({json.dumps(options_dict)})", wait_for_response=True
+            f"vscode.window.showInputBox({json.dumps(options_dict)})",
+            wait_for_response=True,
         )
 
 
