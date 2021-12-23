@@ -156,6 +156,29 @@ class TextDocument:
         pass
 
 
+class Terminal:
+    def __init__(self, data) -> None:
+        for key, val in data.items():
+            setattr(key, val)
+
+    async def dispose(self):
+        pass
+
+    async def hide(self):
+        pass
+
+    async def send_text(self, text: str, add_new_line: bool):
+        pass
+
+    async def show(self, preserve_focus: bool):
+        pass
+
+
+@dataclass
+class WindowState:
+    focused: bool
+
+
 @dataclass
 class Message:
     content: str
