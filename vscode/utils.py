@@ -1,11 +1,15 @@
 from typing import Optional
 
 __all__ = (
+    "camel_case_to_snake_case",
     "snake_case_to_camel_case",
     "snake_case_to_title_case",
     "python_condition_to_js_condition",
 )
 
+
+def camel_case_to_snake_case(text: str) -> str:
+    return "".join("_" + i.lower() if i.isupper() else i for i in text).lstrip("_")
 
 def snake_case_to_camel_case(text: Optional[str]) -> Optional[str]:
     if text is None:
