@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from abc import ABC, abstractmethod
 from typing import Iterable, Optional, Union
+from dataclasses import dataclass
 
 from .enums import ViewColumn
 
@@ -20,13 +21,21 @@ __all__ = (
     "ErrorMessage",
 )
 
+class Showable(ABC):
+    @abstractmethod
+    async def _show(self, ws):
+        ...
 
 class Window:
     def __init__(self, ws) -> None:
         self.ws = ws
 
     async def show(self, item):
+        if not isinstance(item, Showable):
+            raise ValueError(f"item must be a Showable")
+
         return await item._show(self.ws)
+
 
 
 class Position:
@@ -179,9 +188,8 @@ class Terminal:
 
 
 class QuickInput:
-    def __init__(self, data) -> None:
-        for key, val in data.items():
-            setattr(key, val)
+    def __init__(self) -> None:
+        pass
 
     async def dispose(self):
         pass
@@ -197,8 +205,9 @@ class QuickPick(QuickInput):
     pass
 
 
-class InputBox(QuickInput):
-    pass
+class InputBox(Showable, QuickInput):
+    async def _show(self, ws):
+        return await ws.run_code("vscode.window.showInputBox()", wait_for_response=True)
 
 
 @dataclass
@@ -207,7 +216,7 @@ class WindowState:
 
 
 @dataclass
-class Message:
+class Message(Showable):
     content: str
     items: Optional[Iterable] = None
 
