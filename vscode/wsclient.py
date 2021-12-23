@@ -1,5 +1,6 @@
-import asyncio
 import json
+import socket
+import asyncio
 import websockets
 
 
@@ -10,7 +11,7 @@ class WSClient:
 
     BASE_URI = "ws://localhost:"
 
-    def __init__(self, extension, port: int = 8765) -> None:
+    def __init__(self, extension, port: int = None) -> None:
         self.extension = extension
         self.port = port
         self.ws = None
@@ -20,12 +21,21 @@ class WSClient:
         return self.BASE_URI + str(self.port)
 
     def run_webserver(self):
+        if self.port is None:
+            self.port = self.get_free_port()
         async def webserver():
             async with websockets.serve(self.handler, "localhost", self.port):
                 await asyncio.Future()  # run forever
 
         print(f"Listening on {self.uri}", flush=True)  # js will read this
         asyncio.run(webserver())
+
+    def get_free_port(self):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.bind(('', 0))
+        _, port = sock.getsockname()
+        sock.close()
+        return port
 
     async def handler(self, websocket, path):
         self.ws = websocket
@@ -39,3 +49,5 @@ class WSClient:
 
     async def send(self, **kwargs):
         return await self.ws.send(json.dumps(kwargs))
+
+
