@@ -197,6 +197,10 @@ class Message(Showable):
     content: str
     items: Optional[Iterable] = None
 
+    def __post_init__(self):
+        if not hasattr(self, "type"):
+            self.type = "information"
+
     async def _show(self, ws):
         base = f'vscode.window.show{self.type.capitalize()}Message("{self.content}"'
         if self.items:

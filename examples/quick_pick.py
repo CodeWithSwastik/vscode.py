@@ -1,29 +1,26 @@
 import vscode
 
-ext = vscode.Extension(name="example", display_name="Example Ext", version="0.0.1")
-
+ext = vscode.Extension(name="Example Ext")
 
 @ext.command()
-def quick_pick():
+async def quick_pick(ctx):
 
     # items can be a list of strings, dicts or QuickPickItem
     items = [
-        vscode.ext.QuickPickItem(label="Youtube", detail="A video sharing platform"),
-        vscode.ext.QuickPickItem(label="Github", detail="A code sharing platform"),
+        vscode.QuickPickItem(label="Youtube", detail="A video sharing platform"),
+        vscode.QuickPickItem(label="Github", detail="A code sharing platform"),
     ]
 
-    options = vscode.ext.QuickPickOptions(match_on_detail=True)
-    selected = vscode.window.show_quick_pick(items, options)
+    options = vscode.QuickPickOptions(match_on_detail=True)
+    selected = await ctx.window.show(vscode.QuickPick(items, options))
 
     if not selected:
         return  # stops execution if selected is undefined or empty
 
-    # selected will either be a string or QuickPickItem
-    # depending on the items you supplied
-    # TIP: For consistency use either strings or QuickPickItems
-    # don't use both together
+    # selected will either be QuickPickItem
+    # or a list of QuickPickItem
+    # if can_pick_many was set to True 
 
-    vscode.window.show_info_message(f"Your selected {selected.label}")
+    await ctx.window.show(vscode.InfoMessage(f"You selected: {selected.label}"))
 
-
-vscode.build(ext)
+ext.run()

@@ -8,3 +8,4 @@ from .extension import *
 from .compiler import *
 from .window import *
 from .objects import *
+from .utils import log

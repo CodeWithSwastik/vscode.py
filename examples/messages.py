@@ -1,34 +1,38 @@
 import vscode
 
-ext = vscode.Extension(name="messages", display_name="Messages", version="0.0.1")
+ext = vscode.Extension(name="Messages")
 
 
 @ext.command()
-def info():
+async def info(ctx):
     vscode.window.show_info_message("This is an info message")
+    await ctx.show(vscode.InfoMessage("This is an info message"))
 
 
 @ext.command()
-def warn():
+async def warn(ctx):
     vscode.window.show_warn_message("This is a warning message")
+    await ctx.show(vscode.WarningMessage("This is a warning message"))
 
 
 @ext.command()
-def error():
+async def error(ctx):
     vscode.window.show_error_message("This is an error message")
+    await ctx.show(vscode.ErrorMessage("This is an error message"))
 
 
 @ext.command()
-def show_choices():
+async def show_choices(ctx):
     # This works the same with warning and error
-    choice = vscode.window.show_info_message("Are you happy using this?", "Yes", "No")
+    message = vscode.InfoMessage("Are you happy using this?", ["Yes", "No"])
+    choice = await ctx.show(message)
 
     if not choice:
         return
     elif choice == "Yes":
-        vscode.window.show_info_message("Thanks :)")
+        await ctx.show(vscode.InfoMessage("Thanks :)"))
     else:
-        vscode.window.show_info_message(":(")
+        await ctx.show(vscode.InfoMessage(":("))
 
 
-vscode.build(ext)
+ext.run()

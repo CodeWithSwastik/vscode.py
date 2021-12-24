@@ -1,17 +1,17 @@
 import vscode
 
-ext = vscode.Extension(name="example", display_name="Example Ext", version="0.0.1")
+ext = vscode.Extension(name="Example Ext")
 
 
 @ext.command()
-def input_box():
-    options = vscode.ext.InputBoxOptions(title="Enter your name")
-    response = vscode.window.show_input_box(options)
+async def input_box(ctx):
+    box = vscode.InputBox(title="Enter your name")
+    response = await ctx.show(box)
 
     if not response:
         return  # stops execution if response is undefined or empty
 
-    vscode.window.show_info_message(f"Your name reversed is: {response[::-1]}")
+    await ctx.show(vscode.InfoMessage(f"Your name reversed is: {response[::-1]}"))
 
 
-vscode.build(ext)
+ext.run()
