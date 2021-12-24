@@ -107,7 +107,7 @@ def build(extension) -> None:
 
     if not os.path.isdir("./venv"):
         print(f"\033[1;37;49mSetting up the virtual environment...", "\033[0m")
-        venv.create("./venv", with_pip=True)
+        # venv.create("./venv", with_pip=True)
 
     create_launch_json()
     print(f"\033[1;37;49mCreating package.json...", "\033[0m")
