@@ -31,7 +31,6 @@ function activate(context) {
     if (arr.length == 3 && arr[arr.length - 1].startsWith("ws://localhost:")) {
       ws = new wslib.WebSocket(arr[arr.length - 1]);
       console.log("Connecting to " + arr[arr.length - 1]);
-
       ws.on("open", () => {
         console.log("Connected!");
         ws.send(JSON.stringify({ type: 2, event: "activate" }));
