@@ -32,7 +32,7 @@ async def show_picker(ctx):
         vscode.QuickPickItem("boring", detail="An adjective"),
         vscode.QuickPickItem("cat", detail="An animal"),
     ]
-    res = ctx.show(
+    res = await ctx.show(
         vscode.QuickPick(items, vscode.QuickPickOptions(match_on_detail=True))
     )
 
