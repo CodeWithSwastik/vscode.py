@@ -85,8 +85,8 @@ REGISTER_COMMANDS_TEMPLATE = """
 
 
 def create_extension_js(extension):
-    with open(os.path.join(os.path.split(__file__)[0], "extension_code.js"), "r") as f1:
-        imports, contents = f1.read().split("// func: registerCommands")
+    with open(os.path.join(os.path.split(__file__)[0], "extcode.py"), "r") as f1:
+        imports, contents = f1.read().replace("'''", "").split("// func: registerCommands")
 
     file = os.path.split(inspect.stack()[-1].filename)[-1]
     imports = imports.replace("<filepath>", file)
