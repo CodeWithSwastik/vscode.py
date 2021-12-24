@@ -131,7 +131,15 @@ class Extension:
         elif data["type"] == 2: # Event
             event = data.get("event").lower()
             if event in self.events:
-                asyncio.ensure_future(self.events[event]())
+                event_data = data.get("data")
+                coro = self.events[event]
+                if event_data:
+                    coro = coro(event_data)
+                else:
+                    coro = coro()
+
+                asyncio.ensure_future(coro)
+
         elif data["type"] == 3: # Eval Response:
             self.ws.responses[data["uuid"]] = data.get("res", None)
         else: # Unrecognized 

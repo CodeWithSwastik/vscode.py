@@ -56,7 +56,7 @@ function activate(context) {
       });
 
       ws.on("close", () => {
-        console.log("closed");
+        console.log("Connection closed!");
       });
     }
   });
