@@ -8,9 +8,11 @@ __all__ = (
     "python_condition_to_js_condition",
 )
 
+
 def log(*args, **kwargs):
     kwargs["flush"] = True
     print(*args, **kwargs)
+
 
 def camel_case_to_snake_case(text: str) -> str:
     return "".join("_" + i.lower() if i.isupper() else i for i in text).lstrip("_")

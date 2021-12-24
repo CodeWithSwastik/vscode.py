@@ -2,6 +2,7 @@ import vscode
 
 ext = vscode.Extension(name="Example Ext")
 
+
 @ext.command()
 async def quick_pick(ctx):
 
@@ -19,8 +20,9 @@ async def quick_pick(ctx):
 
     # selected will either be QuickPickItem
     # or a list of QuickPickItem
-    # if can_pick_many was set to True 
+    # if can_pick_many was set to True
 
     await ctx.window.show(vscode.InfoMessage(f"You selected: {selected.label}"))
+
 
 ext.run()

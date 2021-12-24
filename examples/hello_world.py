@@ -2,6 +2,7 @@ import vscode
 
 ext = vscode.Extension(name="Test Extension")
 
+
 @ext.event
 async def on_activate():
     vscode.log(f"The Extension '{ext.name}' has started")
