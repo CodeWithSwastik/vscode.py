@@ -134,19 +134,17 @@ class QuickInput:
 
 class QuickPick(Showable, QuickInput):
     def __init__(
-        self, 
-        items: List[str, QuickPickItem], 
-        options: Optional[QuickPickOptions] = None
-    ) -> None:  
+        self,
+        items: List[str, QuickPickItem],
+        options: Optional[QuickPickOptions] = None,
+    ) -> None:
         self.items = [QuickPickItem(i) if isinstance(i, str) else i for i in items]
         self.options = options
 
     async def _show(self, ws) -> Optional[Union[QuickPickItem, List[QuickPickItem]]]:
-        items = [
-            i.to_dict() for i in self.items
-        ]
+        items = [i.to_dict() for i in self.items]
 
-        options = ','+json.dumps(self.options.to_dict()) if self.options else ''
+        options = "," + json.dumps(self.options.to_dict()) if self.options else ""
 
         chosen = await ws.run_code(
             f"vscode.window.showQuickPick({json.dumps(items)}{options})",

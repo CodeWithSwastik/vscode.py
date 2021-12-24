@@ -3,13 +3,8 @@ from __future__ import annotations
 from typing import Optional
 from vscode.utils import snake_case_to_camel_case
 
-__all__ = (
-    'Object',
-    'QuickPickItem',
-    'QuickPickOptions',
-    'Position',
-    'Range'
-)
+__all__ = ("Object", "QuickPickItem", "QuickPickOptions", "Position", "Range")
+
 
 class Object:
     """
@@ -17,14 +12,12 @@ class Object:
     """
 
     def __repr__(self):
-        return f'<vscode.{self.__class__.__name__}>'
+        return f"<vscode.{self.__class__.__name__}>"
 
     def to_dict(self) -> dict:
-        return {
-            snake_case_to_camel_case(k): v 
-            for k, v in self.__dict__.items()
-        }
-    
+        return {snake_case_to_camel_case(k): v for k, v in self.__dict__.items()}
+
+
 class QuickPickItem(Object):
     def __init__(
         self,
@@ -33,7 +26,7 @@ class QuickPickItem(Object):
         description: Optional[str] = None,
         detail: Optional[str] = None,
         picked: Optional[bool] = None,
-        **kwargs
+        **kwargs,
     ):
         self.label = label
         self.always_show = always_show or kwargs.pop("alwaysShow", None)
@@ -148,4 +141,3 @@ class Range(Object):
 
     def union(self, other) -> Range:
         pass
-
