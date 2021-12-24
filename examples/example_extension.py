@@ -42,4 +42,4 @@ async def show_picker(ctx):
     await ctx.show(vscode.InfoMessage(f"Woah you selected: '{res.label}'"))
 
 
-vscode.build(ext)
+ext.run()
