@@ -124,7 +124,7 @@ class Extension:
             if any(name == (cmd:=i).name for i in self.commands):
                 ctx = Context(ws=self.ws)
                 ctx.command = cmd
-                asyncio.ensure_future(cmd.func(ctx))
+                asyncio.create_task(cmd.func(ctx))
             else:
                 print(f"Invalid Command '{name}'", flush=True)
 
@@ -138,7 +138,7 @@ class Extension:
                 else:
                     coro = coro()
 
-                asyncio.ensure_future(coro)
+                asyncio.create_task(coro)
 
         elif data["type"] == 3: # Eval Response:
             self.ws.responses[data["uuid"]] = data.get("res", None)
