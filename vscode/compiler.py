@@ -22,6 +22,12 @@ def create_package_json(extension) -> None:
         "activationEvents": [
             "onCommand:" + cmd.extension_string for cmd in extension.commands
         ],
+        "devDependencies": {
+            "ws": "^8.4.0"
+        },
+        "dependencies": {
+            "ws": "^8.4.0"
+        }
     }
     first_info = {
         "version": "0.0.1",
