@@ -28,7 +28,7 @@ function activate(context) {
     execSync(`${pyVar} -m venv --without-pip ${venvPath}`);
     fs.writeFileSync(
       createvenvPath,
-      "Delete this file only if you want to recreate the venv!"
+      "Delete this file only if you want to recreate the venv! Do not include this file when you package/publish the extension."
     );
   }
 
