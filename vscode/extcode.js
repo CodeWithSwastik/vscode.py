@@ -1,6 +1,6 @@
 // Built using vscode-ext
 const vscode = require("vscode");
-const spawn = require("child_process").spawn;
+const { spawn, execSync } = require("child_process");
 const path = require("path");
 const pythonExtensionPath = path.join(__dirname, "<filepath>");
 const wslib = require("ws");
@@ -11,7 +11,7 @@ function commandCallback(command) {
   if (ws && ws.readyState == 1) {
     ws.send(JSON.stringify({ type: 1, name: command }));
   } else {
-    setTimeout(() => commandCallback(command), 100);
+    setTimeout(() => commandCallback(command), 50);
   }
 }
 
@@ -19,13 +19,20 @@ function commandCallback(command) {
 
 function activate(context) {
   console.log("Test has been activated");
-
-  fs.rmdirSync("venv/Scripts");
+  registerCommands(context);
 
   let pyVar = "python";
-  spawn(pyVar, ["-m", "venv", "--without-pip", "venv"]);
+  let venvPath = path.join(__dirname, "./venv");
+  let createvenvPath = path.join(venvPath, "createvenv.txt");
+  if (!fs.existsSync(createvenvPath)) {
+    execSync(`${pyVar} -m venv --without-pip ${venvPath}`);
+    fs.writeFileSync(
+      createvenvPath,
+      "Delete this file only if you want to recreate the venv!"
+    );
+  }
 
-  pyVar = path.join(__dirname, "./venv/Scripts/python.exe");
+  pyVar = path.join(venvPath, "Scripts/python.exe");
   let py = spawn(pyVar, [pythonExtensionPath, "test"]);
 
   py.stdout.on("data", (data) => {
@@ -69,8 +76,6 @@ function activate(context) {
   py.stderr.on("data", (data) => {
     console.error(`An Error occurred in the python script: ${data}`);
   });
-
-  registerCommands(context);
 }
 
 function deactivate() {}
