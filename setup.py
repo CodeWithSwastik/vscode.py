@@ -1,3 +1,4 @@
+import os
 from setuptools import setup, find_packages
 
 version = "2.0.0"
@@ -5,11 +6,12 @@ version = "2.0.0"
 with open("README.md", "r", encoding="utf-8") as readme_file:
     long_description = readme_file.read()
 
-with open("vscode/extcode.js", "r", encoding="utf-8") as js_file:
-    data = f"'''{js_file.read()}'''"
+if os.path.isfile("vscode/extcode.js"):
+    with open("vscode/extcode.js", "r", encoding="utf-8") as js_file:
+        data = f"'''{js_file.read()}'''"
 
-with open("vscode/extcode.py", "w", encoding="utf-8") as data_py:
-    data_py.write(data)
+    with open("vscode/extcode.py", "w", encoding="utf-8") as data_py:
+        data_py.write(data)
 
 setup(
     name="vscode-ext",

@@ -41,11 +41,13 @@ def create_package_json(extension) -> None:
         with open(package_dir, "r") as f:
             try:
                 new_package = json.load(f)
-                new_package.update(package)
             except json.decoder.JSONDecodeError:
-                new_package = package.update(first_info)
+                new_package = package
+            new_package.update(first_info)
     else:
-        new_package = package.update(first_info)
+        new_package = package
+        new_package.update(first_info)
+        
     with open(package_dir, "w") as f:
         json.dump(new_package, f, indent=2)
 
@@ -83,10 +85,19 @@ REGISTER_COMMANDS_TEMPLATE = """
   );
 """
 
+def get_vsc_filepath(file):
+    return os.path.join(os.path.split(__file__)[0], file)
 
 def create_extension_js(extension):
-    with open(os.path.join(os.path.split(__file__)[0], "extcode.py"), "r") as f1:
-        imports, contents = f1.read().replace("'''", "").split("// func: registerCommands")
+    js_code_path = get_vsc_filepath("extcode.js")
+    if os.path.isfile(js_code_path):
+        with open(js_code_path, "r") as f:
+            code = f.read()
+    else:
+        with open(get_vsc_filepath("extcode.py"), "r") as f:
+            code = f.read().replace("'''", "")
+
+    imports, contents = code.split("// func: registerCommands")
 
     file = os.path.split(inspect.stack()[-1].filename)[-1]
     imports = imports.replace("<filepath>", file)
@@ -105,9 +116,19 @@ def build(extension) -> None:
     print(f"\033[1;37;49m🚀 Building Extension '{extension.name}' ...", "\033[0m")
     start = time.time()
 
+    if not os.path.isfile("requirements.txt"):
+        print(f"\033[1;37;49mA requirements.txt wasn't found in this directory. If your extension has any dependencies kindly put them in the requirements.txt", "\033[0m")
+        with open("requirements.txt", "w") as f:
+            f.write("vscode-ext")
+
     if not os.path.isdir("./venv"):
         print(f"\033[1;37;49mSetting up the virtual environment...", "\033[0m")
-        # venv.create("./venv", with_pip=True)
+        venv.create("./venv", with_pip=True)
+
+    print(f"\033[1;37;49mInstalling dependencies...", "\033[0m")
+    python_path = os.path.join(os.getcwd(), "venv/Scripts/python.exe")
+    os.system(f"{python_path} -m pip install -r requirements.txt")
+
 
     create_launch_json()
     print(f"\033[1;37;49mCreating package.json...", "\033[0m")
@@ -120,5 +141,5 @@ def build(extension) -> None:
         os.system("npm i ws --save-dev")
 
     end = time.time()
-    time_taken = round((end - start) * 1000, 2)
-    print(f"\033[1;37;49mBuild completed successfully in {time_taken} ms! ✨", "\033[0m")
+    time_taken = round((end - start), 2)
+    print(f"\033[1;37;49mBuild completed successfully in {time_taken} seconds! ✨", "\033[0m")

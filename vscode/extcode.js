@@ -19,7 +19,7 @@ function commandCallback(command) {
 function activate(context) {
   console.log("Test has been activated");
 
-  let pyVar = "python.exe";
+  let pyVar = path.join(__dirname, "./venv/Scripts/python.exe");
   let py = spawn(pyVar, [pythonExtensionPath, "test"]);
 
   py.stdout.on("data", (data) => {
