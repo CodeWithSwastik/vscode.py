@@ -21,7 +21,7 @@ function activate(context) {
   console.log("Test has been activated");
   registerCommands(context);
 
-  let pyVar = "python";
+  let pyVar = process.platform == "win32" ? "python" : "python3";
   let venvPath = path.join(__dirname, "./venv");
   let createvenvPath = path.join(venvPath, "createvenv.txt");
   if (!fs.existsSync(createvenvPath)) {

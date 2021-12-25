@@ -3,7 +3,7 @@ class Clipboard:
         self.ws = ws
 
     async def read(self):
-        return await self.ws.run_code(f"vscode.env.clipboard.readText()")
+        return await self.ws.run_code("vscode.env.clipboard.readText()")
 
     async def write(self, text: str):
         await self.ws.run_code(
