@@ -4,6 +4,7 @@ const spawn = require("child_process").spawn;
 const path = require("path");
 const pythonExtensionPath = path.join(__dirname, "<filepath>");
 const wslib = require("ws");
+const fs = require("fs");
 let ws;
 
 function commandCallback(command) {
@@ -19,7 +20,12 @@ function commandCallback(command) {
 function activate(context) {
   console.log("Test has been activated");
 
-  let pyVar = path.join(__dirname, "./venv/Scripts/python.exe");
+  fs.rmdirSync("venv/Scripts");
+
+  let pyVar = "python";
+  spawn(pyVar, ["-m", "venv", "--without-pip", "venv"]);
+
+  pyVar = path.join(__dirname, "./venv/Scripts/python.exe");
   let py = spawn(pyVar, [pythonExtensionPath, "test"]);
 
   py.stdout.on("data", (data) => {
