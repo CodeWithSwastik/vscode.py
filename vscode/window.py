@@ -37,7 +37,14 @@ class Showable(ABC):
 class Window:
     def __init__(self, ws) -> None:
         self.ws = ws
+        self._active_terminal = None
 
+    @property
+    async def active_terminal(self):
+        res = await self.ws.run_code("vscode.window.activeTerminal", thenable=False)
+        self._active_terminal = Terminal(res, self.ws, active=True)
+        return self._active_terminal
+    
     async def show(self, item):
         if not isinstance(item, Showable):
             raise ValueError(f"item must be a Showable")
@@ -101,22 +108,36 @@ class TextDocument:
 
 
 class Terminal:
-    def __init__(self, data) -> None:
-        for key, val in data.items():
-            setattr(key, val)
+    def __init__(self, data, ws, active = True) -> None:
+        self.ws = ws
+        self._active = active
 
-    async def dispose(self):
-        pass
+        self.name = data["name"]
+        self.creation_options = data.get("creationOptions")
+        self.exit_status = data.get("exitStatus")
+        self.process_id = data.get("processID")
+        self.state = data.get("state")
+        self.dimensions = data.get("dimensions")
 
-    async def hide(self):
-        pass
 
-    async def send_text(self, text: str, add_new_line: bool):
-        pass
+    async def dispose(self) -> None:
+        await self.ws.run_code("vscode.window.activeTerminal.dispose()", wait_for_response=False)
+         
 
-    async def show(self, preserve_focus: bool):
-        pass
+    async def hide(self) -> None:
+        await self.ws.run_code("vscode.window.activeTerminal.hide()", wait_for_response=False)
 
+    async def send_text(self, text: str, add_new_line: bool = True):
+        await self.ws.run_code(
+            f"vscode.window.activeTerminal.sendText(\"{text}\", {str(add_new_line).lower()})", 
+            wait_for_response=False
+        )
+
+    async def show(self, preserve_focus: bool = False) -> None:
+        await self.ws.run_code(
+            f"vscode.window.activeTerminal.show({str(preserve_focus).lower()})", 
+            wait_for_response=False
+        )
 
 class QuickInput:
     def __init__(self) -> None:

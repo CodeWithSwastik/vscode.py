@@ -5,6 +5,8 @@ class Workspace:
     def __init__(self, ws) -> None:
         self.ws = ws
 
+    
+
     async def open_text_document(self, file):
         return await self.ws.run_code(f'vscode.workspace.openTextDocument("{file}")')
 
