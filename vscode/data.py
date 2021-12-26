@@ -5,7 +5,13 @@ const path = require("path");
 const pythonPath = path.join(__dirname, "extension.py");
 const requirements = path.join(__dirname, "../requirements.txt");
 const extension = vscode.extensions.getExtension("ms-python.python");
-const pyEnv = extension.exports.settings.getExecutionDetails().execCommand[0];
+
+let pyEnv;
+if (!extension || !extension.isActive) {
+  pyEnv = "python3";
+} else {
+  pyEnv = extension.exports.settings.getExecutionDetails().execCommand[0];
+}
 
 spawn(pyEnv, ["-m", "pip", "install", "-r", requirements]);
 
