@@ -3,11 +3,10 @@ from __future__ import annotations
 import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Iterable, List, Optional, Union
-from vscode.objects import QuickPickItem, QuickPickOptions
+from typing import Iterable, List, Optional, Union
 
-if TYPE_CHECKING:
-    from vscode.objects import Position, Range
+from vscode.enums import ViewColumn
+from vscode.objects import QuickPickItem, QuickPickOptions, Position, Range, Selection
 
 
 from .enums import ViewColumn
@@ -38,12 +37,19 @@ class Window:
     def __init__(self, ws) -> None:
         self.ws = ws
         self._active_terminal = None
+        self._active_text_editor = None
 
     @property
     async def active_terminal(self):
         res = await self.ws.run_code("vscode.window.activeTerminal", thenable=False)
         self._active_terminal = Terminal(res, self.ws, active=True)
         return self._active_terminal
+
+    @property
+    async def active_text_editor(self):
+        res = await self.ws.run_code("vscode.window.activeTextEditor", thenable=False)
+        self._active_text_editor = TextEditor(res, self.ws, active=True)
+        return self._active_text_editor
     
     async def show(self, item):
         if not isinstance(item, Showable):
@@ -53,9 +59,35 @@ class Window:
 
 
 class TextEditor:
-    def __init__(self, data) -> None:
-        for key, val in data.items():
-            setattr(key, val)
+    def __init__(self, data, ws, active) -> None:
+        self._active = active
+        self.ws = ws
+
+        self.document = TextDocument(data["document"])
+        self.options = data.get("creationOptions")
+        self.selection = data.get("selection")
+        self.selections = data.get("selections")
+
+        if self.selections:
+            self.selections = [Selection.from_dict(s) for s in self.selections]
+            self.selection = self.selections[0]
+
+        self.view_column = ViewColumn(data.get("viewColumn"))
+        self.visible_ranges = data.get("visibleRanges")
+        if self.visible_ranges:
+            self.visible_ranges = [
+                Range(
+                    start = Position.from_dict(r[0]), 
+                    end = Position.from_dict(r[1])
+                ) for r in self.visible_ranges
+            ]
+
+    @property
+    def cursor(self) -> Position:
+        """
+        The cursor position of the 1st selection.
+        """
+        return self.selection.active
 
     async def edit(self, callback):
         pass
@@ -80,7 +112,7 @@ class TextLine:
 class TextDocument:
     def __init__(self, data) -> None:
         for key, val in data.items():
-            setattr(key, val)
+            setattr(self, key, val)
 
     async def get_text(self, range: Range) -> str:
         pass

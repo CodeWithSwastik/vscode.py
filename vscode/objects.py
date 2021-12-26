@@ -72,6 +72,13 @@ class Position(Object):
         self.line = line
         self.character = character
 
+    @staticmethod
+    def from_dict(data):
+        return Position(data["line"], data["character"])
+
+    def to_dict(self):
+        return {"line": self.line, "character": self.character}
+
     def __eq__(self, other):
         return self.line == other.line and self.character == other.character
 
@@ -118,6 +125,15 @@ class Range(Object):
     def __init__(self, start: Position, end: Position):
         self.start = start
         self.end = end
+    
+    @staticmethod
+    def from_dict(data):
+        start = Position.from_dict(data["start"])
+        end = Position.from_dict(data["end"])
+        return Range(start, end)
+
+    def to_dict(self):
+        return {"start": self.start.to_dict(), "end": self.end.to_dict()}
 
     @property
     def is_empty(self) -> bool:
@@ -141,3 +157,39 @@ class Range(Object):
 
     def union(self, other) -> Range:
         pass
+
+    def __repr__(self):
+        return f"<vscode.{self.__class__.__name__} [{self.start} -> {self.end}]>"
+
+class Selection(Range):
+    """
+    Represents a text selection in an editor.
+    """
+
+    def __init__(
+        self, active: Position, anchor: Position, start: Position, end: Position
+    ):
+        self.active = active
+        self.anchor = anchor
+        self.start = start
+        self.end = end
+
+    @staticmethod
+    def from_dict(data):
+        return Selection(
+            Position.from_dict(data["active"]),
+            Position.from_dict(data["anchor"]),
+            Position.from_dict(data["start"]),
+            Position.from_dict(data["end"]),
+        )
+
+    def to_dict(self):
+        return {
+            "active": self.active.to_dict(),
+            "anchor": self.anchor.to_dict(),
+            "start": self.start.to_dict(),
+            "end": self.end.to_dict(),
+        }
+
+    def is_reversed(self):
+        return self.active < self.anchor
