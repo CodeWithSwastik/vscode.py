@@ -63,7 +63,11 @@ class TextEditor:
         self._active = active
         self.ws = ws
 
-        self.document = TextDocument(data["document"])
+        self.document = TextDocument(
+            data=data["document"], 
+            ws=ws, 
+            editor_code="let editor = vscode.window.activeTextEditor;"
+        )
         self.options = data.get("creationOptions")
         self.selection = data.get("selection")
         self.selections = data.get("selections")
@@ -110,12 +114,20 @@ class TextLine:
 
 
 class TextDocument:
-    def __init__(self, data) -> None:
+    def __init__(self, data, ws, editor_code) -> None:
         for key, val in data.items():
             setattr(self, key, val)
 
+        self.ws = ws
+        self._editor_code = editor_code
+
     async def get_text(self, range: Range) -> str:
-        pass
+        s = range.start
+        e = range.end
+        code = self._editor_code + \
+            f"let range = new vscode.Range({s.line}, {s.character}, {e.line}, {e.character});" + \
+            "editor.document.getText(range);"
+        return await self.ws.run_code(code, thenable=False)
 
     async def get_word_range_at_position(self, position: Position, regex) -> Range:
         pass

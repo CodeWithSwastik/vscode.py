@@ -32,7 +32,10 @@ function activate(context) {
     );
   }
 
-  pyVar = path.join(venvPath, process.platform == "win32" ? "Scripts/python.exe": "bin/python");
+  pyVar = path.join(
+    venvPath,
+    process.platform == "win32" ? "Scripts/python.exe" : "bin/python"
+  );
   let py = spawn(pyVar, [pythonExtensionPath, "test"]);
 
   py.stdout.on("data", (data) => {
