@@ -46,7 +46,7 @@ def create_package_json(extension) -> None:
                 new_package = json.load(f)
             except json.decoder.JSONDecodeError:
                 new_package = package
-            new_package.update(first_info)
+                new_package.update(first_info)
     else:
         new_package = package
         new_package.update(first_info)
@@ -122,7 +122,7 @@ def build(extension) -> None:
     if not os.path.isfile("requirements.txt"):
         print(f"\033[1;37;49mA requirements.txt wasn't found in this directory. If your extension has any dependencies kindly put them in the requirements.txt", "\033[0m")
         with open("requirements.txt", "w") as f:
-            f.write("git+https://github.com/CodeWithSwastik/vscode-ext@rewrite")
+            f.write("git+https://github.com/CodeWithSwastik/vscode-ext@main")
 
     if not os.path.isdir("./venv"):
         print(f"\033[1;37;49mSetting up the virtual environment...", "\033[0m")
