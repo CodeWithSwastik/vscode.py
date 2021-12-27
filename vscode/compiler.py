@@ -133,6 +133,8 @@ def build(extension) -> None:
 
     print(f"\033[1;37;49mInstalling dependencies...", "\033[0m")
     python_path = os.path.join(os.getcwd(), "venv/Scripts/python.exe")
+    if not os.path.exists(python_path):
+        python_path = os.path.join(os.getcwd(), "venv/bin/python")
     os.system(f"{python_path} -m pip install -r requirements.txt")
 
 
