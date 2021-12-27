@@ -21,18 +21,18 @@ function activate(context) {
   console.log("Test has been activated");
   registerCommands(context);
 
-  let pyVar = "python";
+  let pyVar = process.platform == "win32" ? "python" : "python3";
   let venvPath = path.join(__dirname, "./venv");
   let createvenvPath = path.join(venvPath, "createvenv.txt");
   if (!fs.existsSync(createvenvPath)) {
     execSync(`${pyVar} -m venv --without-pip ${venvPath}`);
     fs.writeFileSync(
       createvenvPath,
-      "Delete this file only if you want to recreate the venv!"
+      "Delete this file only if you want to recreate the venv! Do not include this file when you package/publish the extension."
     );
   }
 
-  pyVar = path.join(venvPath, "Scripts/python.exe");
+  pyVar = path.join(venvPath, process.platform == "win32" ? "Scripts/python.exe": "bin/python");
   let py = spawn(pyVar, [pythonExtensionPath, "test"]);
 
   py.stdout.on("data", (data) => {
