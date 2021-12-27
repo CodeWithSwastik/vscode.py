@@ -49,7 +49,7 @@ def create_package_json(extension) -> None:
                 new_package = json.load(f)
             except json.decoder.JSONDecodeError:
                 new_package = package
-            new_package.update(first_info)
+                new_package.update(first_info)
     else:
         new_package = package
         new_package.update(first_info)
