@@ -90,29 +90,8 @@ class Position(Object):
     def __le__(self, other):
         return self == other or self < other
 
-    def __gt__(self, other):
-        return not self <= other
-
-    def __ge__(self, other):
-        return not self < other
-
     def compare_to(self, other: Position) -> int:
         return 1 if self > other else -1 if self < other else 0
-
-    def is_after(self, other: Position) -> bool:
-        return self.compareTo(other) == 1
-
-    def is_after_or_equal(self, other: Position) -> bool:
-        return self.compareTo(other) in (0, 1)
-
-    def is_before(self, other: Position) -> bool:
-        return self.compareTo(other) == -1
-
-    def is_before_or_equal(self, other: Position) -> bool:
-        return self.compareTo(other) in (-1, 0)
-
-    def is_equal(self, other: Position) -> bool:
-        return self.compareTo(other) == 0
 
     def __repr__(self):
         return f"{self.line}:{self.character}"
@@ -152,11 +131,20 @@ class Range(Object):
         else:
             return self.start <= other.start and self.end >= other.end
 
-    def intersection(self, other) -> Range:
-        pass
+    def intersection(self, other) -> Optional[Range]:
+        if self.end < other.start or other.end < self.start:
+            return None
+
+        start = max(self.start, other.start)
+        end = min(self.end, other.end)
+
+        return Range(start, end)
 
     def union(self, other) -> Range:
-        pass
+        start = min(self.start, other.start)
+        end = max(self.end, other.end)
+
+        return Range(start, end)
 
     def __repr__(self):
         return f"<vscode.{self.__class__.__name__} [{self.start} -> {self.end}]>"
