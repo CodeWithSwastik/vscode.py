@@ -3,12 +3,13 @@ import time
 import json
 import venv
 import inspect
-from typing import TYPE_CHECKING
+from pathlib import Path
 
-if TYPE_CHECKING:
-    from vscode.extension import Extension
+from vscode.extension import Launch
 
 __all__ = ("build",)
+
+COMMAND = {"title", "category", "command"}
 
 
 def create_package_json(extension) -> None:
@@ -17,14 +18,15 @@ def create_package_json(extension) -> None:
         "displayName": extension.display_name,
         "main": "./extension.js",
         "contributes": {
-            "commands": [cmd.to_dict() for cmd in extension.commands],
+            "commands": [
+                cmd.dict(include=COMMAND, exclude_unset=True)
+                for cmd in extension.commands
+            ],
         },
-        "activationEvents": [
-            "onCommand:" + cmd.extension_string for cmd in extension.commands
-        ],
+        "activationEvents": ["onCommand:" + cmd.command for cmd in extension.commands],
         "dependencies": {
             "ws": "^8.4.0",
-        }
+        },
     }
     first_info = {
         "version": "0.0.1",
@@ -56,44 +58,30 @@ def create_package_json(extension) -> None:
 
 
 def create_launch_json():
-    launch_json = {
-        "version": "0.2.0",
-        "configurations": [
-            {
-                "name": "Run Extension",
-                "type": "extensionHost",
-                "request": "launch",
-                "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
-            },
-        ],
-    }
 
-    cwd = os.getcwd()
+    vscode_path = Path.cwd().joinpath(".vscode")
+    vscode_path.mkdir(exist_ok=True)
 
-    vscode_path = os.path.join(cwd, ".vscode")
-    os.makedirs(vscode_path, exist_ok=True)
-    os.chdir(vscode_path)
-
-    with open("launch.json", "w") as f:
-        json.dump(launch_json, f, indent=2)
-
-    os.chdir(cwd)
+    with open(vscode_path.joinpath("launch.json"), "w") as f:
+        f.write(Launch().json(indent=2))
 
 
 REGISTER_COMMANDS_TEMPLATE = """
   context.subscriptions.push(
-    vscode.commands.registerCommand("{}", () =>
-        commandCallback("{}")
+    vscode.commands.registerCommand("{command}", () =>
+        commandCallback("{name}")
     )
   );
 """
 
+
 def get_vsc_filepath(file):
-    return os.path.join(os.path.split(__file__)[0], file)
+    return Path(__file__).with_name(file)
+
 
 def create_extension_js(extension):
     js_code_path = get_vsc_filepath("extcode.js")
-    if os.path.isfile(js_code_path):
+    if js_code_path.exists():
         with open(js_code_path, "r") as f:
             code = f.read()
     else:
@@ -106,8 +94,7 @@ def create_extension_js(extension):
     imports = imports.replace("<filepath>", file)
     commands_code = "function registerCommands(context) {\n\t"
     for cmd in extension.commands:
-        args = cmd.extension_string, cmd.name
-        commands_code += REGISTER_COMMANDS_TEMPLATE.format(*args)
+        commands_code += REGISTER_COMMANDS_TEMPLATE.format(**cmd.dict())
 
     commands_code += "\n}"
 
@@ -120,7 +107,12 @@ def build(extension) -> None:
     start = time.time()
 
     if not os.path.isfile("requirements.txt"):
-        print(f"\033[1;37;49mA requirements.txt wasn't found in this directory. If your extension has any dependencies kindly put them in the requirements.txt", "\033[0m")
+        print(
+            f"\033[1;37;49mA requirements.txt wasn't found in this directory. If your extension has any dependencies kindly put them in the requirements.txt",
+            "\033[0m",
+        )
+
+        # TODO: Add websockets requirement
         with open("requirements.txt", "w") as f:
             f.write("git+https://github.com/CodeWithSwastik/vscode-ext@main")
 
@@ -134,7 +126,6 @@ def build(extension) -> None:
         python_path = os.path.join(os.getcwd(), "venv/bin/python")
     os.system(f"{python_path} -m pip install -r requirements.txt")
 
-
     create_launch_json()
     print(f"\033[1;37;49mCreating package.json...", "\033[0m")
     create_package_json(extension)
@@ -147,4 +138,7 @@ def build(extension) -> None:
 
     end = time.time()
     time_taken = round((end - start), 2)
-    print(f"\033[1;37;49mBuild completed successfully in {time_taken} seconds! ✨", "\033[0m")
+    print(
+        f"\033[1;37;49mBuild completed successfully in {time_taken} seconds! ✨",
+        "\033[0m",
+    )
