@@ -2,14 +2,18 @@
   <img alt="vscode logo" src="https://github.com/CodeWithSwastik/vscode-ext/blob/main/images/vscode-ext-2.png?raw=true" width='500px'/>
 </p>
 
-<p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode-ext/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance"></a>
+<p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode-ext/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-no-red.svg" alt="Maintenance"></a>
 <a href="https://pepy.tech/project/vscode-ext"><img src="https://static.pepy.tech/personalized-badge/vscode-ext?period=total&amp;units=international_system&amp;left_color=orange&amp;right_color=brightgreen&amp;left_text=Downloads" alt="Downloads"></a>
 <a href="https://pypi.python.org/pypi/vscode-ext/"><img src="https://badge.fury.io/py/vscode-ext.svg" alt="PyPI version"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 ## About
 
-Create vscode extensions with python.
+Create vscode extensions with python. 
+
+## Note
+
+This repository has currently been archived as I do not have time to maintain the project due to school.  
 
 ## Installation
 
