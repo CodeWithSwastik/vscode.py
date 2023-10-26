@@ -25,7 +25,8 @@ class WebviewPanel:
             let p = vscode.window.createWebviewPanel('{self.id}', '{self.name}', {self.colomn}, {{ enableScripts: true }}); 
             webviews['{self.id}'] = p;
             """
-            )
+            , wait_for_response=False
+        )
         self.running = True
 
     async def set_html(self, html: str) -> None:
@@ -33,7 +34,7 @@ class WebviewPanel:
             raise ValueError(f"Webview is not running")
         
         self._html = html
-        await self.ws.run_code(f"webviews['{self.id}'].webview.html = `{html}`")
+        await self.ws.run_code(f"webviews['{self.id}'].webview.html = `{html}`", wait_for_response=False)
 
     async def update_title(self, title: str) -> None:
         if not self.running:

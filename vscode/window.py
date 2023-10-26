@@ -62,7 +62,7 @@ class Window:
         if not isinstance(webview_panel, WebviewPanel):
             raise ValueError(f"webview_panel must be a WebviewPanel")
         
-        await webview_panel.setup(self.ws)
+        await webview_panel._setup(self.ws)
 
 
 class TextEditor:
