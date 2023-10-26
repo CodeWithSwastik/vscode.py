@@ -2,10 +2,10 @@ import uuid
 from .enums import ViewColumn
 
 __all__ = (
-    "WebViewPanel",
+    "WebviewPanel",
 )
 
-class WebViewPanel:
+class WebviewPanel:
     def __init__(self, title: str, colomn: ViewColumn) -> None:
         self.title = title
         self.colomn = colomn

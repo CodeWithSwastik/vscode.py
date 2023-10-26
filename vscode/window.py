@@ -8,7 +8,7 @@ from typing import Iterable, List, Optional, Union
 from vscode.enums import ViewColumn
 from vscode.objects import QuickPickItem, QuickPickOptions, Position, Range, Selection
 
-from vscode.webviews import WebViewPanel
+from vscode.webviews import WebviewPanel
 
 from .enums import ViewColumn
 
@@ -58,9 +58,9 @@ class Window:
 
         return await item._show(self.ws)
 
-    async def create_webview_panel(self, webview_panel: WebViewPanel):
-        if not isinstance(webview_panel, WebViewPanel):
-            raise ValueError(f"webview_panel must be a WebViewPanel")
+    async def create_webview_panel(self, webview_panel: WebviewPanel):
+        if not isinstance(webview_panel, WebviewPanel):
+            raise ValueError(f"webview_panel must be a WebviewPanel")
         
         await webview_panel.setup(self.ws)
 
