@@ -9,4 +9,5 @@ from .compiler import *
 from .window import *
 from .objects import *
 from .context import *
+from .webviews import *
 from .utils import log
