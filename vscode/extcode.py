@@ -34,7 +34,7 @@ function activate(context) {
 
   pyVar = path.join(venvPath, process.platform == "win32" ? "Scripts/python.exe": "bin/python");
   let py = spawn(pyVar, [pythonExtensionPath, "test"]);
-
+  let webviews = {};
   py.stdout.on("data", (data) => {
     let mes = data.toString().trim();
     if (ws) {
