@@ -28,7 +28,7 @@ class WebviewPanel:
             let p = vscode.window.createWebviewPanel('{self.id}', '{self.title}', {self.colomn}, {{ enableScripts: true }}); 
             webviews['{self.id}'] = p;
 
-            p.onDidReceiveMessage((message) => {{ws.send(JSON.stringify({ type: 4, name: command }));}});
+            p.webview.onDidReceiveMessage((message) => ws.send(JSON.stringify({{ type: 4, id: '{self.id}', data: message }})));
             """
             , wait_for_response=False
         )
