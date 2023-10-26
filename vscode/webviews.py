@@ -1,5 +1,7 @@
 import uuid
-from .enums import ViewColumn
+import json
+from vscode.enums import ViewColumn
+from vscode.utils import log
 
 __all__ = (
     "WebviewPanel",
@@ -20,10 +22,13 @@ class WebviewPanel:
     
     async def _setup(self, ws) -> None:
         self.ws = ws
+        self.ws.webviews[self.id] = self
         await self.ws.run_code(
             f"""
             let p = vscode.window.createWebviewPanel('{self.id}', '{self.name}', {self.colomn}, {{ enableScripts: true }}); 
             webviews['{self.id}'] = p;
+
+            p.onDidReceiveMessage((message) => {{ws.send(JSON.stringify({ type: 4, name: command }));}});
             """
             , wait_for_response=False
         )
@@ -41,4 +46,14 @@ class WebviewPanel:
             raise ValueError(f"Webview is not running")
         
         self.title = title
-        await self.ws.run_code(f"webviews['{self.id}'].title = '{title}'")
+        await self.ws.run_code(f"webviews['{self.id}'].title = '{title}'", wait_for_response=False)
+
+    async def post_message(self, data: dict) -> None:
+        if not self.running:
+            raise ValueError(f"Webview is not running")
+        
+        message = json.dumps(data)
+        await self.ws.run_code(f"webviews['{self.id}'].webview.postMessage({message})", wait_for_response=False)
+
+    async def on_message(self, data: dict):
+        log(f"Webview {self.id} received message: {data}")

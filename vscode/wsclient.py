@@ -18,6 +18,7 @@ class WSClient:
         self.ws = None
 
         self.responses = {}
+        self.webviews = {}
 
     @property
     def uri(self) -> str:
