@@ -64,7 +64,6 @@ class Window:
         
         await webview_panel._setup(self.ws)
 
-
 class TextEditor:
     def __init__(self, data, ws, active) -> None:
         self._active = active
