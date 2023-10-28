@@ -122,7 +122,7 @@ def build(extension) -> None:
     if not os.path.isfile("requirements.txt"):
         print(f"\033[1;37;49mA requirements.txt wasn't found in this directory. If your extension has any dependencies kindly put them in the requirements.txt", "\033[0m")
         with open("requirements.txt", "w") as f:
-            f.write("vscode-ext==2.0.0a1")
+            f.write("vscode-ext==2.0.0a2")
 
     if not os.path.isdir("./venv"):
         print(f"\033[1;37;49mSetting up the virtual environment...", "\033[0m")
@@ -143,7 +143,7 @@ def build(extension) -> None:
     create_extension_js(extension)
 
     if not os.path.isdir("./node_modules/ws"):
-        os.system("npm i ws --save-dev")
+        os.system("npm i ws")
 
     end = time.time()
     time_taken = round((end - start), 2)
