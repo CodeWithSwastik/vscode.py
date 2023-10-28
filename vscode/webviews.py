@@ -1,3 +1,4 @@
+from typing import Optional
 import uuid
 import json
 from vscode.enums import ViewColumn
@@ -56,7 +57,7 @@ class WebviewPanel:
         message = json.dumps(data)
         await self.ws.run_code(f"webviews['{self.id}'].webview.postMessage({message})", wait_for_response=False)
 
-    async def handle_event(self, name: str, data:dict):
+    async def handle_event(self, name: str, data: Optional[dict] = None) -> None:
         if name == "message":
             await self.on_message(data)
         elif name == "dispose":
