@@ -17,21 +17,7 @@ function commandCallback(command) {
   }
 }
 
-function registerCommands(context) {
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "crux-task-extension.showCruxTasksWindow",
-      () => commandCallback("showCruxTasksWindow")
-    )
-  );
-
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "crux-task-extension.generateDocumentation",
-      () => commandCallback("generateDocumentation")
-    )
-  );
-}
+// func: registerCommands
 
 function activate(context) {
   console.log("Test has been activated");
