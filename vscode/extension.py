@@ -142,8 +142,8 @@ class Extension:
 
         elif data["type"] == 3: # Eval Response:
             self.ws.responses[data["uuid"]] = data.get("res", None)
-        elif data["type"] == 4: # Webview Message
-            asyncio.create_task(self.ws.webviews[data["id"]].on_message(data["data"]))
+        elif data["type"] == 4: # Webview Event
+            asyncio.create_task(self.ws.webviews[data["id"]].handle_event(data["name"], data["data"]))
         else: # Unrecognized 
             print(data, flush=True)
 

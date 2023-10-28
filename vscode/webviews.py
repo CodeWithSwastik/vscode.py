@@ -28,7 +28,8 @@ class WebviewPanel:
             let p = vscode.window.createWebviewPanel('{self.id}', '{self.title}', {self.colomn}, {{ enableScripts: true }}); 
             webviews['{self.id}'] = p;
 
-            p.webview.onDidReceiveMessage((message) => ws.send(JSON.stringify({{ type: 4, id: '{self.id}', data: message }})));
+            p.webview.onDidReceiveMessage((message) => ws.send(JSON.stringify({{ type: 4, id: '{self.id}', name: 'message', data: message }})));
+            p.onDidDispose(() => ws.send(JSON.stringify({{ type: 4, id: '{self.id}', name: 'dispose' }})));
             """
             , wait_for_response=False
         )
@@ -55,5 +56,24 @@ class WebviewPanel:
         message = json.dumps(data)
         await self.ws.run_code(f"webviews['{self.id}'].webview.postMessage({message})", wait_for_response=False)
 
+    async def handle_event(self, name: str, data:dict):
+        if name == "message":
+            await self.on_message(data)
+        elif name == "dispose":
+            await self.on_dispose()
+        else:
+            log(f"Webview {self.id} received unknown event: {name}")
+
     async def on_message(self, data: dict):
         log(f"Webview {self.id} received message: {data}")
+
+    async def on_dispose(self):
+        log(f"Webview {self.id} disposed")
+        self.running = False
+        del self.ws.webviews[self.id]
+
+    async def dispose(self):
+        if not self.running:
+            raise ValueError(f"Webview is not running")
+        
+        await self.ws.run_code(f"webviews['{self.id}'].dispose()", wait_for_response=False)
