@@ -2,7 +2,9 @@
 const vscode = require("vscode");
 const { spawn, execSync } = require("child_process");
 const path = require("path");
-const pythonExtensionPath = path.join(__dirname, "<filepath>");
+const pythonExtensionPath = path.join(__dirname, "extension.py");
+const requirementsPath = path.join(__dirname, "requirements.txt");
+
 const wslib = require("ws");
 const fs = require("fs");
 let ws;
@@ -15,7 +17,21 @@ function commandCallback(command) {
   }
 }
 
-// func: registerCommands
+function registerCommands(context) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "crux-task-extension.showCruxTasksWindow",
+      () => commandCallback("showCruxTasksWindow")
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "crux-task-extension.generateDocumentation",
+      () => commandCallback("generateDocumentation")
+    )
+  );
+}
 
 function activate(context) {
   console.log("Test has been activated");
@@ -25,7 +41,7 @@ function activate(context) {
   let venvPath = path.join(__dirname, "./venv");
   let createvenvPath = path.join(venvPath, "createvenv.txt");
   if (!fs.existsSync(createvenvPath)) {
-    execSync(`${pyVar} -m venv --without-pip ${venvPath}`);
+    execSync(`${pyVar} -m venv ${venvPath}`);
     fs.writeFileSync(
       createvenvPath,
       "Delete this file only if you want to recreate the venv! Do not include this file when you package/publish the extension."
@@ -36,6 +52,8 @@ function activate(context) {
     venvPath,
     process.platform == "win32" ? "Scripts/python.exe" : "bin/python"
   );
+  execSync(`${pyVar} -m pip install -r ${requirementsPath}`);
+
   let py = spawn(pyVar, [pythonExtensionPath, "test"]);
   let webviews = {};
 
