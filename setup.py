@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-version = "2.0.0"
+version = "2.0.0a1"
 
 with open("README.md", "r", encoding="utf-8") as readme_file:
     long_description = readme_file.read()
@@ -28,6 +28,7 @@ setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
@@ -36,6 +37,6 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Utilities",
     ],
-    install_requires=[],
+    install_requires=["websockets"],
     python_requires=">=3.8",
 )
