@@ -57,6 +57,20 @@ class WebviewPanel:
         message = json.dumps(data)
         await self.ws.run_code(f"webviews['{self.id}'].webview.postMessage({message})", wait_for_response=False)
 
+    async def reveal(self, column: Optional[ViewColumn] = None) -> None:
+        column = column or self.column
+
+        if not self.running:
+            raise ValueError(f"Webview is not running")
+        
+        await self.ws.run_code(f"webviews['{self.id}'].webview.reveal({column})", wait_for_response=False)
+
+    async def is_visible(self) -> bool:
+        if not self.running:
+            raise ValueError(f"Webview is not running")
+        
+        return await self.ws.run_code(f"webviews['{self.id}'].webview.visible", thenable=False)
+    
     async def handle_event(self, name: str, data: Optional[dict] = None) -> None:
         if name == "message":
             await self.on_message(data)
