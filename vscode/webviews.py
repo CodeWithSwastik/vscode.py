@@ -61,17 +61,21 @@ class WebviewPanel:
         if name == "message":
             await self.on_message(data)
         elif name == "dispose":
+            self.running = False
+            del self.ws.webviews[self.id]
             await self.on_dispose()
         else:
-            log(f"Webview {self.id} received unknown event: {name}")
+            event_handler = getattr(self, f"on_{name}", None)
+            if event_handler:
+                await event_handler(data)
+            else:
+                log(f"Webview {self.id} received unknown event: {name}")
 
     async def on_message(self, data: dict):
         log(f"Webview {self.id} received message: {data}")
 
     async def on_dispose(self):
         log(f"Webview {self.id} disposed")
-        self.running = False
-        del self.ws.webviews[self.id]
 
     async def dispose(self):
         if not self.running:
