@@ -9,9 +9,9 @@ __all__ = (
 )
 
 class WebviewPanel:
-    def __init__(self, title: str, colomn: ViewColumn) -> None:
+    def __init__(self, title: str, column: ViewColumn) -> None:
         self.title = title
-        self.colomn = colomn
+        self.column = column
         self._html = ""
         self.id = str(uuid.uuid4())
         self.ws = None
@@ -26,7 +26,7 @@ class WebviewPanel:
         self.ws.webviews[self.id] = self
         await self.ws.run_code(
             f"""
-            let p = vscode.window.createWebviewPanel('{self.id}', '{self.title}', {self.colomn}, {{ enableScripts: true }}); 
+            let p = vscode.window.createWebviewPanel('{self.id}', '{self.title}', {self.column}, {{ enableScripts: true }}); 
             webviews['{self.id}'] = p;
 
             p.webview.onDidReceiveMessage((message) => ws.send(JSON.stringify({{ type: 4, id: '{self.id}', name: 'message', data: message }})));
