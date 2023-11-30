@@ -1,6 +1,6 @@
-from enum import IntEnum
+from enum import Enum, IntEnum
 
-__all__ = ("ViewColumn",)
+__all__ = ("ViewColumn", "ConfigType")
 
 
 class ViewColumn(IntEnum):
@@ -15,3 +15,9 @@ class ViewColumn(IntEnum):
     Seven = 7
     Eight = 8
     Nine = 9
+
+
+class ConfigType(Enum):
+    boolean = "boolean"
+    integer = "number"
+    string = "string"

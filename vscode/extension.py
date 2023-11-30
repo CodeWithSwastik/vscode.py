@@ -112,6 +112,15 @@ class Extension:
         self.events[name] = func
         return func
 
+
+    def set_default_category(self, category) -> None:
+        """
+        Set a default category for new commands.
+        Args:
+            category: The name of the default category.
+        """
+        self.default_category = category
+        
     def run(self):
         if len(sys.argv) > 1:
             self.ws.run_webserver()
