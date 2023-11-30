@@ -1,9 +1,22 @@
 from typing import Optional, Union
-
+from vscode.config import Config
 
 class Workspace:
     def __init__(self, ws) -> None:
         self.ws = ws
+
+    async def get_extension_configs(self, extension_name: Optional[str] = None):
+        if extension_name is None:
+            extension_name = self.ws.extension.name
+            
+        return await self.ws.run_code(f'vscode.workspace.getConfiguration("{extension_name}")', thenable=False)
+
+    async def get_config_value(self, config: Union[str, Config]):
+        if isinstance(config, Config):
+            config = config.name
+        
+        return (await self.get_extension_configs()).get(config)
+
 
     async def get_workspace_folders(self):
         folders = await self.ws.run_code('vscode.workspace.workspaceFolders', thenable=False)

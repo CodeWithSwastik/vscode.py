@@ -15,7 +15,7 @@ class BaseConfig:
         return cls(**conf_dict)
 
     def to_dict(self):
-        return {"name": self.name, "description": self.description}
+        return {"description": self.description}
 
     def __repr__(self):
         return f"<vscode.BaseConfig name={self.name} description={self.description}>"
@@ -29,7 +29,6 @@ class EnumConfig(BaseConfig):
 class Config(BaseConfig):
     def __init__(
         self,
-        *,
         name: str,
         description: str,
         input_type: Type[Union[str, int, bool]],

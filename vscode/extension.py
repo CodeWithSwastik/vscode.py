@@ -1,10 +1,11 @@
 import sys
 import asyncio
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, List
 
 from vscode.context import Context
 from vscode.wsclient import WSClient
 from vscode.compiler import build
+from vscode.config import Config
 from vscode.utils import *
 
 __all__ = ("Extension", "Command")
@@ -15,10 +16,11 @@ class Extension:
     Represents a vscode extension.
     """
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, config: Optional[List[Config]] = None) -> None:
         self.name = name.lower().replace(" ", "-")
         self.display_name = name
 
+        self.config = [] if config is None else config
         self.commands = []
         self.events = {}
         self.default_category = None
@@ -120,7 +122,7 @@ class Extension:
             category: The name of the default category.
         """
         self.default_category = category
-        
+
     def run(self):
         if len(sys.argv) > 1:
             self.ws.run_webserver()

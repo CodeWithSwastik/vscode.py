@@ -35,6 +35,13 @@ def create_package_json(extension) -> None:
     if extension.keybindings:
         package["contributes"].update({"keybindings": extension.keybindings})
 
+    if extension.config:
+        package["contributes"]["configuration"] = {
+                "title": extension.display_name,
+                "properties":{
+                    f"{extension.name}.{c.name}": c.to_dict() for c in extension.config
+                }
+            }
     # package.update(config)
 
     cwd = os.getcwd()
@@ -44,6 +51,7 @@ def create_package_json(extension) -> None:
         with open(package_dir, "r") as f:
             try:
                 new_package = json.load(f)
+                new_package.update(package)
             except json.decoder.JSONDecodeError:
                 new_package = package
                 new_package.update(first_info)

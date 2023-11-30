@@ -6,6 +6,7 @@ __version__ = "2.0.0a4"
 
 from .extension import *
 from .compiler import *
+from .config import *
 from .window import *
 from .objects import *
 from .context import *
