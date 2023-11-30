@@ -47,6 +47,7 @@ class WebviewPanel:
             , wait_for_response=False
         )
         self.running = True
+        await self.on_activate()
 
     async def set_html(self, html: str) -> None:
         if not self.running:
@@ -97,6 +98,9 @@ class WebviewPanel:
                 await event_handler(data)
             else:
                 log(f"Webview {self.id} received unknown event: {name}")
+
+    async def on_activate(self):
+        log(f"Webview {self.id} activated")
 
     async def on_message(self, data: dict):
         log(f"Webview {self.id} received message: {data}")
