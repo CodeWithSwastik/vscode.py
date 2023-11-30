@@ -1,6 +1,6 @@
 from enum import Enum, IntEnum
 
-__all__ = ("ViewColumn", "ConfigType")
+__all__ = ("ViewColumn", "ConfigType", "ProgressLocation")
 
 
 class ViewColumn(IntEnum):
@@ -21,3 +21,8 @@ class ConfigType(Enum):
     boolean = "boolean"
     integer = "number"
     string = "string"
+
+class ProgressLocation(IntEnum):
+    SourceControl = 1
+    Window = 10
+    Notification = 15

@@ -5,12 +5,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Iterable, List, Optional, Union
 
-from vscode.enums import ViewColumn
+from vscode.enums import ViewColumn, ProgressLocation
 from vscode.objects import QuickPickItem, QuickPickOptions, Position, Range, Selection
 
 from vscode.webviews import WebviewPanel
-
-from .enums import ViewColumn
 
 __all__ = (
     "Window",
@@ -63,6 +61,9 @@ class Window:
             raise ValueError(f"webview_panel must be a WebviewPanel")
         
         await webview_panel._setup(self.ws)
+
+    def progress(self, title: str, location: ProgressLocation = ProgressLocation.Window, cancellable: bool = False) -> Progress:
+        return Progress(self.ws, title, location, cancellable)
 
 class TextEditor:
     def __init__(self, data, ws, active) -> None:
@@ -295,3 +296,48 @@ class WarningMessage(Message):
 @dataclass
 class ErrorMessage(Message):
     type = "error"
+
+
+class Progress:
+    def __init__(self, ws, title: str, location: ProgressLocation = ProgressLocation.Window, cancellable: bool = False) -> None:
+        self.ws = ws
+        self.title = title
+        self.cancellable = cancellable
+        self.location = location
+
+    async def __aenter__(self):
+        await self.ws.run_code(
+            f'''
+            vscode.window.withProgress({{"location": {self.location.value}, "title": "{self.title}", "cancellable":{str(self.cancellable).lower()}}}, (progress, token) => {{ 
+                progress.report({{ increment: 0 }}); 
+                progressRecords["{self.title}"] = {{ "progress": progress, "token": token, "percentComplete": 0 }};
+                const checkProgressComplete = (resolve) => {{
+                    if (progressRecords["{self.title}"].percentComplete >= 100) {{ 
+                        console.log("Progress Complete");
+                        resolve();
+                    }}
+                    else {{
+                        setTimeout(checkProgressComplete, 100);
+                    }}
+                }};
+                return new Promise(resolve => setTimeout(checkProgressComplete, 100, resolve));
+            }});
+            ''',
+            thenable=False
+        )
+        return self
+    
+    async def __aexit__(self, exc_type, exc_value, traceback):
+        await self.dispose()
+
+    async def report(self, increment: int, message: str = ""):
+        await self.ws.run_code(
+            f'''
+            progressRecords["{self.title}"].progress.report({{ increment: {increment}, message: "{message}" }});
+            progressRecords["{self.title}"].percentComplete += {increment};
+            ''',
+            thenable=False
+        )
+
+    async def dispose(self):
+        pass
