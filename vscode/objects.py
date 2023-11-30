@@ -96,8 +96,8 @@ class Position(Object):
     def __repr__(self):
         return f"{self.line}:{self.character}"
 
-    def translate(line_delta: int, character_delta: int) -> Position:
-        pass
+    def translate(self, line_delta: int, character_delta: int) -> Position:
+        return Position(self.line + line_delta, self.character + character_delta)
 
 
 class Range(Object):
