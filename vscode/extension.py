@@ -8,17 +8,65 @@ from vscode.compiler import build
 from vscode.config import Config
 from vscode.utils import *
 
-__all__ = ("Extension", "Command")
+__all__ = ("ExtensionMetadata", "Extension", "Command")
 
+class ExtensionMetadata:
+    """
+    Holds details of a vscode extension.
+
+    Refer to https://code.visualstudio.com/api/references/extension-manifest for more details.
+    """
+
+    def __init__(
+        self,
+        version: str = "0.0.1",
+        publisher: Optional[str] = None,
+        engine: str = "^1.58.0",
+        license: Optional[str] = None,
+        display_name: Optional[str] = None,
+        description: Optional[str] = None,
+        categories: Optional[List[str]] = None,
+        icon: Optional[str] = None,
+        keywords: Optional[List[str]] = None,
+        preview: Optional[bool] = None,
+        repository: Optional[str] = None,
+    ) -> None:
+        self.version = version
+        self.repository = repository
+        self.publisher = publisher
+        self.engine = engine
+        self.license = license
+        self.display_name = display_name
+        self.description = description
+        self.categories = categories
+        self.icon = icon
+        self.keywords = keywords
+        self.preview = preview
+
+    def to_dict(self) -> dict:
+        metadata = {}
+        for key, value in self.__dict__.items():
+            if value is not None:
+
+                if key == "engine":
+                    metadata["engines"] = {"vscode": value}
+                elif key == "repository":
+                    metadata["repository"] = {"url": value}
+                elif key == "display_name":
+                    pass
+                else:
+                    metadata[key] = value
+        return metadata
 
 class Extension:
     """
     Represents a vscode extension.
     """
 
-    def __init__(self, name: str, config: Optional[List[Config]] = None) -> None:
+    def __init__(self, name: str, *, metadata: Optional[ExtensionMetadata] = None, config: Optional[List[Config]] = None) -> None:
         self.name = name.lower().replace(" ", "-")
-        self.display_name = name
+        self.metadata = metadata if metadata is not None else ExtensionMetadata()
+        self.display_name = name if metadata is None or metadata.display_name is None else metadata.display_name
 
         self.config = [] if config is None else config
         self.commands = []
@@ -157,6 +205,7 @@ class Extension:
             asyncio.create_task(self.ws.webviews[data["id"]].handle_event(data["name"], data.get("data", None)))
         else: # Unrecognized 
             print(data, flush=True)
+
 
 class Command:
     """

@@ -26,11 +26,8 @@ def create_package_json(extension) -> None:
             "ws": "^8.4.0",
         }
     }
-    first_info = {
-        "version": "0.0.1",
-        "engines": {"vscode": "^1.58.0"},
-        "categories": ["Other"],
-    }
+    metadata = extension.metadata.to_dict()
+    package.update(metadata)
 
     if extension.keybindings:
         package["contributes"].update({"keybindings": extension.keybindings})
@@ -42,7 +39,7 @@ def create_package_json(extension) -> None:
                     f"{extension.name}.{c.name}": c.to_dict() for c in extension.config
                 }
             }
-    # package.update(config)
+    
 
     cwd = os.getcwd()
 
@@ -54,10 +51,8 @@ def create_package_json(extension) -> None:
                 new_package.update(package)
             except json.decoder.JSONDecodeError:
                 new_package = package
-                new_package.update(first_info)
     else:
         new_package = package
-        new_package.update(first_info)
 
     with open(package_dir, "w") as f:
         json.dump(new_package, f, indent=2)
