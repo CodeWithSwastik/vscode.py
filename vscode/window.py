@@ -308,19 +308,22 @@ class Progress:
     async def __aenter__(self):
         await self.ws.run_code(
             f'''
-            vscode.window.withProgress({{"location": {self.location.value}, "title": "{self.title}", "cancellable":{str(self.cancellable).lower()}}}, (progress, token) => {{ 
-                progress.report({{ increment: 0 }}); 
-                progressRecords["{self.title}"] = {{ "progress": progress, "token": token, "percentComplete": 0 }};
-                const checkProgressComplete = (resolve) => {{
-                    if (progressRecords["{self.title}"].percentComplete >= 100) {{ 
-                        console.log("Progress Complete");
-                        resolve();
-                    }}
-                    else {{
-                        setTimeout(checkProgressComplete, 100);
-                    }}
-                }};
-                return new Promise(resolve => setTimeout(checkProgressComplete, 100, resolve));
+            vscode.window.withProgress({{"location": {self.location.value}, "title": "{self.title}", "cancellable":{str(self.cancellable).lower()}}}, async (progress, token) => {{ 
+                progressRecords["{self.title}"] = {{ "progress": progress, "token": token, "completed": false }};
+
+                const checkProgressComplete = () => {{
+                    return new Promise(resolve => {{
+                        const interval = setInterval(() => {{
+                            if (progressRecords["{self.title}"].completed) {{
+                                console.log("Progress Complete");
+                                clearInterval(interval);
+                                resolve();
+                            }}
+                        }}, 100);
+                    }});
+                }};                                
+                
+                await checkProgressComplete();
             }});
             ''',
             thenable=False
@@ -334,10 +337,14 @@ class Progress:
         await self.ws.run_code(
             f'''
             progressRecords["{self.title}"].progress.report({{ increment: {increment}, message: "{message}" }});
-            progressRecords["{self.title}"].percentComplete += {increment};
             ''',
             thenable=False
         )
 
     async def dispose(self):
-        pass
+        await self.ws.run_code(
+            f'''
+            progressRecords["{self.title}"].completed = true;
+            ''',
+            thenable=False
+        )
