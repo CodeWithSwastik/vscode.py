@@ -1,5 +1,6 @@
 **/__pycache__
 /vscode_ext.egg-info
+/vscode.py.egg-info
 /venv
 /dist
 /build

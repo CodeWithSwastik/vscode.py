@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-version = "2.0.0a4"
+version = "2.0.0a5"
 
 with open("README.md", "r", encoding="utf-8") as readme_file:
     long_description = readme_file.read()
@@ -14,7 +14,7 @@ if os.path.isfile("vscode/extcode.js"):
         data_py.write(data)
 
 setup(
-    name="vscode-ext",
+    name="vscode.py",
     version=version,
     description="Create VSCode Extensions with python",
     long_description=long_description,

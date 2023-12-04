@@ -43,7 +43,7 @@ function activate(context) {
   let py = spawn(pyVar, [pythonExtensionPath, "test"]);
   let webviews = {};
   let progressRecords = {};
-  
+
   py.stdout.on("data", (data) => {
     let mes = data.toString().trim();
     if (ws) {
