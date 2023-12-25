@@ -1,31 +1,31 @@
 <p align="center">
-  <img alt="vscode logo" src="https://github.com/CodeWithSwastik/vscode-ext/blob/main/images/vscode-ext-2.png?raw=true" width='500px'/>
+  <img alt="vscode.py logo" src="https://github.com/CodeWithSwastik/vscode.py/blob/main/images/vscode-py.png?raw=true" width='500px'/>
 </p>
 
-<p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode-ext/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance"></a>
-<a href="https://pepy.tech/project/vscode-ext"><img src="https://static.pepy.tech/personalized-badge/vscode-ext?period=total&amp;units=international_system&amp;left_color=orange&amp;right_color=brightgreen&amp;left_text=Downloads" alt="Downloads"></a>
-<a href="https://pypi.python.org/pypi/vscode-ext/"><img src="https://badge.fury.io/py/vscode-ext.svg" alt="PyPI version"></a>
+<p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode.py/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance"></a>
+<a href="https://pepy.tech/project/vscode.py"><img src="https://static.pepy.tech/personalized-badge/vscode.py?period=total&amp;units=international_system&amp;left_color=orange&amp;right_color=brightgreen&amp;left_text=Downloads" alt="Downloads"></a>
+<a href="https://pypi.python.org/pypi/vscode.py/"><img src="https://badge.fury.io/py/vscode.py.svg" alt="PyPI version"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 ## About
 
-Create vscode extensions with python. 
+Create vscode extensions with python.
 
 ## Installation
 
 Stable version:
 
 ```sh-session
-pip install vscode-ext
+pip install vscode.py
 ```
 
-## Why use this?
+## Why use vscode.py?
 
 Why should you use this for building VScode extensions when you can use typescript? Here are some reasons:
 
-- vscode-ext builds the package.json for you! No need to switch between your extension.py and package.json in order to add commands. It also handles adding Activity Bars, Keybinds and Views.
-- vscode-ext provides a more pythonic way of creating the extension. Python also has some powerful modules that Javascript doesn't and you can include these with vscode-ext
-- vscode-ext extensions work perfectly with vsce and you can publish your extensions just like you would publish any other extension.
+- vscode.py builds the package.json for you! No need to switch between your extension.py and package.json in order to add commands. It also handles adding Activity Bars, Keybinds and Views.
+- vscode.py provides a more pythonic way of creating the extension. Python also has some powerful modules that Javascript doesn't and you can include these with vscode.py
+- vscode.py extensions work perfectly with vsce and you can publish your extensions just like you would publish any other extension.
 
 ## Example Extension
 
@@ -86,9 +86,9 @@ Finally, test your command.
 
 ![image](https://user-images.githubusercontent.com/61446939/126892110-f8d4bcf2-9ec0-43c2-a7d6-40288d91f000.png)
 
-## Extensions built using vscode-ext
+## Extensions built using vscode.py
 
-Here's a list of some extensions built using vscode-ext. If you'd like to include your extension here feel free to create a PR.
+Here's a list of some extensions built using vscode.py. If you'd like to include your extension here feel free to create a PR.
 
 - [Youtube](https://github.com/CodeWithSwastik/youtube-ext)
 - [Wikipedia](https://github.com/SkullCrusher0003/wikipedia-ext)
@@ -98,4 +98,4 @@ Here's a list of some extensions built using vscode-ext. If you'd like to includ
 
 ## Documentation
 
-The docs are coming soon! In the meantime you can look at the [examples](https://github.com/CodeWithSwastik/vscode-ext/tree/main/examples) in order to learn how vscode-ext works and what it offers!
+The docs are coming soon! In the meantime you can look at the [examples](https://github.com/CodeWithSwastik/vscode.py/tree/main/examples) in order to learn how vscode.py works and what it offers!
