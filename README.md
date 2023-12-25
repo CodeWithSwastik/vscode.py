@@ -2,14 +2,8 @@
   <img alt="vscode.py logo" src="https://github.com/CodeWithSwastik/vscode.py/blob/main/images/vscode-py.png?raw=true" width='500px'/>
 </p>
 
-<<<<<<< HEAD
-
 <p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode.py/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance"></a>
 <a href="https://pepy.tech/project/vscode.py"><img src="https://static.pepy.tech/personalized-badge/vscode.py?period=total&amp;units=international_system&amp;left_color=orange&amp;right_color=brightgreen&amp;left_text=Downloads" alt="Downloads"></a>
-=======
-<p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode-ext/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance"></a>
-<a href="https://pepy.tech/project/vscode-ext"><img src="https://static.pepy.tech/personalized-badge/vscode-ext?period=total&amp;units=international_system&amp;left_color=orange&amp;right_color=brightgreen&amp;left_text=Downloads" alt="Downloads"></a>
->>>>>>> 266e07ff61c8da91a1e73a7bdb49534c1a8064a7
 <a href="https://pypi.python.org/pypi/vscode.py/"><img src="https://badge.fury.io/py/vscode.py.svg" alt="PyPI version"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
