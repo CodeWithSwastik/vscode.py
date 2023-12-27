@@ -5,19 +5,16 @@ ext = vscode.Extension(name="Messages")
 
 @ext.command()
 async def info(ctx):
-    vscode.window.show_info_message("This is an info message")
     await ctx.show(vscode.InfoMessage("This is an info message"))
 
 
 @ext.command()
 async def warn(ctx):
-    vscode.window.show_warn_message("This is a warning message")
     await ctx.show(vscode.WarningMessage("This is a warning message"))
 
 
 @ext.command()
 async def error(ctx):
-    vscode.window.show_error_message("This is an error message")
     await ctx.show(vscode.ErrorMessage("This is an error message"))
 
 
