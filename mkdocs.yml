@@ -15,7 +15,6 @@ nav:
 
   - Documentation:
       - Extension: documentation/extension.md
-      - Command: documentation/command.md
       - Objects: documentation/objects.md
       - Window: documentation/window.md
       - Configuration: documentation/config.md
@@ -51,5 +50,5 @@ plugins:
       default_handler: python
       handlers:
         python:
-          rendering:
+          options:
             show_source: false

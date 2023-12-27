@@ -1,3 +1,0 @@
-# Command
-
-::: vscode.extension.Command
