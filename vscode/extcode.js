@@ -20,7 +20,6 @@ function commandCallback(command) {
 // func: registerCommands
 
 function activate(context) {
-  console.log("Test has been activated");
   registerCommands(context);
 
   let pyVar = process.platform == "win32" ? "python" : "python3";
