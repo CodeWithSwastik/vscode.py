@@ -1,4 +1,4 @@
-"""// Built using vscode-ext
+'''// Built using vscode-ext
 const vscode = require("vscode");
 const { spawn, execSync } = require("child_process");
 const path = require("path");
@@ -90,4 +90,4 @@ function activate(context) {
 function deactivate() {}
 
 module.exports = { activate, deactivate };
-"""
+'''
