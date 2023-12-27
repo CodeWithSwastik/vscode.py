@@ -35,20 +35,22 @@ class Config(BaseConfig):
         enums: List[EnumConfig] = [],
         default=None,
     ) -> None:
-
         if input_type not in (bool, str, int):
             raise TypeError("input_type must be either the bool, str or int class")
 
-        types = {bool: ConfigType.boolean, str: ConfigType.string, int: ConfigType.integer}
-        input_type = types[input_type]     
-        
+        types = {
+            bool: ConfigType.boolean,
+            str: ConfigType.string,
+            int: ConfigType.integer,
+        }
+        input_type = types[input_type]
+
         super().__init__(name=name, description=description)
 
         self.type = input_type.name
         self.default = default
         self.enums = enums
 
-    
     def to_dict(self) -> dict:
         out = super().to_dict()
 

@@ -49,7 +49,7 @@ class Window:
         res = await self.ws.run_code("vscode.window.activeTextEditor", thenable=False)
         self._active_text_editor = TextEditor(res, self.ws, active=True)
         return self._active_text_editor
-    
+
     async def show(self, item):
         if not isinstance(item, Showable):
             raise ValueError(f"item must be a Showable")
@@ -59,11 +59,17 @@ class Window:
     async def create_webview_panel(self, webview_panel: WebviewPanel):
         if not isinstance(webview_panel, WebviewPanel):
             raise ValueError(f"webview_panel must be a WebviewPanel")
-        
+
         await webview_panel._setup(self.ws)
 
-    def progress(self, title: str, location: ProgressLocation = ProgressLocation.Window, cancellable: bool = False) -> Progress:
+    def progress(
+        self,
+        title: str,
+        location: ProgressLocation = ProgressLocation.Window,
+        cancellable: bool = False,
+    ) -> Progress:
         return Progress(self.ws, title, location, cancellable)
+
 
 class TextEditor:
     def __init__(self, data, ws, active) -> None:
@@ -71,9 +77,9 @@ class TextEditor:
         self.ws = ws
 
         self.document = TextDocument(
-            data=data["document"], 
-            ws=ws, 
-            editor_code="let editor = vscode.window.activeTextEditor;"
+            data=data["document"],
+            ws=ws,
+            editor_code="let editor = vscode.window.activeTextEditor;",
         )
         self.options = data.get("creationOptions")
         self.selection = data.get("selection")
@@ -87,10 +93,8 @@ class TextEditor:
         self.visible_ranges = data.get("visibleRanges")
         if self.visible_ranges:
             self.visible_ranges = [
-                Range(
-                    start = Position.from_dict(r[0]), 
-                    end = Position.from_dict(r[1])
-                ) for r in self.visible_ranges
+                Range(start=Position.from_dict(r[0]), end=Position.from_dict(r[1]))
+                for r in self.visible_ranges
             ]
 
     @property
@@ -131,9 +135,11 @@ class TextDocument:
     async def get_text(self, range: Range) -> str:
         s = range.start
         e = range.end
-        code = self._editor_code + \
-            f"let range = new vscode.Range({s.line}, {s.character}, {e.line}, {e.character});" + \
-            "editor.document.getText(range);"
+        code = (
+            self._editor_code
+            + f"let range = new vscode.Range({s.line}, {s.character}, {e.line}, {e.character});"
+            + "editor.document.getText(range);"
+        )
         return await self.ws.run_code(code, thenable=False)
 
     async def get_word_range_at_position(self, position: Position, regex) -> Range:
@@ -159,7 +165,7 @@ class TextDocument:
 
 
 class Terminal:
-    def __init__(self, data, ws, active = True) -> None:
+    def __init__(self, data, ws, active=True) -> None:
         self.ws = ws
         self._active = active
 
@@ -170,25 +176,28 @@ class Terminal:
         self.state = data.get("state")
         self.dimensions = data.get("dimensions")
 
-
     async def dispose(self) -> None:
-        await self.ws.run_code("vscode.window.activeTerminal.dispose()", wait_for_response=False)
-         
+        await self.ws.run_code(
+            "vscode.window.activeTerminal.dispose()", wait_for_response=False
+        )
 
     async def hide(self) -> None:
-        await self.ws.run_code("vscode.window.activeTerminal.hide()", wait_for_response=False)
+        await self.ws.run_code(
+            "vscode.window.activeTerminal.hide()", wait_for_response=False
+        )
 
     async def send_text(self, text: str, add_new_line: bool = True):
         await self.ws.run_code(
-            f"vscode.window.activeTerminal.sendText(\"{text}\", {str(add_new_line).lower()})", 
-            wait_for_response=False
+            f'vscode.window.activeTerminal.sendText("{text}", {str(add_new_line).lower()})',
+            wait_for_response=False,
         )
 
     async def show(self, preserve_focus: bool = False) -> None:
         await self.ws.run_code(
-            f"vscode.window.activeTerminal.show({str(preserve_focus).lower()})", 
-            wait_for_response=False
+            f"vscode.window.activeTerminal.show({str(preserve_focus).lower()})",
+            wait_for_response=False,
         )
+
 
 class QuickInput:
     def __init__(self) -> None:
@@ -299,7 +308,13 @@ class ErrorMessage(Message):
 
 
 class Progress:
-    def __init__(self, ws, title: str, location: ProgressLocation = ProgressLocation.Window, cancellable: bool = False) -> None:
+    def __init__(
+        self,
+        ws,
+        title: str,
+        location: ProgressLocation = ProgressLocation.Window,
+        cancellable: bool = False,
+    ) -> None:
         self.ws = ws
         self.title = title
         self.cancellable = cancellable
@@ -307,7 +322,7 @@ class Progress:
 
     async def __aenter__(self):
         await self.ws.run_code(
-            f'''
+            f"""
             vscode.window.withProgress({{"location": {self.location.value}, "title": "{self.title}", "cancellable":{str(self.cancellable).lower()}}}, async (progress, token) => {{ 
                 progressRecords["{self.title}"] = {{ "progress": progress, "token": token, "completed": false }};
 
@@ -325,26 +340,26 @@ class Progress:
                 
                 await checkProgressComplete();
             }});
-            ''',
-            thenable=False
+            """,
+            thenable=False,
         )
         return self
-    
+
     async def __aexit__(self, exc_type, exc_value, traceback):
         await self.dispose()
 
     async def report(self, increment: int, message: str = ""):
         await self.ws.run_code(
-            f'''
+            f"""
             progressRecords["{self.title}"].progress.report({{ increment: {increment}, message: "{message}" }});
-            ''',
-            thenable=False
+            """,
+            thenable=False,
         )
 
     async def dispose(self):
         await self.ws.run_code(
-            f'''
+            f"""
             progressRecords["{self.title}"].completed = true;
-            ''',
-            thenable=False
+            """,
+            thenable=False,
         )

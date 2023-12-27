@@ -5,7 +5,6 @@ ext = vscode.Extension(name="Example Ext")
 
 @ext.command()
 async def quick_pick(ctx):
-
     # items can be a list of strings, dicts or QuickPickItem
     items = [
         vscode.QuickPickItem(label="Youtube", detail="A video sharing platform"),

@@ -15,7 +15,6 @@ async def hello_world(ctx):
 
 @ext.command(keybind="f9", when="editor_lang_id == python")
 async def ask_question(ctx):
-
     resp = await ctx.show(vscode.InfoMessage("How are you?", ("Great!", "Sad")))
     if resp == "Great!":
         await ctx.show(vscode.InfoMessage("Thats nice!"))

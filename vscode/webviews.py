@@ -4,9 +4,8 @@ import json
 from vscode.enums import ViewColumn
 from vscode.utils import log
 
-__all__ = (
-    "WebviewPanel",
-)
+__all__ = ("WebviewPanel",)
+
 
 class WebviewPanelViewState:
     def __init__(self, column: ViewColumn, active: bool, visible: bool) -> None:
@@ -14,9 +13,10 @@ class WebviewPanelViewState:
         self.active = active
         self.visible = visible
 
-    def  __repr__(self) -> str:
+    def __repr__(self) -> str:
         return f"<WebviewPanelViewState column={self.column} active={self.active} visible={self.visible}>"
-    
+
+
 class WebviewPanel:
     def __init__(self, title: str, column: ViewColumn) -> None:
         self.title = title
@@ -31,7 +31,7 @@ class WebviewPanel:
     @property
     def html(self) -> str:
         return self._html
-    
+
     async def _setup(self, ws) -> None:
         self.ws = ws
         self.ws.webviews[self.id] = self
@@ -43,8 +43,8 @@ class WebviewPanel:
             p.webview.onDidReceiveMessage((message) => ws.send(JSON.stringify({{ type: 4, id: '{self.id}', name: 'message', data: message }})));
             p.onDidDispose(() => ws.send(JSON.stringify({{ type: 4, id: '{self.id}', name: 'dispose' }})));
             p.onDidChangeViewState((e) => ws.send(JSON.stringify({{ type: 4, id: '{self.id}', name: 'change_view_state', data: {{column: e.webviewPanel.viewColumn, active: e.webviewPanel.active, visible: e.webviewPanel.visible}} }})));
-            """
-            , wait_for_response=False
+            """,
+            wait_for_response=False,
         )
         self.running = True
         await self.on_activate()
@@ -52,31 +52,43 @@ class WebviewPanel:
     async def set_html(self, html: str) -> None:
         if not self.running:
             raise ValueError(f"Webview is not running")
-        
+
         self._html = html
-        await self.ws.run_code(f"webviews['{self.id}'].webview.html = `{html}`", wait_for_response=False)
+        await self.ws.run_code(
+            f"webviews['{self.id}'].webview.html = `{html}`", wait_for_response=False
+        )
 
     async def update_title(self, title: str) -> None:
         if not self.running:
             raise ValueError(f"Webview is not running")
-        
+
         self.title = title
-        await self.ws.run_code(f"webviews['{self.id}'].title = '{title}'", wait_for_response=False)
+        await self.ws.run_code(
+            f"webviews['{self.id}'].title = '{title}'", wait_for_response=False
+        )
 
     async def post_message(self, data: dict) -> None:
         if not self.running:
             raise ValueError(f"Webview is not running")
-        
-        message = json.dumps(data)
-        await self.ws.run_code(f"webviews['{self.id}'].webview.postMessage({message})", wait_for_response=False)
 
-    async def reveal(self, column: Optional[ViewColumn] = None, preserve_focus: bool = False) -> None:
+        message = json.dumps(data)
+        await self.ws.run_code(
+            f"webviews['{self.id}'].webview.postMessage({message})",
+            wait_for_response=False,
+        )
+
+    async def reveal(
+        self, column: Optional[ViewColumn] = None, preserve_focus: bool = False
+    ) -> None:
         column = column or self.column
 
         if not self.running:
             raise ValueError(f"Webview is not running")
-        
-        await self.ws.run_code(f"webviews['{self.id}'].webview.reveal({column}, {str(preserve_focus).lower()})", wait_for_response=False)
+
+        await self.ws.run_code(
+            f"webviews['{self.id}'].webview.reveal({column}, {str(preserve_focus).lower()})",
+            wait_for_response=False,
+        )
 
     async def handle_event(self, name: str, data: Optional[dict] = None) -> None:
         if name == "message":
@@ -86,11 +98,15 @@ class WebviewPanel:
             del self.ws.webviews[self.id]
             await self.on_dispose()
         elif name == "change_view_state":
-            previous_state = WebviewPanelViewState(column=self.column, active=self.active, visible=self.visible)
+            previous_state = WebviewPanelViewState(
+                column=self.column, active=self.active, visible=self.visible
+            )
             self.column = ViewColumn(data["column"])
             self.active = data["active"]
             self.visible = data["visible"]
-            current_state = WebviewPanelViewState(column=self.column, active=self.active, visible=self.visible)
+            current_state = WebviewPanelViewState(
+                column=self.column, active=self.active, visible=self.visible
+            )
             await self.on_change_view_state(previous_state, current_state)
         else:
             event_handler = getattr(self, f"on_{name}", None)
@@ -108,12 +124,15 @@ class WebviewPanel:
     async def on_dispose(self):
         log(f"Webview {self.id} disposed")
 
-    async def on_change_view_state(self, before: WebviewPanelViewState, after: WebviewPanelViewState):
+    async def on_change_view_state(
+        self, before: WebviewPanelViewState, after: WebviewPanelViewState
+    ):
         log(f"Webview {self.id} changed view state from {before} to {after}")
 
     async def dispose(self):
         if not self.running:
             raise ValueError(f"Webview is not running")
-        
-        await self.ws.run_code(f"webviews['{self.id}'].dispose()", wait_for_response=False)
 
+        await self.ws.run_code(
+            f"webviews['{self.id}'].dispose()", wait_for_response=False
+        )

@@ -22,6 +22,7 @@ class ConfigType(Enum):
     integer = "number"
     string = "string"
 
+
 class ProgressLocation(IntEnum):
     SourceControl = 1
     Window = 10

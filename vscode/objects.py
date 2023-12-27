@@ -104,7 +104,7 @@ class Range(Object):
     def __init__(self, start: Position, end: Position):
         self.start = start
         self.end = end
-    
+
     @staticmethod
     def from_dict(data):
         start = Position.from_dict(data["start"])
@@ -148,6 +148,7 @@ class Range(Object):
 
     def __repr__(self):
         return f"<vscode.{self.__class__.__name__} [{self.start} -> {self.end}]>"
+
 
 class Selection(Range):
     """
