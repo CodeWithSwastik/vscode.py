@@ -129,7 +129,7 @@ def build(extension, publish=False) -> None:
             "\033[0m",
         )
         with open("requirements.txt", "w") as f:
-            f.write("vscode.py==2.0.0.beta1")
+            f.write("vscode.py==2.0.0b2")
 
     if not os.path.isdir("./venv"):
         print(f"\033[1;37;49mSetting up the virtual environment...", "\033[0m")
