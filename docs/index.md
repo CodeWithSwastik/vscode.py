@@ -2,7 +2,7 @@
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/CodeWithSwastik/vscode.py/graphs/commit-activity) [![Downloads](https://static.pepy.tech/personalized-badge/vscode.py?period=total&units=international_system&left_color=orange&right_color=brightgreen&left_text=Downloads)](https://pepy.tech/project/vscode.py) [![PyPI version](https://badge.fury.io/py/vscode.py.svg)](https://pypi.python.org/pypi/vscode.py/) [![GitHub stars](https://img.shields.io/github/stars/CodeWithSwastik/vscode.py.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/CodeWithSwastik/vscode.py/stargazers/) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Create vscode extensions and color themes with python.
+Create vscode extensions with python.
 
 ## Why use this?
 

@@ -6,14 +6,13 @@ edit_uri: blob/main/docs/
 nav:
   - Home:
       - Overview: index.md
-      - Releases:
-          - Changelog: changelog.md
+      - Changelog: changelog.md
   - Getting Started:
       - Installation: getting-started.md
       - Creating your first extension: creating-your-extension.md
       - Publishing your extension: publish-your-extension.md
 
-  - Documentation:
+  - API Reference:
       - Extension: documentation/extension.md
       - Objects: documentation/objects.md
       - Window: documentation/window.md
