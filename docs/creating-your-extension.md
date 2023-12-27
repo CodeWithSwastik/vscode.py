@@ -8,9 +8,25 @@ Create a python file inside a folder.
 
 ### Step 2
 
-Write the code for your extension. For this guide we have used the [Example Extension](#example-extension)
+Write the code for your extension. For this guide we will use this code:
 
-![image](https://user-images.githubusercontent.com/61446939/126891803-8da2e8e8-174f-451b-9103-4fbf001c4e7b.png)
+```python
+import vscode
+from vscode import InfoMessage
+
+ext = vscode.Extension(name="Test Extension")
+
+@ext.event
+async def on_activate():
+    vscode.log(f"The Extension '{ext.name}' has started")
+
+
+@ext.command()
+async def hello_world(ctx):
+    return await ctx.show(InfoMessage(f"Hello World from {ext.name}"))
+
+ext.run()
+```
 
 ### Step 3
 
@@ -38,23 +54,3 @@ Finally, test your command.
 - It should show a popup like this in the bottom right corner
 
 ![image](https://user-images.githubusercontent.com/61446939/126892110-f8d4bcf2-9ec0-43c2-a7d6-40288d91f000.png)
-
-## Example Extension
-
-```python
-import vscode
-from vscode import InfoMessage
-
-ext = vscode.Extension(name="Test Extension")
-
-@ext.event
-async def on_activate():
-    vscode.log(f"The Extension '{ext.name}' has started")
-
-
-@ext.command()
-async def hello_world(ctx):
-    return await ctx.show(InfoMessage(f"Hello World from {ext.name}"))
-
-ext.run()
-```
