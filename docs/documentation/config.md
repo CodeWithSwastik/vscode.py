@@ -4,16 +4,17 @@
 
 ```py
 import vscode
-from vscode.config import Config
+from vscode import Config, InfoMessage
 
 c = Config(name='Say', description='Say Something!', input_type=str, default="Hello World!")
-ext = vscode.Extension('speaker','Speaker', '0.0.1', config=[c])
+ext = vscode.Extension(name='Speaker', config=[c])
 
 @ext.command()
-def message_say_config():
-    vscode.window.show_info_message(ext.get_config('Say') or c.default)
+async def message_say_config(ctx):
+    say_value = await ctx.workspace.get_config_value(c)
+    await ctx.window.show(InfoMessage(say_value))
 
-vscode.build(ext)
+ext.run()
 ```
 
 #### Result

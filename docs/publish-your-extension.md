@@ -1,9 +1,9 @@
 # Publishing Extensions
 
-In order to publish your extension created with vscode.py you should build your extension with the publish flag as follows:
+In order to publish your extension created with vscode.py you should run your extension file with the publish flag as follows:
 
-```py
-vscode.build(ext, publish=True)
+```bash
+python extension.py --publish
 ```
 
 This will generate the `README.md` and `CHANGELOG.md` for your extension. It's important to keep these updated. It will also create the `.vscodeignore` file. The contents of this file will be removed from being packaged in your extension.
