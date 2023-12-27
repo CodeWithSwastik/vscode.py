@@ -1,3 +1,3 @@
 # Command
 
-::: vscode.Command
+::: vscode.extension.Command

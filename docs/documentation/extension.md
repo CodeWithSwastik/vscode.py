@@ -1,3 +1,3 @@
 # Extension
 
-::: vscode.Extension
+::: vscode.extension.Extension
