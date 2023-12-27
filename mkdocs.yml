@@ -16,7 +16,7 @@ nav:
   - Documentation:
       - Extension: documentation/extension.md
       - Command: documentation/command.md
-      - Types: documentation/types.md
+      - Objects: documentation/objects.md
       - Window: documentation/window.md
       - Configuration: documentation/config.md
 
