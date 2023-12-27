@@ -22,9 +22,9 @@ setup(
     author="Swas.py",
     author_email="cwswas.py@gmail.com",
     packages=find_packages(),
-    url="https://github.com/CodeWithSwastik/vscode-ext",
+    url="https://github.com/CodeWithSwastik/vscode.py",
     project_urls={
-        "Issue tracker": "https://github.com/CodeWithSwastik/vscode-ext/issues",
+        "Issue tracker": "https://github.com/CodeWithSwastik/vscode.py/issues",
     },
     classifiers=[
         "Programming Language :: Python :: 3",

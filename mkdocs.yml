@@ -27,8 +27,8 @@ theme:
     accent: deep orange
   icon:
     repo: fontawesome/brands/github
-  logo: vscode-ext.png
-  favicon: vscode-ext.png
+  logo: vscode-py.png
+  favicon: vscode-py.png
   features:
     - navigation.instant
     - navigation.tabs

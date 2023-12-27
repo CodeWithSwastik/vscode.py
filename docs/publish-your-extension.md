@@ -1,6 +1,6 @@
 # Publishing Extensions
 
-In order to publish your extension created with vscode-ext you should build your extension with the publish flag as follows:
+In order to publish your extension created with vscode.py you should build your extension with the publish flag as follows:
 
 ```py
 vscode.build(ext, publish=True)

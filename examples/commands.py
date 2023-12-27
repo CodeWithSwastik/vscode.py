@@ -5,7 +5,7 @@ ext = vscode.Extension(name="Commands Example")
 
 @ext.command()
 async def simple_command(ctx):
-    # If a command title is not specified, vscode-ext removes the underscores
+    # If a command title is not specified, vscode.py removes the underscores
     # and title cases each word to be the title for the command
     # Eg: This command will become > Simple Command
 

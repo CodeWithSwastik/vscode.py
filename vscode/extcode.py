@@ -1,4 +1,4 @@
-'''// Built using vscode-ext
+'''// Built using vscode.py
 const vscode = require("vscode");
 const { spawn, execSync } = require("child_process");
 const path = require("path");

@@ -24,7 +24,7 @@ pip install vscode.py
 Why should you use this for building VScode extensions when you can use typescript? Here are some reasons:
 
 - vscode.py builds the package.json for you! No need to switch between your extension.py and package.json in order to add commands. It also handles adding Activity Bars, Keybinds and Views.
-- vscode.py provides a pythonic way of creating the extension. Python has some powerful modules that Javascript doesn't and you can include these with vscode-ext
+- vscode.py provides a pythonic way of creating the extension. Python has some powerful modules that Javascript doesn't and you can include these with vscode.py
 - vscode.py extensions work perfectly with vsce and you can publish your extensions just like you would publish any other extension.
 
 ## Example Extension
