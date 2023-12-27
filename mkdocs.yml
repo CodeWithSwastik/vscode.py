@@ -14,9 +14,11 @@ nav:
 
   - API Reference:
       - Extension: documentation/extension.md
+      - Commands: documentation/commands.md
       - Objects: documentation/objects.md
       - Window: documentation/window.md
       - Configuration: documentation/config.md
+      - Enums: documentation/enums.md
 
 theme:
   name: material

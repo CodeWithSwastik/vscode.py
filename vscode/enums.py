@@ -4,6 +4,8 @@ __all__ = ("ViewColumn", "ConfigType", "ProgressLocation")
 
 
 class ViewColumn(IntEnum):
+    """Represents where a view should be shown in the editor."""
+
     Beside = -2
     Active = -1
     One = 1
