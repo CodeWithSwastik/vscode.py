@@ -118,7 +118,7 @@ def create_extension_js(extension):
         f2.write(f"{imports}\n{commands_code}\n{contents}")
 
 
-def build(extension) -> None:
+def build(extension, publish = False) -> None:
     print(f"\033[1;37;49m🚀 Building Extension '{extension.name}' ...", "\033[0m")
     start = time.time()
 
@@ -148,6 +148,22 @@ def build(extension) -> None:
     if not os.path.isdir("./node_modules/ws"):
         os.system("npm i ws")
 
+    if publish:
+        if not os.path.isfile("README.md"):
+            with open("README.md", "w") as f:
+                pass
+
+        if not os.path.isfile("CHANGELOG.md"):
+            with open("CHANGELOG.md", "w") as f:
+                pass
+
+        if not os.path.isfile(".vscodeignore"):
+            with open(".vscodeignore", "w") as f:
+                f.write(".vscode/**")
+                
     end = time.time()
     time_taken = round((end - start), 2)
     print(f"\033[1;37;49mBuild completed successfully in {time_taken} seconds! ✨", "\033[0m")
+    
+
+

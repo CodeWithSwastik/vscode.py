@@ -173,7 +173,12 @@ class Extension:
 
     def run(self):
         if len(sys.argv) > 1:
-            self.ws.run_webserver()
+            if sys.argv[1] == "--run-webserver":
+                self.ws.run_webserver()
+            elif sys.argv[1] == "--build":
+                build(self)
+            elif sys.argv[1] == "--publish":
+                build(self, publish=True)
         else:
             build(self)
 

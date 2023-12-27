@@ -40,7 +40,7 @@ function activate(context) {
   );
   execSync(`${pyVar} -m pip install -r ${requirementsPath}`);
 
-  let py = spawn(pyVar, [pythonExtensionPath, "test"]);
+  let py = spawn(pyVar, [pythonExtensionPath, "--run-webserver"]);
   let webviews = {};
   let progressRecords = {};
 
