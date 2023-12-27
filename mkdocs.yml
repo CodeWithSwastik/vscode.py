@@ -1,6 +1,6 @@
-site_name: vscode-ext
+site_name: vscode.py
 site_description: Create vscode extensions with Python
-repo_url: https://github.com/codewithswastik/vscode-ext
+repo_url: https://github.com/codewithswastik/vscode.py
 edit_uri: blob/main/docs/
 
 nav:
@@ -11,7 +11,6 @@ nav:
   - Getting Started:
       - Installation: getting-started.md
       - Creating your first extension: creating-your-extension.md
-      - Creating a color theme: color-theme.md
       - Publishing your extension: publish-your-extension.md
 
   - Documentation:
