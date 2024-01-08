@@ -91,6 +91,7 @@ class Extension:
         """
         Register a command.
         This is usually not called, instead the command() shortcut decorators should be used instead.
+
         Args:
             func: 
                 The function to register as a command.
@@ -124,6 +125,7 @@ class Extension:
     ):
         """
         A decorator for registering commands.
+        
         Args:
             name: 
                 The internal name of the command.
