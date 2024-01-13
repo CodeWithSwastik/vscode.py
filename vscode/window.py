@@ -105,13 +105,13 @@ class TextEditor:
         return self.selection.active
 
     async def edit(self, callback):
-        pass
+        raise NotImplementedError
 
     async def reveal_range(self, range: Range, reveal_type) -> Range:
-        pass
+        raise NotImplementedError
 
     async def show(self, column: ViewColumn):
-        pass
+        raise NotImplementedError
 
 
 @dataclass
@@ -143,25 +143,25 @@ class TextDocument:
         return await self.ws.run_code(code, thenable=False)
 
     async def get_word_range_at_position(self, position: Position, regex) -> Range:
-        pass
+        raise NotImplementedError
 
     async def line_at(self, line_or_position: Union[int, Position]) -> TextLine:
-        pass
+        raise NotImplementedError
 
     async def offset_at(self, position: Position) -> TextLine:
-        pass
+        raise NotImplementedError
 
     async def position_at(self, offset: int) -> Position:
-        pass
+        raise NotImplementedError
 
     async def save(self):
-        pass
+        raise NotImplementedError
 
     async def validate_position(self, position: Position) -> Position:
-        pass
+        raise NotImplementedError
 
     async def validate_range(self, range: Range) -> Range:
-        pass
+        raise NotImplementedError
 
 
 class Terminal:
