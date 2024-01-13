@@ -1,14 +1,29 @@
-version: 2
+# Read the Docs configuration file for Sphinx projects
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
+# Required
+version: 2.0.0
+
+# Formats to be built
+formats:
+  - epbub
+  - pdf
+
+# Install requirements.txt using pip
+python:
+  install:
+    - method: pip
+    - requirements: docs/requirements.txt
+
+# Set the OS, Python version
 build:
   os: ubuntu-22.04
   tools:
     python: "3.10"
 
-mkdocs:
-  configuration: mkdocs.yml
-  fail_on_warning: false
 
-python:
-  install:
-    - requirements: docs/requirements.txt
+# Build documentation in the "docs/" directory with Sphinx
+sphinx:
+  builder: html
+  configuration: docs/conf.py
+  fail_on_warning: true

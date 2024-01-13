@@ -1,3 +1,0 @@
-# Extension
-
-::: vscode.Extension

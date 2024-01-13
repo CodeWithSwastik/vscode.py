@@ -4,6 +4,7 @@
 /venv
 /dist
 /build
+/docs/_build
 /media
 /.vscode
 /node_modules
