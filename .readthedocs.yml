@@ -4,17 +4,17 @@
 # Required
 version: 2
 
-# Install requirements.txt using pip
-python:
-  install:
-    - method: pip
-    - requirements: docs/requirements.txt
-
 # Set the OS, Python version
 build:
   os: ubuntu-22.04
   tools:
     python: "3.10"
+
+# Install requirements.txt using pip
+python:
+  install:
+    - method: pip
+    - requirements: docs/requirements.txt
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
