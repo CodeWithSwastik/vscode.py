@@ -132,7 +132,12 @@ class TextDocument:
         self.ws = ws
         self._editor_code = editor_code
 
-    async def get_text(self, range: Range) -> str:
+    async def get_text(self, range: Optional[Range] = None) -> str:
+        if range is None:
+            return await self.ws.run_code(
+                self._editor_code + "editor.document.getText();", thenable=False
+            )
+        
         s = range.start
         e = range.end
         code = (
