@@ -251,7 +251,7 @@ class Command:
         """
 
         self.name = snake_case_to_camel_case(name)
-        self.title = snake_case_to_title_case(name)
+        self.title = snake_case_to_title_case(title)
         self.ext = ext
 
         if not asyncio.iscoroutinefunction(func):
