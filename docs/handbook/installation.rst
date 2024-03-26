@@ -23,7 +23,7 @@ However if you want the latest working version from github you can do that as we
 .. code-block::
 
    # Linux/macOS
-   python3 -m pip git+https://github.com/codewithswastik/vscode.py.git
+   python3 -m pip install git+https://github.com/codewithswastik/vscode.py.git
 
    # Windows
    py -3 -m pip install git+https://github.com/codewithswastik/vscode.py.git
