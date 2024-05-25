@@ -159,6 +159,19 @@ class TextDocument:
     async def position_at(self, offset: int) -> Position:
         raise NotImplementedError
 
+    async def replace(self, range: Range, text: str) -> None:
+        s = range.start
+        e = range.end
+        escaped_text = json.dumps(text)[1:-1].replace("'", "\\'")
+        code = (
+            self._editor_code
+            + "editor.edit(editBuilder => {"
+            + f"    let range = new vscode.Range({s.line}, {s.character}, {e.line}, {e.character});".strip()
+            + f"    editBuilder.replace(range, '{escaped_text}');".strip()
+            + "})"
+        )
+        return await self.ws.run_code(code, wait_for_response=False, thenable=False)
+
     async def save(self):
         raise NotImplementedError
 
