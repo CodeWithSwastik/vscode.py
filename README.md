@@ -11,6 +11,9 @@
 
 Create vscode extensions with python.
 
+> [!NOTE]
+> This repository is being archived due to a lack of time for regular maintenance. If you are interested in taking over the maintenance of this project, please feel free to contact me at cwswastik2005@gmail.com. Thank you for your support!
+
 ## Installation
 
 Stable version:
