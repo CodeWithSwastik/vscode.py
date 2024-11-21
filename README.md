@@ -2,7 +2,7 @@
   <img alt="vscode.py logo" src="https://github.com/CodeWithSwastik/vscode.py/blob/main/images/vscode-py.png?raw=true" width='500px'/>
 </p>
 
-<p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode.py/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance"></a>
+<p align="center"><a href="https://GitHub.com/CodeWithSwastik/vscode.py/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-no-red.svg" alt="Maintenance"></a>
 <a href="https://pepy.tech/project/vscode.py"><img src="https://static.pepy.tech/personalized-badge/vscode.py?period=total&amp;units=international_system&amp;left_color=orange&amp;right_color=brightgreen&amp;left_text=Downloads" alt="Downloads"></a>
 <a href="https://pypi.python.org/pypi/vscode.py/"><img src="https://badge.fury.io/py/vscode.py.svg" alt="PyPI version"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
